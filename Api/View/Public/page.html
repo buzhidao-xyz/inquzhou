@@ -1,0 +1,98 @@
+{if isset($page)&&is_array($page)}
+<ul id="pagination" class="pagination" link="{$page.link}" page="{$page.page}" pagecount="{$page.pagecount}">
+	<li><a href="{$page.first.link}">首页</a></li>
+	<li><a href="{$page.prev.link}">上一页</a></li>
+	{foreach $page.rool as $p}
+	<li {if $page.current.page==$p.page}class="active"{/if}><a href="{$p.link}">{$p.page}</a></li>
+	{/foreach}
+	<li><a href="{$page.next.link}">下一页</a></li>
+	<li><a href="{$page.last.link}">尾页</a></li>
+	<li><span>{$page.page}/{$page.pagecount}页</span></li>
+	<li class="ctpage">&nbsp;</li>
+	<li>
+		<input type="text" id="gopage" name="gopage" value="{$page.current.page}" class="form-control shortinput">
+		<button type="button" id="gobtn" name="gobtn" class="btn btn-default">GO</button>
+	</li>
+	<li class="ctpage">&nbsp;</li>
+	<li>
+		<select id="pagesize" name="pagesize" class="form-control pagesize">
+			{foreach $page.pagesizelist as $p}
+			<option value="{$p}" {if $p==$page.pagesize}selected{/if}>{$p}</option>
+			{/foreach}
+		</select>
+		<span>条</span>
+	</li>
+</ul>
+<style type="text/css">
+#pagination .ctpage {
+	float: left;
+	display: block;
+	width: 10px;
+}
+#pagination input,
+#pagination button,
+#pagination select
+{
+	float: left;
+}
+#pagination input.shortinput {
+	width: 63px;
+	text-align: center;
+}
+#pagination select.pagesize {
+	width: 70px;
+}
+</style>
+<script type="text/javascript">
+$(document).ready(function (){
+/**
+ * 分页类
+ * wangbaoqing@imooly.com
+ * 2014-07-21
+ */
+var pageClass = function (){
+	//page对象
+	var pageObject = $("#pagination");
+	//跳转URL
+	var link = pageObject.attr("link");
+	//当前页
+	var page = pageObject.attr("page");
+	//总页数
+	var pagecount = parseInt(pageObject.attr("pagecount"));
+
+	//GOTO指定页码
+	var gopage = function () {
+		pageObject.find("button[name=gobtn]").click(function (){
+			var pageregexp = /^[1-9][0-9]*$/i;
+			var gopage = parseInt(pageObject.find("input[name=gopage]").val());
+
+			//判断页码是否真实有效
+			if (!pageregexp.test(gopage) || gopage>pagecount) {
+				alert('请输入正确的页码！');
+				return false;
+			}
+
+			location.href = link+gopage;
+		});
+	}();
+
+	//每页显示多少条记录
+	var showpagesize = function (){
+		pageObject.find("select[name=pagesize]").change(function (){
+			var pagesize = $(this).val();
+			var linkregexp = /&pagesize=[1-9][0-9]*/i;
+			if (linkregexp.test(link)) {
+				var href = link.replace(linkregexp,"&pagesize="+pagesize);
+			} else {
+				var href = link+"&pagesize="+pagesize;
+			}
+
+			location.href = href;
+		});
+	}();
+}
+new pageClass();
+
+});
+</script>
+{/if}

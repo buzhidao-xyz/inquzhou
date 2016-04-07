@@ -1,0 +1,22 @@
+{include file="include/head.html"}
+<div id="loginpanel">
+	<form name="lform" action="__ROOT__/debug/loginck" method="post">
+		<span>账户：<input type="text" name="username" value=""></span>
+		<span>密码：<input type="password" name="password" value=""></span>
+		<span><input type="submit" name="subut" value="登录"></span>
+	</form>
+</div>
+<style text="css/style">
+#loginpanel {
+	width: 200px;
+	height: 200px;
+	margin: auto;
+	margin-top: 200px;
+}
+#loginpanel span {
+	float: left;
+	clear: both;
+	margin: 10px;
+}
+</style>
+{include file="include/foot.html"}
