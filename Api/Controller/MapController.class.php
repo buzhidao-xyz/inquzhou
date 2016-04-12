@@ -53,7 +53,7 @@ class MapController extends CommonController
 			}
 			$this->apiReturn(1, $msg);
 		} else {
-			return $result['result'];
+			return json_decode($result['result'], true, 10, JSON_BIGINT_AS_STRING);
 		}
 	}
 
