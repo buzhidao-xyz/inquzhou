@@ -38,6 +38,60 @@ class MapController extends CommonController
 		return $lat;
 	}
 
+	//获取key
+	private function _getKey()
+	{
+		$key = mRequest('key');
+		if (!$key) $this->apiReturn(1, '未知参数Key！');
+
+		return $key;
+	}
+
+	//获取pageindex
+	private function _getpageIndex()
+	{
+		$pageIndex = mRequest('pageIndex');
+		if (!$pageIndex) $pageIndex = 1;
+
+		return $pageIndex;
+	}
+
+	//获取pagestep
+	private function _getpageStep()
+	{
+		$pageStep = mRequest('pageStep');
+		if (!$pageStep) $pageStep = 5;
+
+		return $pageStep;
+	}
+
+	//获取curX
+	private function _getcurX()
+	{
+		$curX = mRequest('curX');
+		if (!$curX) $this->apiReturn(1, '未知参数curX！');
+
+		return $curX;
+	}
+
+	//获取curY
+	private function _getcurY()
+	{
+		$curY = mRequest('curY');
+		if (!$curY) $this->apiReturn(1, '未知参数curY！');
+
+		return $curY;
+	}
+
+	//获取distance
+	private function _getDistance()
+	{
+		$distance = mRequest('distance');
+		if (!$distance) $this->apiReturn(1, '未知参数distance！');
+
+		return $distance;
+	}
+
 	//解析返回result
 	private function _parseResult($result=array())
 	{
@@ -53,7 +107,9 @@ class MapController extends CommonController
 			}
 			$this->apiReturn(1, $msg);
 		} else {
-			return json_decode($result['result'], true, 10, JSON_BIGINT_AS_STRING);
+			$result = json_decode($result['result'], true, 10, JSON_BIGINT_AS_STRING);
+
+			return is_array($result)&&!empty($result) ? $result : '';
 		}
 	}
 
@@ -67,6 +123,51 @@ class MapController extends CommonController
 
 		$postStr = '{lon:'.$lon.',lat:'.$lat.',appkey:'.$this->_mapconfig['appkey'].',ver:1}';
 		$geocodeapi = $this->_mapconfig['geocode_api'].'?postStr='.$postStr.'&type=geocode';
+
+		$Http = Http::Init($geocodeapi, 1);
+		$result = $Http->get();
+
+		$apijson = $this->_parseResult($result);
+		$this->apiReturn(0, '', array(
+			'apijson' => $apijson
+		));
+	}
+
+	//POI搜索
+	public function poisearch()
+	{
+		$this->CKQuest('get');
+
+		$key = $this->_getKey();
+		$pageIndex = $this->_getpageIndex();
+		$pageStep = $this->_getpageStep();
+
+		$paramStr = 'key='.$key.'&pac=&type=&flds=&pageIndex='.$pageIndex.'&pageStep='.$pageStep.'&taghead=&tagtail=';
+		$geocodeapi = $this->_mapconfig['poisearch_api'].'?'.$paramStr;
+
+		$Http = Http::Init($geocodeapi, 1);
+		$result = $Http->get();
+
+		$apijson = $this->_parseResult($result);
+		$this->apiReturn(0, '', array(
+			'apijson' => $apijson
+		));
+	}
+
+	//nearsearch
+	public function nearsearch()
+	{
+		$this->CKQuest('get');
+
+		$curX = $this->_getcurX();
+		$curY = $this->_getcurY();
+		$distance = $this->_getDistance();
+		$key = $this->_getKey();
+		$pageIndex = $this->_getpageIndex();
+		$pageStep = $this->_getpageStep();
+
+		$paramStr = 'key='.$key.'&curX='.$curX.'&curY='.$curY.'&distance='.$distance.'&type=&flds=&pageIndex='.$pageIndex.'&pageStep='.$pageStep.'&taghead=&tagtail=';
+		$geocodeapi = $this->_mapconfig['nearsearch_api'].'?'.$paramStr;
 
 		$Http = Http::Init($geocodeapi, 1);
 		$result = $Http->get();

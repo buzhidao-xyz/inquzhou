@@ -6,7 +6,13 @@
  */
 return array(
 	//geocode
-	'appkey' => '8a7b9aac0db21f9dd995e61a14685f05',
-	'ver'    => '1',
-	'geocode_api' => 'http://map.tianditu.com/query.shtml'
+	'appkey'       => '8a7b9aac0db21f9dd995e61a14685f05',
+	'ver'          => '1',
+	'geocode_api'  => 'http://map.tianditu.com/query.shtml',
+	
+	//poisearch
+	'poisearch_api' => 'http://qz-map.com/map/qzwsLUCENE/Service.asmx/QueryPOI',
+
+	//nearsearch
+	'nearsearch_api' => 'http://qz-map.com/map/qzwsLUCENE/Service.asmx/GetNearSearch',
 );
