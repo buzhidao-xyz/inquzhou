@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>in衢州交通系统 - 衢州测绘局</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="author" content="sindgood" />
+    <meta name="description" content="login page" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
+    <!-- bootstrap css -->
+    <link href="{$SERVER.HOST.CSS_SERVER}View/Beyond/Assets/bootstrap-3.3.4/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="{$SERVER.HOST.CSS_SERVER}View/Beyond/Assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+
+    <!--Beyond styles-->
+    <!-- <link id="beyond-link" href="#" rel="stylesheet" type="text/css" /> -->
+    <link href="{$SERVER.HOST.CSS_SERVER}View/Beyond/Assets/css/beyond.min.css" rel="stylesheet" />
+    <link href="{$SERVER.HOST.CSS_SERVER}View/Beyond/Assets/css/demo.min.css" rel="stylesheet" />
+    <link href="{$SERVER.HOST.CSS_SERVER}View/Beyond/Assets/css/animate.min.css" rel="stylesheet" />
+    <link id="skin-link" href="#" rel="stylesheet" type="text/css" />
+
+    <!-- frame css -->
+    <link href="{$SERVER.HOST.CSS_SERVER}View/Beyond/Assets/css/frame.css" rel="stylesheet" />
+
+    <!-- ================== jquery ================== -->
+    <script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/jquery/jquery-1.11.3.min.js"></script>
+    <script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/jquery/jquery-migrate-1.1.0.min.js"></script>
+    <!--Skin Script: Place this script in head to load scripts for skins and rtl support-->
+    <script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/js/skins.min.js"></script>
+    
+    <script type="text/javascript">
+    var JS_APP = '{$ANY.__APP__}';
+    
+    var JS_SERVER    = '{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/js/';
+    var CSS_SERVER   = '{$SERVER.HOST.CSS_SERVER}View/Beyond/Assets/css/';
+    var IMAGE_SERVER = '{$SERVER.HOST.IMAGE_SERVER}View/Beyond/Assets/img/';
+    </script>
+
+</head>
+
+<body>
+    <div id="header">
+        {include file="Public/header.html"}
+    </div>
+    <div id="menuTree">
+        {include file="Public/menu.html"}
+    </div>
+    <div id="main">
+        <iframe frameborder="0" name="main" src="{$ANY.__APP__}?s=Index/dashboard" scrolling="yes"></iframe>
+    </div>
+    <div id="bottom">
+        {include file="Public/bottom.html"}
+    </div>
+
+    <div id="modalpanel" style="display: none;"></div>
+    
+    <!--Basic Scripts-->
+    <script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/jquery/jquery-ui/ui/minified/jquery-ui.min.js"></script>
+    <script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/jquery/slimscroll/jquery.slimscroll.min.js"></script>
+    
+    <script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/plugins/bootbox/bootbox.js"></script>
+
+    <!--Beyond Scripts-->
+    <script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/js/beyond.js"></script>
+
+    <!--Page Related Scripts-->
+    <!--Sparkline Charts Needed Scripts-->
+    <script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/plugins/charts/sparkline/jquery.sparkline.js"></script>
+    <script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/plugins/charts/sparkline/sparkline-init.js"></script>
+
+    <script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/plugins/select2/select2.js"></script>
+
+    <!-- bzd js -->
+    <script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/js/bzd.js"></script>
+    
+    <script>
+        $(window).bind("load", function () {
+            themeprimary = getThemeColorFromCss('themeprimary');
+            themesecondary = getThemeColorFromCss('themesecondary');
+            themethirdcolor = getThemeColorFromCss('themethirdcolor');
+            themefourthcolor = getThemeColorFromCss('themefourthcolor');
+            themefifthcolor = getThemeColorFromCss('themefifthcolor');
+        });
+    </script>
+</body>
+<!-- /Body -->
+
+</html>

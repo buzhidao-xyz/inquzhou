@@ -14,9 +14,9 @@ class ManagerModel extends CommonModel
     }
 
     //加密管理员密码
-    public function passwordEncrypt($password=null, $mkey=null)
+    public function passwordEncrypt($password=null)
     {
-        return md5(md5($password).$mkey);
+        return md5($password);
     }
 
     //获取管理员
@@ -41,7 +41,7 @@ class ManagerModel extends CommonModel
                                 ->distinct(true)
                                 ->field('a.managerid')
                                 ->where($where)
-                                ->order(array('super desc, managerid asc'))
+                                ->order(array('managerid asc'))
                                 ->limit($start, $length)
                                 ->buildSql();
         //查询数据

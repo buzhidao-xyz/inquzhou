@@ -45,14 +45,14 @@ class AdminController extends BaseController
     /**
      * 获取密码 规则：字母数字开始 字母数字下划线!@#$% 长度5-20
      */
-    private function _getPassword()
+    private function _getPasswd()
     {
-        $password = mRequest('password');
-        if (!Filter::F_Password($password)) {
+        $passwd = mRequest('passwd');
+        if (!Filter::F_Password($passwd)) {
             $this->ajaxReturn(1, "账号或密码错误！");
         }
 
-        return $password;
+        return $passwd;
     }
 
     //获取验证码
@@ -79,30 +79,16 @@ class AdminController extends BaseController
         $this->_checkAdminLogon();
         
         $account = $this->_getAccount();
-        $password = $this->_getPassword();
+        $passwd = $this->_getPasswd();
 
         //检查验证码
-        $this->_CKVCode();
+        // $this->_CKVCode();
 
         //查询管理员信息
         $managerInfo = D('Manager')->getManagerByAccount($account);
 
         //逻辑判断 如果登录失败
-        if (!is_array($managerInfo) || empty($managerInfo)
-         || !isset($managerInfo['password']) || !isset($managerInfo['mkey'])
-         || $managerInfo['status'] == 0
-         || D('Manager')->passwordEncrypt($password, $managerInfo['mkey']) != $managerInfo['password']) {
-            $managerid = isset($managerInfo['managerid']) ? $managerInfo['managerid'] : 0;
-            //记录登录日志
-            D('Manager')->saveManagerLoginLog(array(
-                'managerid' => $managerid,
-                'account'   => $account,
-                'logintime' => TIMESTAMP,
-                'loginip'   => $ip,
-                'result'    => $this->_loginlog_result['FAILED'],
-                'browser'   => $_SERVER['HTTP_USER_AGENT'],
-            ));
-
+        if (!is_array($managerInfo) || empty($managerInfo) || !isset($managerInfo['passwd']) || $managerInfo['status']==0 || D('Manager')->passwordEncrypt($passwd)!=$managerInfo['passwd']) {
             $this->ajaxReturn(1, L('LOGIN_ERROR'));
         }
 
@@ -111,22 +97,6 @@ class AdminController extends BaseController
         
         //更新管理员账户信息
         $ip = get_client_ip(1,true);
-        D('Manager')->saveManager($managerid, array(
-            'lastlogintime' => TIMESTAMP,
-            'lastloginip'   => $ip,
-            'logincount'    => array('exp', 'logincount+1'),
-            'updatetime'    => TIMESTAMP,
-        ));
-        
-        //记录登录日志
-        D('Manager')->saveManagerLoginLog(array(
-            'managerid' => $managerid,
-            'account'   => $account,
-            'logintime' => TIMESTAMP,
-            'loginip'   => $ip,
-            'result'    => $this->_loginlog_result['SUCCESS'],
-            'browser'   => $_SERVER['HTTP_USER_AGENT'],
-        ));
 
         //获取权限菜单信息
         $access = $this->_getManagerAccess($managerid, $managerInfo['super']);
@@ -135,11 +105,8 @@ class AdminController extends BaseController
         session('managerinfo', array(
             'managerid'     => $managerid,
             'account'       => $managerInfo['account'],
-            'super'         => $managerInfo['super'],
-            'lastlogintime' => $managerInfo['lastlogintime'],
-            'lastloginip'   => $managerInfo['lastloginip'],
-            'logincount'    => $managerInfo['logincount'],
             'access'        => $access,
+            'clientip'      => $ip,
         ));
 
         $this->ajaxReturn(0, L('LOGIN_SUCCESS'), array(
@@ -165,6 +132,9 @@ class AdminController extends BaseController
      */
     private function _getManagerAccess($managerid=null, $super=0)
     {
+        $access = require(APP_PATH.MODULE_NAME.'/Conf/access.php');
+        return $access;
+
         if (!$managerid) return array();
 
         //权限菜单

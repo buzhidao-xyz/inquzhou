@@ -64,18 +64,20 @@ class BaseController extends Controller
         ));
     }
 
-	/**
-	 * 加载语言包
-	 */
-	private function _loadLang()
-	{
-		//加载公共语言包
-		include(COMMON_PATH.C('LANG_DEFAULT').'.php');
-		L($lang);
-		//加载控制器语言包
-		include(LANG_PATH.C('LANG_DEFAULT').'/'.strtolower(CONTROLLER_NAME).'.php');
-		L($lang);
-	}
+    /**
+     * 加载语言包
+     */
+    private function _loadLang()
+    {
+        $lang_type = C('DEFAULT_LANG');
+
+        //加载公共语言包
+        include(LANG_PATH.$lang_type.'.php');
+        L($lang);
+        //加载控制器语言包
+        include(APP_PATH.MODULE_NAME.'/Common/Lang/'.$lang_type.'/'.CONTROLLER_NAME.'.php');
+        L($lang);
+    }
 
 	/**
 	 * 检查请求类型 是否get/post

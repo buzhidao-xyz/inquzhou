@@ -22,6 +22,8 @@ class CommonController extends BaseController
 		parent::__construct();
 
         $this->userinfo = $this->GSUserInfo();
+
+        $this->_CKSign();
 	}
 
     /**
@@ -109,5 +111,11 @@ class CommonController extends BaseController
 
         //返回
         return $flag ? array($start,$pagesize,$pagecount) : array($start,$pagesize);
+    }
+
+    //检查校验Sign
+    private function _CKSign()
+    {
+        return true;
     }
 }

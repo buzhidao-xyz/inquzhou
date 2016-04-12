@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>管理中心 - in衢州交通系统</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="author" content="sindgood" />
+    <meta name="description" content="login page" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
+    <!-- bootstrap css -->
+    <link href="{$SERVER.HOST.CSS_SERVER}View/Beyond/Assets/bootstrap-3.3.4/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="{$SERVER.HOST.CSS_SERVER}View/Beyond/Assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+
+    <!--Beyond styles-->
+    <!-- <link id="beyond-link" href="#" rel="stylesheet" type="text/css" /> -->
+    <link href="{$SERVER.HOST.CSS_SERVER}View/Beyond/Assets/css/beyond.min.css" rel="stylesheet" />
+    <link href="{$SERVER.HOST.CSS_SERVER}View/Beyond/Assets/css/demo.min.css" rel="stylesheet" />
+    <link href="{$SERVER.HOST.CSS_SERVER}View/Beyond/Assets/css/animate.min.css" rel="stylesheet" />
+    <link id="skin-link" href="#" rel="stylesheet" type="text/css" />
+
+    <link href="{$SERVER.HOST.CSS_SERVER}View/Beyond/Assets/plugins/pace/themes/orange/pace-theme-minimal.css" rel="stylesheet" />
+
+    <!-- bzd css -->
+    <link href="{$SERVER.HOST.CSS_SERVER}View/Beyond/Assets/css/bzd.css" rel="stylesheet" />
+
+    <!-- ================== jquery ================== -->
+    <script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/jquery/jquery-1.11.3.min.js"></script>
+    <script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/jquery/jquery-migrate-1.1.0.min.js"></script>
+    <!--Skin Script: Place this script in head to load scripts for skins and rtl support-->
+    <script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/js/skins.min.js"></script>
+
+    <!-- ================== PACE JS ================== -->
+    <script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/plugins/pace/pace.min.js"></script>
+
+    <script type="text/javascript">
+    var JS_APP = '{$ANY.__APP__}';
+    
+    var JS_SERVER    = '{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/js/';
+    var CSS_SERVER   = '{$SERVER.HOST.CSS_SERVER}View/Beyond/Assets/css/';
+    var IMAGE_SERVER = '{$SERVER.HOST.IMAGE_SERVER}View/Beyond/Assets/img/';
+    </script>
+
+    <!-- requirejs -->
+    <!-- <script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/js/require-2.1.11.min.js" data-main="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/js/main.js"></script> -->
+</head>
+
+<body>
+    {include file="Public/alertpanel.html"}
+    <!-- Main Container -->
+    <div class="main-container container-fluid" ng-controller="KeyController">
+        <!-- Page Container -->
+        <div class="page-container">
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- Page Breadcrumb -->
+                <div class="page-breadcrumbs page-breadcrumbs-fixed">
+                    <ul class="breadcrumb">
+                        <li>
+                            <i class="fa fa-home"></i>
+                            <a href="javascript:;">in衢州交通系统</a>
+                        </li>
+                        <li class="active">控制面板</li>
+                    </ul>
+                </div>
+                <!-- /Page Breadcrumb -->

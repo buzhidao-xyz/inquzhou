@@ -12,17 +12,17 @@ $dbconfig = array(
 		// 数据库类型
 		'DB_TYPE'            => 'mysql',
 		// 数据库HOST
-		'DB_HOST'            => '192.168.10.82',
+		'DB_HOST'            => '192.168.10.6',
 		// 数据库端口
 		'DB_PORT'            => 3306,
 		// 数据库名
-		'DB_NAME'            => 'md',
+		'DB_NAME'            => 'quzhou',
 		// 用户名
-		'DB_USER'            => 'mb_md_user',
+		'DB_USER'            => 'dbuser',
 		// 密码
-		'DB_PWD'             => 'mb_md_user',
+		'DB_PWD'             => 'dbpass',
 		// 表前缀
-		'DB_PREFIX'          => 'mb_',
+		'DB_PREFIX'          => 'qz_',
 		// 字符集
 		'DB_CHARSET'         => 'utf8',
 		// 字段名小写

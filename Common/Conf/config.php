@@ -5,6 +5,7 @@
  * 2014-07-15
  */
 require_once('db.config.php');
+require_once('host.config.php');
 
 return array(
 	/**
@@ -15,4 +16,7 @@ return array(
 
 	//mongodb配置信息
 	'MONGO'     => $mongo,
+
+	//HOST
+	'HOST' => $HOST,
 );

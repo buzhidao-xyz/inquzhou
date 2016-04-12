@@ -34,13 +34,13 @@ class BaseController extends Controller
      */
     private function _loadLang()
     {
-        $lang = C('DEFAULT_LANG');
+        $lang_type = C('DEFAULT_LANG');
 
         //加载公共语言包
-        include(LANG_PATH.$lang.'.php');
+        include(LANG_PATH.$lang_type.'.php');
         L($lang);
         //加载控制器语言包
-        include(LANG_PATH.$lang.'/'.CONTROLLER_NAME.'.php');
+        include(APP_PATH.MODULE_NAME.'/Common/Lang/'.$lang_type.'/'.CONTROLLER_NAME.'.php');
         L($lang);
     }
 
