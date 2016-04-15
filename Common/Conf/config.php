@@ -8,6 +8,9 @@ require_once('db.config.php');
 require_once('host.config.php');
 
 return array(
+	//默认语言
+	'DEFAULT_LANG'  => 'zh-cn',
+	
 	/**
 	 * 数据库配置信息
 	 * 支持多数据库配置
@@ -19,4 +22,13 @@ return array(
 
 	//HOST
 	'HOST' => $HOST,
+
+	//SESSION配置信息
+	'SESSION_TYPE'       => '',
+	'SESSION_PREFIX'     => 'inquzhou',
+	'VAR_SESSION_ID'     => 'sessionid',
+	'SESSION_OPTIONS'    => array(
+		'name'   => 'inquzhou',
+		'expire' => 7200 //session默认过期时间 2小时=7200秒
+	),
 );
