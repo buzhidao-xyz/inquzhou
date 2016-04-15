@@ -48,7 +48,7 @@ function mPost($var=null,$urldecode=true)
 	$paramTypes = array('string','integer','double');
 	$value = isset($_POST[$var]) ? $_POST[$var] : '';
     $urldecode ? $value = urldecode($value) : null;
-    
+
     $type = gettype($value);
     if (in_array($type, $paramTypes)) {
         $value = htmlentities(trim($value),ENT_QUOTES,'UTF-8');
@@ -63,15 +63,16 @@ function mPost($var=null,$urldecode=true)
  */
 function mRequest($var=null,$urldecode=true)
 {
-	//判断请求方式 GET/POST
-	if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-		$value = mGet($var,$urldecode);
-	} else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-		$value = mPost($var,$urldecode);
-	} else {
-		$value = $urldecode ? urldecode($_REQUEST[$var]) : $_REQUEST[$var];
-	}
-	return $value;
+    $paramTypes = array('string','integer','double');
+    $value = isset($_REQUEST[$var]) ? $_REQUEST[$var] : '';
+    $urldecode ? $value = urldecode($value) : null;
+
+    $type = gettype($value);
+    if (in_array($type, $paramTypes)) {
+        $value = htmlentities(trim($value),ENT_QUOTES,'UTF-8');
+    }
+
+    return $value;
 }
 
 /**

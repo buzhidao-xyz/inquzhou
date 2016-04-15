@@ -34,7 +34,7 @@ var ajaxCallback = function(data) {
                 location.href = data.data.location;
             }
             location.reload();
-        }, 3000);
+        }, 2500);
     }
 };
 

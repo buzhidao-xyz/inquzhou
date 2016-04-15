@@ -10,6 +10,8 @@ require_once('host.config.php');
 return array(
 	//默认语言
 	'DEFAULT_LANG'  => 'zh-cn',
+
+	'SHOW_ERROR_MSG'        =>  true,    // 显示错误信息
 	
 	/**
 	 * 数据库配置信息
