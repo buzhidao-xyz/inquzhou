@@ -33,4 +33,10 @@ return array(
 		'name'   => 'inquzhou',
 		'expire' => 7200 //session默认过期时间 2小时=7200秒
 	),
+
+	//加载扩展配置文件 引用方式C('x.x')
+	'LOAD_EXT_CONFIG' => array(
+		//专题信息配置文件
+		'TOPIC' => 'topic.config',
+	),
 );

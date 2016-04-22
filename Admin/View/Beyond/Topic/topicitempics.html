@@ -1,0 +1,91 @@
+{include file="Common/head.html"}
+<link href="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/plugins/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
+<script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/plugins/bootstrap-fileinput/js/fileinput.min.js"></script>
+<script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/plugins/bootstrap-fileinput/js/fileinput_locale_zh.js"></script>
+<script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/js/class/bootstrap-fileinput.class.js"></script>
+
+    <!-- Page Header -->
+    <div class="page-header position-relative page-header-fixed">
+        <div class="header-title">
+            <h1>
+                专题管理 <!-- <small><i class="fa fa-angle-right"></i> 管理 </small> -->
+            </h1>
+        </div>
+        <!--Header Buttons-->
+        <div class="header-buttons">
+            <a class="sidebar-toggler" href="#">
+                <i class="fa fa-arrows-h"></i>
+            </a>
+            <a class="refresh" id="refresh-toggler" href="#">
+                <i class="glyphicon glyphicon-refresh"></i>
+            </a>
+            <a class="fullscreen" id="fullscreen-toggler" href="#">
+                <i class="glyphicon glyphicon-fullscreen"></i>
+            </a>
+        </div>
+        <!--Header Buttons End-->
+    </div>
+    <!-- /Page Header -->
+
+    <!-- Page Body -->
+    <div class="page-body">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+                <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>专题-{$topicmapinfo.title}-图集</h5>
+                <div class="oplinks">
+                    <a href="{$ANY.__APP__}?s=Topic/topicitem&topicid={$topicid}" class="btn btn-sky">管理专题点</a>
+                    <a href="{$ANY.__APP__}?s=Topic/newtopicitem&topicid={$topicid}" class="btn btn-darkorange">新增专题点</a>
+                </div>
+                <div class="widget">
+                    <div class="widget-header bordered-bottom bordered-sky">
+                        <span class="widget-caption">专题点-图集表单</span>
+                    </div>
+                    <div class="widget-body">
+                        <div id="horizontal-form">
+                            <form name="ajaxform" method="post" action="{$ANY.__APP__}?s=Topic/topicitempicssave" class="form-horizontal" role="form">
+                                <input type="hidden" name="topicid" value="{$topicid}">
+                                <input type="hidden" name="itemid" value="{$itemid}">
+                                {foreach $topicmapinfo.fields as $field}
+                                {if isset($field.apifield)&&$field.apifield}
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">{$field.name}：</label>
+                                    <div class="col-sm-10">
+                                        <p class="m-t-5">{$topiciteminfo[$field.field]}</p>
+                                    </div>
+                                </div>
+                                {/if}
+                                {/foreach}
+                                {foreach $picnum as $num}
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">图片{$num+1}</label>
+                                    <div class="col-sm-10">
+                                        {if isset($topiciteminfo['pics'][$num])}
+                                        <p><img src="{$SERVER.HOST.HTTP_HOST}{$topiciteminfo['pics'][$num]['pic']}" class="img-responsive"></p>
+                                        {/if}
+                                        <input type="hidden" name="pic{$num}" value="{$topiciteminfo['pics'][$num]['pic']}">
+                                        <input id="pic{$num}file" type="file" name="pic{$num}file" placeholder="图片" class="file-loading">
+                                        <p class="help-block">*大小:200K以下</p>
+                                    </div>
+                                </div>
+                                <script>
+                                $(function (){
+                                    var BootstrapFileInputClassObj = new BootstrapFileInputClass();
+                                    //课程示例图
+                                    BootstrapFileInputClassObj.Init("pic{$num}", JS_APP+"?s=Topic/topicitempicupload");
+                                })
+                                </script>
+                                {/foreach}
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-sky">保存</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{include file="Common/foot.html"}

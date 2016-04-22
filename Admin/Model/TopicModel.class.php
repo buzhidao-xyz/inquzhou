@@ -91,4 +91,28 @@ class TopicModel extends CommonModel
 
 		return $result ? true : false;
 	}
+
+	//获取专题点-图集
+	public function getTopicitempics($topicid=null, $itemid=null)
+	{
+		if (!$topicid || !$itemid) return false;
+
+		$data = M('topic_pics')->where(array('topicid'=>$topicid, 'itemid'=>$itemid))->select();
+
+		return is_array($data) ? $data : array();
+	}
+
+	//保存专题点 - 图集
+	public function saveTopicitempics($topicid=null, $itemid=null, $data=array())
+	{
+		if (!isset($this->topicmap[$topicid]) || !is_array($data) || empty($data)) return false;
+
+		$topicmapinfo = $this->topicmap[$topicid];
+
+		M('topic_pics')->where(array('topicid'=>$topicid, 'itemid'=>$itemid))->delete();
+
+		$result = M('topic_pics')->addAll($data);
+
+		return $result;
+	}
 }

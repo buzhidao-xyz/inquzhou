@@ -303,4 +303,93 @@ class TopicController extends CommonController
 			$this->ajaxReturn(1, '保存失败！');
 		}
 	}
+
+	//上传图片
+	public function topicitempicupload()
+	{
+		$upload = new \Think\Upload();
+		$upload->maxSize  = 5242880; //5M
+		$upload->exts     = array('jpg', 'gif', 'png', 'jpeg');
+		$upload->rootPath = APP_PATH;
+		$upload->savePath = '/Upload/topic/';
+		$upload->saveName = array('uniqid','');
+		$upload->subName  = array('date','Y/md');
+		$info = $upload->upload();
+
+		$error = null;
+        $msg = '上传成功！';
+        $data = array();
+		if (!$info) {
+			$error = 1;
+			$msg = $upload->getError();
+		} else {
+			$fileinfo = current($info);
+			$data = array(
+				'filepath' => $fileinfo['savepath'],
+				'filename' => $fileinfo['savename'],
+			);
+		}
+
+        $this->ajaxReturn($error, $msg, $data);
+	}
+
+	//专题点 - 图集
+	public function topicitempics()
+	{
+		$topicid = $this->_getTopicid(true);
+		$topicmapinfo = $this->topicmap[$topicid];
+		if (!is_array($topicmapinfo)||empty($topicmapinfo)) $this->ajaxReturn(1, '未知专题！');
+
+		$this->assign('topicmapinfo', $topicmapinfo);
+
+		$itemid = $this->_getItemid(true);
+
+		$topiciteminfo = D('Topic')->getTopicitem($topicid, $itemid);
+		if (!$topiciteminfo['total']) $this->pageReturn(1, '未知专题点！');
+
+		$topiciteminfo = current($topiciteminfo['data']);
+
+		//获取专题点图集信息
+		$topicitempics = D('Topic')->getTopicitempics($topicid, $itemid);
+		$topiciteminfo['pics'] = $topicitempics;
+
+		$this->assign('picnum', range(0,29));
+
+		$this->assign('topiciteminfo', $topiciteminfo);
+		$this->display();
+	}
+
+	//专题点 - 图集 - 保存
+	public function topicitempicssave()
+	{
+		$topicid = $this->_getTopicid(true);
+		$topicmapinfo = $this->topicmap[$topicid];
+		if (!is_array($topicmapinfo)||empty($topicmapinfo)) $this->ajaxReturn(1, '未知专题！');
+
+		$this->assign('topicmapinfo', $topicmapinfo);
+
+		$itemid = $this->_getItemid(true);
+
+		//获取图集图片路径
+		$data = array();
+		$picnum = range(0,29);
+		foreach ($picnum as $num) {
+			$pic = mRequest('pic'.$num);
+			if ($pic) {
+				$data[] = array(
+					'topicid'    => $topicid,
+					'itemid'     => $itemid,
+					'pic'        => $pic,
+					'createtime' => TIMESTAMP,
+				);
+			}
+		}
+
+		$result = D('Topic')->saveTopicitempics($topicid, $itemid, $data);
+		if ($result) {
+			$this->ajaxReturn(0, '保存成功！');
+		} else {
+			$this->ajaxReturn(1, '保存失败！');
+		}
+	}
 }

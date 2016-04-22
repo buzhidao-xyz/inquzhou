@@ -20,6 +20,8 @@ class TopicController extends CommonController
 	public function __construct()
 	{
 		parent::__construct();
+
+		$this->topicmap = C('TOPIC');
 	}
 
 	//获取topicid
@@ -71,9 +73,20 @@ class TopicController extends CommonController
 	public function topicitemlist()
 	{
 		$topicid = $this->_getTopicid(true);
+		$topicmapinfo = $this->topicmap[$topicid];
+		if (!is_array($topicmapinfo)||empty($topicmapinfo)) $this->apiReturn(1, '未知专题！');
+
 		$lat = $this->_getLat(true);
 		$lng = $this->_getLng(true);
 		$distance = $this->_getDistance(true);
+
+		//专题信息
+		$apifields = array();
+		foreach ($topicmapinfo['fields'] as $field) {
+			if (isset($field['apifield'])&&$field['apifield']) {
+				$apifields[$field['apifield']] = $field['field'];
+			}
+		}
 
 		//获取专题点数据
 		list($start, $length) = $this->mkPage();
@@ -83,14 +96,15 @@ class TopicController extends CommonController
 
 		$data = array();
 		foreach ($datalist as $d) {
-			$data[] = array(
+			$c = array(
 				'topicid' => (int)$topicid,
 				'itemid'  => (int)$d['itemid'],
-				'name'    => (string)$d['name'],
-				'address' => (string)$d['address'],
-				'lat'     => (string)$d['lat'],
-				'lng'     => (string)$d['lng'],
 			);
+			foreach ($apifields as $apifield=>$field) {
+				$c[$apifield] = (string)$d[$field];
+			}
+
+			$data[] = $c;
 		}
 
 		$this->apiReturn(0, '', array(

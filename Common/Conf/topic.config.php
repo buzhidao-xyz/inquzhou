@@ -14,6 +14,7 @@
  * fields.value.show : 是否列表显示
  * fields.value.search : 是否表单搜索
  * fields.value.excel : excel导入对应列
+ * fields.value.apifield : topicitemlist接口对应字段名
  */
 return array(
 	1 => array(
@@ -29,6 +30,7 @@ return array(
 				'show'   => 1,
 				'search' => 1,
 				'excel'  => 'A',
+				'apifield' => 'name',
 			),
 			'address' => array(
 				'field'  => 'address',
@@ -38,6 +40,7 @@ return array(
 				'show'   => 1,
 				'search' => 1,
 				'excel'  => 'B',
+				'apifield' => 'address',
 			),
 			'guardstatus' => array(
 				'field'  => 'guardstatus',
@@ -47,6 +50,7 @@ return array(
 				'show'   => 1,
 				'search' => 0,
 				'excel'  => 'C',
+				'apifield' => '',
 			),
 			'servicetel' => array(
 				'field'  => 'servicetel',
@@ -56,6 +60,7 @@ return array(
 				'show'   => 0,
 				'search' => 0,
 				'excel'  => 'D',
+				'apifield' => '',
 			),
 			'servicetime' => array(
 				'field'  => 'servicetime',
@@ -65,6 +70,7 @@ return array(
 				'show'   => 0,
 				'search' => 0,
 				'excel'  => 'E',
+				'apifield' => '',
 			),
 			'remark' => array(
 				'field'  => 'remark',
@@ -74,6 +80,7 @@ return array(
 				'show'   => 0,
 				'search' => 0,
 				'excel'  => 'F',
+				'apifield' => '',
 			),
 			'serviceid' => array(
 				'field'  => 'serviceid',
@@ -83,6 +90,7 @@ return array(
 				'show'   => 0,
 				'search' => 0,
 				'excel'  => 'F',
+				'apifield' => '',
 			),
 			'type' => array(
 				'field'  => 'type',
@@ -92,6 +100,7 @@ return array(
 				'show'   => 1,
 				'search' => 0,
 				'excel'  => 'G',
+				'apifield' => '',
 			),
 			'bikecount' => array(
 				'field'  => 'bikecount',
@@ -101,6 +110,7 @@ return array(
 				'show'   => 1,
 				'search' => 0,
 				'excel'  => 'H',
+				'apifield' => '',
 			),
 			'point_x' => array(
 				'field'  => 'point_x',
@@ -110,6 +120,7 @@ return array(
 				'show'   => 1,
 				'search' => 0,
 				'excel'  => 'I',
+				'apifield' => 'lng',
 			),
 			'point_y' => array(
 				'field'  => 'point_y',
@@ -119,6 +130,7 @@ return array(
 				'show'   => 1,
 				'search' => 0,
 				'excel'  => 'J',
+				'apifield' => 'lat',
 			),
 		)
 	),
@@ -135,6 +147,7 @@ return array(
 				'show'   => 1,
 				'search' => 1,
 				'excel'  => 'A',
+				'apifield' => 'name',
 			),
 			'type' => array(
 				'field'  => 'type',
@@ -171,6 +184,7 @@ return array(
 				'show'   => 1,
 				'search' => 1,
 				'excel'  => 'E',
+				'apifield' => 'address',
 			),
 			'servicetime' => array(
 				'field'  => 'servicetime',
@@ -225,6 +239,7 @@ return array(
 				'show'   => 1,
 				'search' => 0,
 				'excel'  => 'K',
+				'apifield' => 'lng',
 			),
 			'point_y' => array(
 				'field'  => 'point_y',
@@ -234,6 +249,7 @@ return array(
 				'show'   => 1,
 				'search' => 0,
 				'excel'  => 'L',
+				'apifield' => 'lat',
 			),
 		)
 	),
@@ -250,6 +266,7 @@ return array(
 				'show'   => 1,
 				'search' => 1,
 				'excel'  => 'A',
+				'apifield' => 'name',
 			),
 			'address' => array(
 				'field'  => 'address',
@@ -259,6 +276,7 @@ return array(
 				'show'   => 1,
 				'search' => 1,
 				'excel'  => 'B',
+				'apifield' => 'address',
 			),
 			'point_x' => array(
 				'field'  => 'point_x',
@@ -268,6 +286,7 @@ return array(
 				'show'   => 1,
 				'search' => 0,
 				'excel'  => 'C',
+				'apifield' => 'lng',
 			),
 			'point_y' => array(
 				'field'  => 'point_y',
@@ -277,6 +296,7 @@ return array(
 				'show'   => 1,
 				'search' => 0,
 				'excel'  => 'D',
+				'apifield' => 'lat',
 			),
 		)
 	),
@@ -302,6 +322,7 @@ return array(
 				'show'   => 1,
 				'search' => 1,
 				'excel'  => 'B',
+				'apifield' => 'name',
 			),
 			'secondname' => array(
 				'field'  => 'secondname',
@@ -320,6 +341,7 @@ return array(
 				'show'   => 1,
 				'search' => 1,
 				'excel'  => 'D',
+				'apifield' => 'address',
 			),
 			'category' => array(
 				'field'  => 'category',
@@ -356,6 +378,7 @@ return array(
 				'show'   => 1,
 				'search' => 0,
 				'excel'  => 'H',
+				'apifield' => 'lng',
 			),
 			'point_y' => array(
 				'field'  => 'point_y',
@@ -365,6 +388,7 @@ return array(
 				'show'   => 1,
 				'search' => 0,
 				'excel'  => 'I',
+				'apifield' => 'lat',
 			),
 		)
 	),
@@ -390,6 +414,7 @@ return array(
 				'show'   => 1,
 				'search' => 0,
 				'excel'  => 'B',
+				'apifield' => 'lng',
 			),
 			'point_y' => array(
 				'field'  => 'point_y',
@@ -399,6 +424,7 @@ return array(
 				'show'   => 1,
 				'search' => 0,
 				'excel'  => 'C',
+				'apifield' => 'lat',
 			),
 			'name' => array(
 				'field'  => 'name',
@@ -408,6 +434,7 @@ return array(
 				'show'   => 1,
 				'search' => 1,
 				'excel'  => 'D',
+				'apifield' => 'name',
 			),
 			'fullname' => array(
 				'field'  => 'fullname',
@@ -435,6 +462,7 @@ return array(
 				'show'   => 1,
 				'search' => 1,
 				'excel'  => 'G',
+				'apifield' => 'address',
 			),
 			'postcode' => array(
 				'field'  => 'postcode',
@@ -568,6 +596,7 @@ return array(
 				'show'   => 1,
 				'search' => 0,
 				'excel'  => 'C',
+				'apifield' => 'name',
 			),
 			'address' => array(
 				'field'  => 'address',
@@ -577,6 +606,7 @@ return array(
 				'show'   => 1,
 				'search' => 0,
 				'excel'  => 'D',
+				'apifield' => 'address',
 			),
 			'stime' => array(
 				'field'  => 'stime',
@@ -631,6 +661,7 @@ return array(
 				'show'   => 1,
 				'search' => 0,
 				'excel'  => 'J',
+				'apifield' => 'lng',
 			),
 			'point_y' => array(
 				'field'  => 'point_y',
@@ -640,6 +671,7 @@ return array(
 				'show'   => 1,
 				'search' => 0,
 				'excel'  => 'K',
+				'apifield' => 'lat',
 			),
 		)
 	),
@@ -656,6 +688,7 @@ return array(
 				'show'   => 1,
 				'search' => 1,
 				'excel'  => 'A',
+				'apifield' => 'name',
 			),
 			'address' => array(
 				'field'  => 'address',
@@ -665,6 +698,7 @@ return array(
 				'show'   => 1,
 				'search' => 1,
 				'excel'  => 'B',
+				'apifield' => 'address',
 			),
 			'point_x' => array(
 				'field'  => 'point_x',
@@ -674,6 +708,7 @@ return array(
 				'show'   => 1,
 				'search' => 0,
 				'excel'  => 'C',
+				'apifield' => 'lng',
 			),
 			'point_y' => array(
 				'field'  => 'point_y',
@@ -683,6 +718,7 @@ return array(
 				'show'   => 1,
 				'search' => 0,
 				'excel'  => 'D',
+				'apifield' => 'lat',
 			),
 		)
 	),
@@ -699,6 +735,7 @@ return array(
 				'show'   => 1,
 				'search' => 1,
 				'excel'  => 'A',
+				'apifield' => 'name',
 			),
 			'address' => array(
 				'field'  => 'address',
@@ -708,6 +745,7 @@ return array(
 				'show'   => 1,
 				'search' => 1,
 				'excel'  => 'B',
+				'apifield' => 'address',
 			),
 			'point_x' => array(
 				'field'  => 'point_x',
@@ -717,6 +755,7 @@ return array(
 				'show'   => 1,
 				'search' => 0,
 				'excel'  => 'C',
+				'apifield' => 'lng',
 			),
 			'point_y' => array(
 				'field'  => 'point_y',
@@ -726,6 +765,7 @@ return array(
 				'show'   => 1,
 				'search' => 0,
 				'excel'  => 'D',
+				'apifield' => 'lat',
 			),
 		)
 	),

@@ -23,7 +23,5 @@ return array(
 	'LOAD_EXT_CONFIG' => array(
 		//用户信息配置文件
 		'USER'  => 'user.config',
-		//专题信息配置文件
-		'TOPIC' => 'topic.config',
 	),
 );
