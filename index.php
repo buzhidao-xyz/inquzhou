@@ -29,6 +29,9 @@ define('MODULE_NAME','Api');
 // 定义应用目录
 define('APP_PATH', str_replace('\\','/',dirname(__FILE__)).'/');
 
+//系统应用主入口标识
+define('APP_INDEX', 1);
+
 // 引入ThinkPHP入口文件
 require './ThinkPHP/ThinkPHP.php';
 

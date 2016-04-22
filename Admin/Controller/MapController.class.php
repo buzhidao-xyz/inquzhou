@@ -16,10 +16,4 @@ class MapController extends CommonController
 	}
 
 	public function index(){}
-
-	//图层设置
-	public function layer()
-	{
-		
-	}
 }

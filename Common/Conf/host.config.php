@@ -10,6 +10,7 @@ function hostpath()
     $hostpath = null;
     if (isset($_SERVER['REQUEST_URI'])) {
         $uripath = explode('?', $_SERVER['REQUEST_URI']);
+        if (isset($_SERVER['REDIRECT_URL'])) $uripath[0] = str_replace($uripath[0], $_SERVER['REDIRECT_URL'], '');
         if (preg_match("/\.php$/", $uripath[0])) {
             $hostpathinfo = pathinfo($uripath[0]);
             $hostpath = $hostpathinfo['dirname'];

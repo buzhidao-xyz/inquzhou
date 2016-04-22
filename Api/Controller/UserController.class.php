@@ -27,8 +27,8 @@ class UserController extends CommonController
     private function _getPhone($ck=1)
     {
         $phone = mRequest('phone');
-        if ($ck&&!\Think\Filter::CKPhone($phone)) $this->appReturn(1,'未知手机号码！');
-        if ($phone&&!\Think\Filter::CKPhone($phone)) $this->appReturn(1,'未知手机号码！');
+        if ($ck&&!\Think\Filter::CKPhone($phone)) $this->apiReturn(1,'未知手机号码！');
+        if ($phone&&!\Think\Filter::CKPhone($phone)) $this->apiReturn(1,'未知手机号码！');
 
         return $phone;
     }
@@ -70,7 +70,7 @@ class UserController extends CommonController
     {
         $action = mRequest('action');
         $actions = array('regist','forgot');
-        if (!in_array($action,$actions)) $this->appReturn(1,'未知短信发送动作！');
+        if (!in_array($action,$actions)) $this->apiReturn(1,'未知短信发送动作！');
 
         return $action;
     }
@@ -85,19 +85,19 @@ class UserController extends CommonController
         $sms_resend_expire = C('RS.SMS_RESEND_EXPIRE');
 
         //查询session是否在N秒内有短信发送记录
-        if (session('smssendflag','',0,0)) $this->appReturn(1,$sms_resend_expire.'秒内请勿重复发送短信！');
+        if (session('smssendflag','',0,0)) $this->apiReturn(1,$sms_resend_expire.'秒内请勿重复发送短信！');
 
         //发送短信的动作
         $action = $this->_getAction();
         if ($action == 'regist') {
             $phone = $this->_getPhone();
             $userinfo = D('User')->getUserByPhone($phone);
-            if (!empty($userinfo)) $this->appReturn(1,'该手机号码已注册！');
+            if (!empty($userinfo)) $this->apiReturn(1,'该手机号码已注册！');
         }
         if ($action == 'forgot') {
             $phone = $this->_getPhone();
             $userinfo = D('User')->getUserByPhone($phone);
-            if (empty($userinfo)) $this->appReturn(1,'该手机号码未注册！');
+            if (empty($userinfo)) $this->apiReturn(1,'该手机号码未注册！');
         }
         if ($action == 'forgotwalletpwd') {
             $phone = $this->_getPhone(0);
@@ -107,7 +107,7 @@ class UserController extends CommonController
 
             $userinfo = $this->userinfo;
             //判断要发送的手机号码是否是该登录用户手机号码
-            if ($phone&&$phone!=$userinfo['phone']) $this->appReturn(1,'发送手机号码验证失败！');
+            if ($phone&&$phone!=$userinfo['phone']) $this->apiReturn(1,'发送手机号码验证失败！');
 
             $phone = $userinfo['phone'];
         }
@@ -133,13 +133,13 @@ class UserController extends CommonController
             //session记录短信发送标记 N秒内防重发
             session('smssendflag',1,$sms_resend_expire);
 
-            $this->appReturn(0,'短信发送成功！',array(
+            $this->apiReturn(0,'短信发送成功！',array(
                 'success' => 1,
                 'message' => ''
             ));
         }
 
-        $this->appReturn(1,'短信发送失败！');
+        $this->apiReturn(1,'短信发送失败！');
     }
 
     /**
@@ -162,12 +162,12 @@ class UserController extends CommonController
         //检查短信验证码是否已过期
         $return = D('Org')->ckSmsVcodeExpire($templatecode,$phone,$vcode);
         if ($return) {
-            $this->appReturn(0,'',array(
+            $this->apiReturn(0,'',array(
                 'success' => 1,
                 'message' => ''
             ));
         } else {
-            $this->appReturn(1,'短信验证码不存在或已过期！');
+            $this->apiReturn(1,'短信验证码不存在或已过期！');
         }
     }
 
@@ -192,7 +192,7 @@ class UserController extends CommonController
         //获取密码或登录码
         $password = $this->_getPassword();
         $signtoken = $this->_getSigntoken();
-        if (!$password && !$signtoken) $this->appReturn(1,'未知密码！');
+        if (!$password && !$signtoken) $this->apiReturn(1,'未知密码！');
 
         //appid
         $appid = mRequest('appid');
@@ -268,9 +268,9 @@ class UserController extends CommonController
                 'sessionid' => session_id(),
                 'vipflag' => $vipflag
             );
-            $this->appReturn(0,null,$return);
+            $this->apiReturn(0,null,$return);
         } else {
-            $this->appReturn(1,'登录失败！账户或密码错误！');
+            $this->apiReturn(1,'登录失败！账户或密码错误！');
         }
     }
 
@@ -289,7 +289,7 @@ class UserController extends CommonController
         //用户解绑appid
         D('User')->bindingAppid($userinfo['id'],null,0);
 
-        $this->appReturn(0,'',array(
+        $this->apiReturn(0,'',array(
             'success' => 1,
             'message' => ''
         ));
@@ -306,14 +306,14 @@ class UserController extends CommonController
 
         //手机号码
         $phone = $this->_getPhone();
-        if (!D('User')->CKPhoneExists($phone)) $this->appReturn(1,'该手机号码未注册！');
+        if (!D('User')->CKPhoneExists($phone)) $this->apiReturn(1,'该手机号码未注册！');
 
         //短信验证码
         $vcode = $this->_getVcode();
         $templatecode = D('Org')->smsTemplateCode($action);
-        if (!D('Org')->ckSmsVcodeExpire($templatecode,$phone,$vcode)) $this->appReturn(1,'短信验证码不存在或已过期！');
+        if (!D('Org')->ckSmsVcodeExpire($templatecode,$phone,$vcode)) $this->apiReturn(1,'短信验证码不存在或已过期！');
 
-        $this->appReturn(0,'',array(
+        $this->apiReturn(0,'',array(
             'success' => 1,
             'message' => ''
         ));
@@ -330,20 +330,20 @@ class UserController extends CommonController
 
         //手机号码
         $phone = $this->_getPhone();
-        if (!D('User')->CKPhoneExists($phone)) $this->appReturn(1,'该手机号码尚未注册！');
+        if (!D('User')->CKPhoneExists($phone)) $this->apiReturn(1,'该手机号码尚未注册！');
 
         //短信验证码
         $vcode = $this->_getVcode();
         $templatecode = D('Org')->smsTemplateCode($action);
-        // if (!D('Org')->ckSmsVcodeExpire($templatecode,$phone,$vcode)) $this->appReturn(1,'短信验证码不存在或已过期！');
+        // if (!D('Org')->ckSmsVcodeExpire($templatecode,$phone,$vcode)) $this->apiReturn(1,'短信验证码不存在或已过期！');
 
         //用户密码
         $password = $this->_getPassword();
-        if (!\Think\Filter::CKPasswd($password)) $this->appReturn(1,'密码规则：数字字母开始 包含数字字母_!@#$的6-20位字符串');
+        if (!\Think\Filter::CKPasswd($password)) $this->apiReturn(1,'密码规则：数字字母开始 包含数字字母_!@#$的6-20位字符串');
         //确认密码
         $passwordc = $this->_getPasswordc();
         //检查密码
-        if ($password != $passwordc) $this->appReturn(1,'两次输入的密码不一致！');
+        if ($password != $passwordc) $this->apiReturn(1,'两次输入的密码不一致！');
 
         //设置新密码
         
@@ -361,12 +361,12 @@ class UserController extends CommonController
         $return = D('User')->setUserInfo($userid,$data);
 
         if ($return) {
-            $this->appReturn(0,'',array(
+            $this->apiReturn(0,'',array(
                 'success' => 1,
                 'message' => ''
             ));
         } else {
-            $this->appReturn(1,'设置新密码失败！');
+            $this->apiReturn(1,'设置新密码失败！');
         }
     }
 
@@ -390,7 +390,7 @@ class UserController extends CommonController
 
         $avatar = D('User')->getUserAvatar($userinfo['id']);
         $usergroup = isset($userinfo['usergroup']) ? $userinfo['usergroup'] : null;
-        $this->appReturn(0,'',array(
+        $this->apiReturn(0,'',array(
             'userid' => $userid,
             'avatar' => $avatar,
             'nickname' => $userinfo['nickname'],
@@ -505,12 +505,12 @@ class UserController extends CommonController
                 $this->GSUserInfo($userinfo,0);
             }
 
-            $this->appReturn(0,'',array(
+            $this->apiReturn(0,'',array(
                 'success' => 1,
                 'message' => ''
             ));
         } else {
-            $this->appReturn(1,'更新失败！');
+            $this->apiReturn(1,'更新失败！');
         }
     }
 
@@ -531,15 +531,15 @@ class UserController extends CommonController
         $oldpassword = mRequest('oldpassword');
         $oldpassword = D('User')->passwordEncrypt($oldpassword);
         //检查原密码是否正确
-        if (!$oldpassword || !D('User')->CKUserPassword($userinfo['userid'],$oldpassword)) $this->appReturn(1,L('oldpassword_error'));
+        if (!$oldpassword || !D('User')->CKUserPassword($userinfo['userid'],$oldpassword)) $this->apiReturn(1,L('oldpassword_error'));
     
         //新密码
         $password = $this->_getPassword();
-        if (!\Think\Filter::CKPasswd($password)) $this->appReturn(1,'密码规则：数字字母开始 包含数字字母_!@#$的6-20位字符串');
+        if (!\Think\Filter::CKPasswd($password)) $this->apiReturn(1,'密码规则：数字字母开始 包含数字字母_!@#$的6-20位字符串');
         //确认密码
         $passwordc = $this->_getPasswordc();
         //检查密码
-        if ($password != $passwordc) $this->appReturn(1,'两次输入的密码不一致！');
+        if ($password != $passwordc) $this->apiReturn(1,'两次输入的密码不一致！');
 
         //设置密码
         $data = array(
@@ -547,12 +547,12 @@ class UserController extends CommonController
         );
         $return = D('User')->setUserInfo($userinfo['userid'],$data);
         if ($return) {
-            $this->appReturn(0,'',array(
+            $this->apiReturn(0,'',array(
                 'success' => 1,
                 'message' => ''
             ));
         } else {
-            $this->appReturn(1,'修改失败！');
+            $this->apiReturn(1,'修改失败！');
         }
     }
 }

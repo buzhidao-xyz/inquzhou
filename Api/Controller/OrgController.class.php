@@ -52,7 +52,7 @@ class OrgController extends CommonController
         $userinfo = $this->userinfo;
 
         $imgfile = mRequest('imgfile',false);
-        if (!$imgfile) $this->appReturn(1,'请选择图片！');
+        if (!$imgfile) $this->apiReturn(1,'请选择图片！');
 
         $api = C('RS.IMAGE_UPLOAD');
 
@@ -66,7 +66,7 @@ class OrgController extends CommonController
 
         //返回
         if ($result['State'] == 0) {
-            $this->appReturn(0,'',array(
+            $this->apiReturn(0,'',array(
                     'success' => 1,
                     'imgpath' => $result['Url'],
                     'imgurl'  => C('RS.IMAGE_SERVER').$result['Url']
@@ -74,7 +74,7 @@ class OrgController extends CommonController
             );
         } else {
             $msg = $result['ErrorMessage'] ? $result['ErrorMessage'] : '图片上传失败！';
-            $this->appReturn(1,$msg);
+            $this->apiReturn(1,$msg);
         }
     }
 }

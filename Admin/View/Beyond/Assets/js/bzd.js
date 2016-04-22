@@ -38,21 +38,6 @@ var ajaxCallback = function(data) {
     }
 };
 
-//AJAX-form提交
-$("form[name=ajax-form]").submit(function() {
-    var url = $(this).attr("action");
-    var method = $(this).attr("method");
-    var d = $(this).serialize();
-
-    if (method != "post") {
-        $.post(url, d, ajaxCallback, 'json');
-    } else {
-        $.get(url, d, ajaxCallback, 'json');
-    }
-
-    return false;
-});
-
 //AJAX请求 启用/禁用、显示/隐藏、删除
 $("a.btn-ajax, a.btn-ajax-enable, a.btn-ajax-delete").on('click', function (){
     $.post($(this).attr('href'), {}, function (data){
@@ -113,6 +98,15 @@ function bootboxInit() {
 }
 
 $(function (){
+    //checkbox-slider-ck元素
+    $(".checkbox-slider-ck").click(function (){
+        if ($(this).attr("checked")) {
+            $(this).val(1);
+        } else {
+            $(this).val(0);
+        }
+    });
+
     //modal-edit
     $("a.btn-edit-modal").on('click', function (){
         $.get($(this).attr("href"), {}, function (data){
@@ -123,6 +117,21 @@ $(function (){
                 alertPanelShow('error', data.msg);
             }
         });
+        return false;
+    });
+    
+    //ajaxform提交
+    $("form[name=ajaxform]").submit(function() {
+        var url = $(this).attr("action");
+        var method = $(this).attr("method");
+        var d = $(this).serialize();
+
+        if (method != "post") {
+            $.post(url, d, ajaxCallback, 'json');
+        } else {
+            $.get(url, d, ajaxCallback, 'json');
+        }
+
         return false;
     });
 });

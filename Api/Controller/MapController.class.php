@@ -177,4 +177,19 @@ class MapController extends CommonController
 			'apijson' => $apijson
 		));
 	}
+
+	//实时路况图层接口
+	public function layer()
+	{
+		$this->CKQuest('get');
+
+		$configkey = 'maplayer_road';
+		$configinfo = D('System')->getSystemConfigByKey($configkey);
+
+		$realtimeroad = $configinfo[$configkey]['configvalue'];
+
+		$this->apiReturn(0, '', array(
+			'realtimeroad' => $realtimeroad
+		));
+	}
 }

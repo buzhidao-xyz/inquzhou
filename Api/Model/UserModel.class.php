@@ -1,7 +1,7 @@
 <?php
 /**
  * 用户模型
- * wangbaoqing@xlh-tech.com
+ * wbq@xlh-tech.com
  * 2016-04-07
  */
 namespace Api\Model;

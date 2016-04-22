@@ -19,6 +19,9 @@ class BaseController extends Controller
 	{
 		parent::__construct();
 
+		//获取php://input数据
+        $this->_getPhpinput();
+
 		//配置文件输出到模板
 		$this->_assignConfig();
 
@@ -29,21 +32,31 @@ class BaseController extends Controller
         $this->_accessLog();
 	}
 
+    //获取php://input数据
+    private function _getPhpinput()
+    {
+        $phpinput = file_get_contents("php://input");
+        $phpinputdata = json_decode($phpinput, true);
+        !is_array($phpinputdata) ? $phpinputdata = array() : null;
+        
+        $_REQUEST = array_merge($_REQUEST, $phpinputdata, array('phpinput'=>$phpinput));
+    }
+
 	/**
 	 * 配置文件输出到模板
 	 */
 	private function _assignConfig()
 	{
-		//HTTP_HOST
-		$this->assign('HTTP_HOST',C('HTTP_HOST'));
-		//JS静态文件服务器
-		$this->assign('JS_FILE_SERVER',C('JS_FILE_SERVER'));
-		//css静态文件服务器
-		$this->assign('CSS_FILE_SERVER',C('CSS_FILE_SERVER'));
-		//.svg .eot .ttf .woff字体文件服务器
-		$this->assign('FONT_FILE_SERVER',C('FONT_FILE_SERVER'));
-		//图片文件服务器
-		$this->assign('IMAGE_SERVER',C('IMAGE_SERVER'));
+        $SERVER = array();
+
+        //服务器HOST
+        $HOST = C('HOST');
+        $SERVER['HOST'] = $HOST;
+        $this->assign('SERVER', $SERVER);
+
+        //系统初始化默认管理员
+        $SYSTEM_MANAGER = C('SYSTEM_MANAGER');
+        $this->assign('system_manager', $SYSTEM_MANAGER);
 	}
 
     /**
@@ -104,7 +117,7 @@ class BaseController extends Controller
 			default:
 				break;
 		}
-		if (!$flag) $this->appReturn(1,L('quest_error'));
+		if (!$flag) $this->apiReturn(1,L('quest_error'));
 
 		return true;
 	}
@@ -120,19 +133,19 @@ class BaseController extends Controller
 	{
 		if (!in_array($error,$this->errorflag)) {
 			$error = 1;
-			!$msg ? $msg = L('appreturn_error_errorflag') : null;
+			!$msg ? $msg = L('apireturn_error_errorflag') : null;
 			$data = array();
 		}
 
 		if ($error && !$msg) {
 			$error = 1;
-			$msg = L('appreturn_error_msg');
+			$msg = L('apireturn_error_msg');
 			$data = array();
 		}
 
 		if (!$error && !is_array($data)) {
 			$error = 1;
-			$msg = L('appreturn_error_data');
+			$msg = L('apireturn_error_data');
 			$data = array();
 		}
 
@@ -184,7 +197,7 @@ class BaseController extends Controller
     	}
 
         //如果有错误 返回错误
-        if ($timeoutflag&&$result['error']) $this->appReturn(1,L($result['error']));
+        if ($timeoutflag&&$result['error']) $this->apiReturn(1,L($result['error']));
 
         return $result['result'];
     }

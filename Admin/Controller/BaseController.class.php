@@ -126,7 +126,7 @@ class BaseController extends Controller
             default:
                 break;
         }
-        if (!$flag) $this->appReturn(1,L('quest_error'));
+        if (!$flag) $this->ajaxReturn(1,L('quest_error'));
 
         return true;
     }

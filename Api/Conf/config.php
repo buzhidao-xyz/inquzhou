@@ -48,8 +48,8 @@ return array(
 
 	//加载扩展配置文件 引用方式C('x.x')
 	'LOAD_EXT_CONFIG' => array(
-		//用户信息配置文件
-		'USER'  => 'user.config',
+		//访问信息配置文件
+		'ACCESS'  => 'access.config',
 	),
 
 	//图片地址

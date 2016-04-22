@@ -23,7 +23,8 @@ class CommonController extends BaseController
 
         $this->userinfo = $this->GSUserInfo();
 
-        $this->_CKSign();
+        //检查API请求
+        $this->CKApiQuest();
 	}
 
     /**
@@ -55,15 +56,38 @@ class CommonController extends BaseController
     }
 
     /**
-     * 判断用户是否已登录
+     * 检查用户是否已登录
      */
-    protected function CKUserLogon($appreturnflag=0)
+    protected function CKUserLogon($logon=false)
     {
-        if (!$this->userinfo || !is_array($this->userinfo)) {
-            return $appreturnflag ? $this->appReturn(1,L('user_logon_error')) : false;
+        if ($logon && (!$this->userinfo || !is_array($this->userinfo) || empty($this->userinfo))) {
+            $this->apiReturn(1,L('user_logon_error'));
         }
 
         return true;
+    }
+
+    //检查API请求
+    private function CKApiQuest()
+    {
+        //ACCESS配置信息
+        $access = C('ACCESS');
+
+        //当前API请求
+        $api = parse_url($_SERVER['REQUEST_URI'])['path'];
+
+        //API信息
+        $apiinfo = isset($access['APILIST'][$api]) ? $access['APILIST'][$api] : array();
+        if (!is_array($apiinfo)||empty($apiinfo)) $this->apiReturn(1, '未知API请求！');
+
+        //检查请求方式
+        $this->CKQuest($apiinfo['method']);
+
+        //检查用户登录
+        $this->CKUserLogon($apiinfo['logon']);
+
+        //检查Sign
+        $this->_CKSign();
     }
 
     //获取页码
@@ -117,5 +141,25 @@ class CommonController extends BaseController
     private function _CKSign()
     {
         return true;
+    }
+
+    //获取纬度
+    protected function _getLat($ck=false)
+    {
+        $lat = mRequest('lat');
+
+        $ck&&!$lat ? $this->apiReturn(1, '纬度信息为空！') : null;
+
+        return (double)$lat;
+    }
+
+    //获取经度
+    protected function _getLng($ck=false)
+    {
+        $lng = mRequest('lng');
+
+        $ck&&!$lng ? $this->apiReturn(1, '经度信息为空！') : null;
+
+        return (double)$lng;
     }
 }

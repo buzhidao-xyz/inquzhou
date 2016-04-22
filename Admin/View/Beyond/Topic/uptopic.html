@@ -3,7 +3,7 @@
     <div class="page-header position-relative page-header-fixed">
         <div class="header-title">
             <h1>
-                用户管理 <!-- <small><i class="fa fa-angle-right"></i> 管理 </small> -->
+                专题管理 <!-- <small><i class="fa fa-angle-right"></i> 管理 </small> -->
             </h1>
         </div>
         <!--Header Buttons-->
@@ -26,47 +26,40 @@
     <div class="page-body">
         <div class="row">
             <div class="col-lg-12 col-sm-12 col-xs-12">
-                <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>编辑用户信息</h5>
+                <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>编辑专题信息</h5>
                 <div class="widget">
                     <div class="widget-header bordered-bottom bordered-sky">
-                        <span class="widget-caption">用户信息表单</span>
+                        <span class="widget-caption">专题信息表单</span>
                     </div>
                     <div class="widget-body">
                         <div id="horizontal-form">
-                            <form name="userform" method="post" action="{$ANY.__APP__}?s=User/upusersave" class="form-horizontal" role="form">
-                                <input type="hidden" name="userid" value="{$userinfo.userid}">
+                            <form name="ajaxform" method="post" action="{$ANY.__APP__}?s=Topic/uptopicsave" class="form-horizontal" role="form">
+                                <input type="hidden" name="topicid" value="{$topicinfo.topicid}">
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label no-padding-right">手机号</label>
+                                    <label class="col-sm-2 control-label no-padding-right">名称</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="phone" value="{$userinfo.phone}" placeholder="手机号 例：18012341234">
+                                        <input type="text" class="form-control" name="title" value="{$topicinfo.title}" placeholder="专题名称">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label no-padding-right">密码</label>
+                                    <label class="col-sm-2 control-label no-padding-right">图片</label>
                                     <div class="col-sm-10">
-                                        <input type="password" class="form-control" name="passwd" value="" placeholder="密码 数字字母下划线5-20位">
-                                        <p class="help-block danger m-b-5">*不修改请留空！</p>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label no-padding-right">确认密码</label>
-                                    <div class="col-sm-10">
-                                        <input type="password" class="form-control" name="passwdc" value="" placeholder="确认密码 数字字母下划线5-20位">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label no-padding-right">用户名</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="username" value="{$userinfo.username}" placeholder="用户名 例：张三">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label no-padding-right">头像</label>
-                                    <div class="col-sm-10">
-                                        <p><img src="{$userinfo.avatar}" class="img-responsive"></p>
-                                        <input type="hidden" name="avatar" value="{$SERVER.HOST.HTTP_HOST}{$userinfo.avatar}">
-                                        <input id="avatarfile" type="file" name="avatarfile" placeholder="头像" class="file-loading">
+                                        <p><img src="{$SERVER.HOST.HTTP_HOST}{$topicinfo.pic}" class="img-responsive"></p>
+                                        <input type="hidden" name="pic" value="{$topicinfo.pic}">
+                                        <input id="picfile" type="file" name="picfile" placeholder="图片" class="file-loading">
                                         <p class="help-block">*大小:200K以下</p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">作者</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="author" value="{$topicinfo.author}" placeholder="专题作者 例：衢州测绘院">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">描述</label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control" rows="5" name="desc" placeholder="专题描述">{$topicinfo.desc}</textarea>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -90,17 +83,7 @@
 $(function (){
     var BootstrapFileInputClassObj = new BootstrapFileInputClass();
     //课程示例图
-    BootstrapFileInputClassObj.Init("avatar", JS_APP+"?s=User/avatarupload");
-
-    //用户Form提交
-    $("form[name=userform]").submit(function (){
-        var url = $(this).attr('action');
-        var postdata = $(this).serialize();
-        $.post(url, postdata, function (data){
-            ajaxCallback(data);
-        }, 'json');
-        return false;
-    });
+    BootstrapFileInputClassObj.Init("pic", JS_APP+"?s=Topic/picupload");
 })
 </script>
 {include file="Common/foot.html"}

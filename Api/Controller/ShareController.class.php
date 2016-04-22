@@ -35,7 +35,7 @@ class ShareController extends CommonController
     private function _getConfig()
     {
     	$configfile = APP_PATH.'APP/Conf/share.config.php';
-    	if (!file_exists($configfile)) $this->appReturn(1,'分享配置出错！');
+    	if (!file_exists($configfile)) $this->apiReturn(1,'分享配置出错！');
 
     	$this->_share_config = include($configfile);
         $this->_platform       = $this->_share_config['platform'];
@@ -52,7 +52,7 @@ class ShareController extends CommonController
     private function _getObject()
     {
     	$object = mRequest('object');
-    	if (!in_array($object,$this->_object)) $this->appReturn(1,'未知分享对象！');
+    	if (!in_array($object,$this->_object)) $this->apiReturn(1,'未知分享对象！');
 
     	return $object;
     }
@@ -63,7 +63,7 @@ class ShareController extends CommonController
     private function _getPlatform()
     {
     	$platform = mRequest('platform');
-    	if (!in_array($platform,$this->_platform)) $this->appReturn(1,'未知分享平台！');
+    	if (!in_array($platform,$this->_platform)) $this->apiReturn(1,'未知分享平台！');
 
     	return $platform;
     }
@@ -82,7 +82,7 @@ class ShareController extends CommonController
     	$objectparams = isset($objectparams[$object]) ? $objectparams[$object] : array();
     	//参数匹配
     	foreach ($objectparams as $d) {
-    		if (!isset($params[$d])) $this->appReturn(1,'缺少分享对象参数！');
+    		if (!isset($params[$d])) $this->apiReturn(1,'缺少分享对象参数！');
     	}
 
     	return $params;
@@ -152,7 +152,7 @@ class ShareController extends CommonController
         		break;
         }
 
-        $this->appReturn(0,'',$sinfo);
+        $this->apiReturn(0,'',$sinfo);
     }
 
     /**
@@ -277,7 +277,7 @@ class ShareController extends CommonController
         );
         $return = D('Share')->shareLogSave($data);
 
-        $this->appReturn(0,'',array(
+        $this->apiReturn(0,'',array(
             'success' => 1
         ));
     }

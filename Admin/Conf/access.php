@@ -111,7 +111,7 @@ return array(
                         'nodeid'   => 13,
                         'nodename' => '专题类型',
                         'control'  => 'Topic',
-                        'action'   => 'topiclist',
+                        'action'   => 'topic',
                         'icon'     => '',
                         'nodelist' => array(),
                     ),
@@ -127,7 +127,7 @@ return array(
                     15 => array(
                         'nodeid'   => 15,
                         'nodename' => '图层设置',
-                        'control'  => 'Map',
+                        'control'  => 'System',
                         'action'   => 'layer',
                         'icon'     => '',
                         'nodelist' => array(),
