@@ -13,15 +13,23 @@ var BootstrapFileInputClass = function () {
         filename: ''
     }
 
-    //初始化fileinput控件（第一次初始化）
-    oFile.Init = function(ctrlName, uploadUrl) {
+    /**
+     * 初始化fileinput控件（第一次初始化）
+     * @param string ctrlName        控件对象名
+     * @param string uploadUrl       上传url
+     * @param boolean showUploadFlag 是否显示上传按钮
+     * @param string callbackfunc    回调函数
+     */
+    oFile.Init = function(ctrlName, uploadUrl, showUploadFlag, callbackfunc) {
+        //设置参数默认值
+        if (arguments[2]!==true && arguments[2]!==false) showUploadFlag = true;
+
+        //inupt-file对象
         var ctrlObj = $('#' + ctrlName + 'file');
 
-        if (uploadUrl) {
-            showUpload = true;
-        } else {
-            showUpload = false;
-        }
+        //上传按钮显示
+        var showUpload = true;
+        if (!showUploadFlag || !uploadUrl) showUpload = false;
 
         //初始化上传控件的样式 单文件上传
         ctrlObj.fileinput({
@@ -54,9 +62,13 @@ var BootstrapFileInputClass = function () {
 
         //上传成功回调
         ctrlObj.on("fileuploaded", function (event, data, previewId, index) {
-            alertPanelShow('success', data.response.msg);
-            //服务端返回file写入input
-            $('input[name='+ctrlName+']').val(data.response.data.filepath+data.response.data.filename);
+            if (callbackfunc) {
+                callbackfunc(data);
+            } else {
+                alertPanelShow('success', data.response.msg);
+                //服务端返回file写入input
+                $('input[name='+ctrlName+']').val(data.response.data.filepath+data.response.data.filename);
+            }
         });
 
         //上传失败回调

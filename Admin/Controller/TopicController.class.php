@@ -392,4 +392,110 @@ class TopicController extends CommonController
 			$this->ajaxReturn(1, '保存失败！');
 		}
 	}
+
+	//导入专题点
+	public function importtopicitem()
+	{
+		$topicid = $this->_getTopicid(true);
+		$topicmapinfo = $this->topicmap[$topicid];
+		if (!is_array($topicmapinfo)||empty($topicmapinfo)) $this->ajaxReturn(1, '未知专题！');
+
+		$this->assign('topicmapinfo', $topicmapinfo);
+
+		$this->display();
+	}
+
+	//导入专题点Excel
+	public function topicexcelimport()
+	{
+		$topicid = $this->_getTopicid(true);
+		$topicmapinfo = $this->topicmap[$topicid];
+		if (!is_array($topicmapinfo)||empty($topicmapinfo)) $this->ajaxReturn(1, '未知专题类型！');
+
+		//解析导入字段
+		$excelfields = array();
+		foreach ($topicmapinfo['fields'] as $field) {
+			$excelfields[$field['excel']] = $field['field'];
+		}
+
+		$upload = new \Think\Upload();
+		$upload->maxSize  = 5242880; //5M
+		$upload->exts     = array('xls', 'xlsx');
+		$upload->rootPath = APP_PATH;
+		$upload->savePath = '/Upload/topic/excel/';
+		$upload->saveName = array('uniqid','');
+		$upload->subName  = array('date','Y/md');
+		$info = $upload->upload();
+
+		$error = null;
+        $msg = '导入成功！';
+        $data = array();
+		if (!$info) {
+			$error = 1;
+			$msg = $upload->getError();
+		} else {
+			$fileinfo = current($info);
+			$excelfile = APP_PATH.$fileinfo['savepath'].$fileinfo['savename'];
+
+			//导入数据
+			$data['result'] = array();
+			//Excel数据
+			$ExcelData = $this->_readExcel($excelfile);
+			//解析数据
+			$datas = array();
+			array_shift($ExcelData);
+			foreach ($ExcelData as $dcell) {
+				$ddd = array();
+				foreach ($dcell as $colname=>$value) {
+					//解析数据类型
+					switch ($excelfields[$colname]) {
+						case 'point_x':
+							$value = (double)$value;
+						break;
+						case 'point_y':
+							$value = (double)$value;
+						break;
+						default:
+						break;
+					}
+
+					$ddd[$excelfields[$colname]] = $value;
+				}
+				$datas[] = $ddd;
+			}
+			$result = D('Topic')->saveTopicitems($datas);
+		}
+
+        $this->ajaxReturn($error, $msg, $data);
+	}
+
+	//获取ExcelData
+	private function _readExcel($excelfile=null)
+	{
+		if (!$excelfile) return false;
+
+		//加载EXCEL
+		include(VENDOR_PATH.'PHPExcel-1.8.1/PHPExcel.php');
+		include(VENDOR_PATH.'PHPExcel-1.8.1/PHPExcel/IOFactory.php');
+		include(VENDOR_PATH.'PHPExcel-1.8.1/PHPExcel/Reader/Excel2007.php');
+
+		$excelObjReader = \PHPExcel_IOFactory::createReader('Excel2007');
+		$excelObjReader->setReadDataOnly(true);
+		$excelObjPHPExcel = $excelObjReader->load($excelfile);
+		$excelObjWorksheet = $excelObjPHPExcel->getActiveSheet();
+
+		$highestRow = $excelObjWorksheet->getHighestRow();
+		$highestColumn = $excelObjWorksheet->getHighestColumn();
+
+		// $highestColumnIndex = \PHPExcel_Cell::columnIndexFromString($highestColumn);
+
+		$excelData = array();
+		for ($row=1; $row<=$highestRow; $row++) {
+			for ($col='A'; $col<=$highestColumn; $col++) {
+				$excelData[$row][$col] = (string)$excelObjWorksheet->getCell($col.$row)->getValue();
+			}
+		}
+
+		return $excelData;
+	}
 }

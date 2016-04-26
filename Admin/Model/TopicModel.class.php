@@ -92,7 +92,19 @@ class TopicModel extends CommonModel
 		return $result ? true : false;
 	}
 
-	//获取专题点-图集
+	//保存专题点 - 批量
+	public function saveTopicitems($topicid=null, $data=array();)
+	{
+		if (!isset($this->topicmap[$topicid]) || !is_array($data) || empty($data)) return false;
+
+		$topicmapinfo = $this->topicmap[$topicid];
+
+		$result = M('topic_'.$topicmapinfo['table'])->addAll($data);
+
+		return $result ? true : false;
+	}
+
+	//获取专题点 - 图集
 	public function getTopicitempics($topicid=null, $itemid=null)
 	{
 		if (!$topicid || !$itemid) return false;

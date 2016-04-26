@@ -89,7 +89,7 @@ return array(
 				'need'   => 0,
 				'show'   => 0,
 				'search' => 0,
-				'excel'  => 'F',
+				'excel'  => 'G',
 				'apifield' => '',
 			),
 			'type' => array(
@@ -99,7 +99,7 @@ return array(
 				'need'   => 0,
 				'show'   => 1,
 				'search' => 0,
-				'excel'  => 'G',
+				'excel'  => 'H',
 				'apifield' => '',
 			),
 			'bikecount' => array(
@@ -109,7 +109,7 @@ return array(
 				'need'   => 1,
 				'show'   => 1,
 				'search' => 0,
-				'excel'  => 'H',
+				'excel'  => 'I',
 				'apifield' => '',
 			),
 			'point_x' => array(
@@ -119,7 +119,7 @@ return array(
 				'need'   => 1,
 				'show'   => 1,
 				'search' => 0,
-				'excel'  => 'I',
+				'excel'  => 'J',
 				'apifield' => 'lng',
 			),
 			'point_y' => array(
@@ -129,7 +129,7 @@ return array(
 				'need'   => 1,
 				'show'   => 1,
 				'search' => 0,
-				'excel'  => 'J',
+				'excel'  => 'K',
 				'apifield' => 'lat',
 			),
 		)

@@ -1,0 +1,107 @@
+{include file="Common/head.html"}
+<link href="{$SERVER.HOST.CSS_SERVER}View/Beyond/Assets/css/dataTables.bootstrap.css" rel="stylesheet">
+    <!-- Page Header -->
+    <div class="page-header position-relative page-header-fixed">
+        <div class="header-title">
+            <h1>
+                专题管理 <!-- <small><i class="fa fa-angle-right"></i> 管理 </small> -->
+            </h1>
+        </div>
+        <!--Header Buttons-->
+        <div class="header-buttons">
+            <a class="sidebar-toggler" href="#">
+                <i class="fa fa-arrows-h"></i>
+            </a>
+            <a class="refresh" id="refresh-toggler" href="#">
+                <i class="glyphicon glyphicon-refresh"></i>
+            </a>
+            <a class="fullscreen" id="fullscreen-toggler" href="#">
+                <i class="glyphicon glyphicon-fullscreen"></i>
+            </a>
+        </div>
+        <!--Header Buttons End-->
+    </div>
+    <!-- /Page Header -->
+
+    <!-- Page Body -->
+    <div class="page-body">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+                <h5 class="row-title before-warning"><i class="glyphicon glyphicon-plane warning"></i>专题-{$topicmapinfo.title}-导入</h5>
+                <div class="oplinks">
+                    <a href="{$ANY.__APP__}?s=Topic/topicitem&topicid={$topicid}" class="btn btn-sky">管理专题点</a>
+                    <a href="{$ANY.__APP__}?s=Topic/newtopicitem&topicid={$topicid}" class="btn btn-darkorange">新增专题点</a>
+                    <a href="{$ANY.__APP__}?s=Topic/importtopicitem&topicid={$topicid}" class="btn btn-success">导入专题点</a>
+                </div>
+                <div class="widget">
+                    <div class="widget-header bordered-bottom bordered-sky">
+                        <span class="widget-caption">导入专题点信息表单</span>
+                    </div>
+                    <div class="widget-body">
+                        <div id="horizontal-form">
+                            <form name="topicexcelform" method="post" action="{$ANY.__APP__}?s=Topic/topicexcelimport" class="form-horizontal" role="form">
+                                <input type="hidden" name="topicid" value="{$topicid}">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">专题点Excel</label>
+                                    <div class="col-sm-10">
+                                        <input type="hidden" name="topicexcel" value="">
+                                        <input id="topicexcelfile" type="file" name="topicexcelfile" placeholder="Excel文件" class="file-loading">
+                                        <p class="help-block danger">*大小:500K以下</p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-sky">导入</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div class="widget">
+                    <div class="widget-header bg-sky">
+                        <span class="widget-caption">导入专题点结果信息</span>
+                        <div class="widget-buttons">
+                            <a href="#" data-toggle="collapse">
+                                <i class="fa fa-minus"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="widget-body no-padding">
+                        <div id="topicexcelresultbox" class="dataTables_wrapper form-inline"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<link href="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/plugins/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
+<script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/plugins/bootstrap-fileinput/js/fileinput.min.js"></script>
+<script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/plugins/bootstrap-fileinput/js/fileinput_locale_zh.js"></script>
+<script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/js/class/bootstrap-fileinput.class.js"></script>
+<script>
+$(function (){
+    var upurl = $("form[name=topicexcelform]").attr("action")+"&topicid={$topicid}";
+    //BootstrapFileInput初始化
+    var BootstrapFileInputClassObj = new BootstrapFileInputClass();
+    BootstrapFileInputClassObj.Init("topicexcel", upurl, false, function (data){
+        alertPanelShow('success', data.response.msg);
+
+        for (index in data.response.data.result) {
+            $("#topicexcelresultbox").append(data.response.data.result[index]);
+        }
+    });
+
+    //表单提交-EXCEL文件
+    $("form[name=topicexcelform]").submit(function (){
+        $('#topicexcelfile').fileinput('upload');
+
+        return false;
+    });
+})
+</script>
+{include file="Common/foot.html"}
