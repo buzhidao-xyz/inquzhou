@@ -413,8 +413,11 @@ class TopicController extends CommonController
 		if (!is_array($topicmapinfo)||empty($topicmapinfo)) $this->ajaxReturn(1, '未知专题类型！');
 
 		//解析导入字段
+		$namefield = null;
 		$excelfields = array();
 		foreach ($topicmapinfo['fields'] as $field) {
+			if ($field['apifield'] == 'name') $namefield = $field['field'];
+
 			$excelfields[$field['excel']] = $field['field'];
 		}
 
@@ -438,7 +441,11 @@ class TopicController extends CommonController
 			$excelfile = APP_PATH.$fileinfo['savepath'].$fileinfo['savename'];
 
 			//导入数据
-			$data['result'] = array();
+			$data = array(
+				'success' => 0,
+				'failure' => 0,
+				'result'  => array(),
+			);
 			//Excel数据
 			$ExcelData = $this->_readExcel($excelfile);
 			//解析数据
@@ -461,9 +468,29 @@ class TopicController extends CommonController
 
 					$ddd[$excelfields[$colname]] = $value;
 				}
-				$datas[] = $ddd;
+
+				//查询是否已经存在该名字的专题点
+				$topiciteminfo = D('Topic')->getTopicitemByName($topicid, $ddd[$namefield]);
+				if (!empty($topiciteminfo)) {
+					foreach ($ddd as $key=>$value) {
+						if (!$value && $topiciteminfo[$key]) $ddd[$key] = $topiciteminfo[$key];
+					}
+					$ddd['updatetime'] = TIMESTAMP;
+					$result = D('Topic')->saveTopicitem($topicid, $topiciteminfo['itemid'], $ddd);
+				} else {
+					$ddd['createtime'] = TIMESTAMP;
+					$ddd['updatetime'] = TIMESTAMP;
+					$result = D('Topic')->saveTopicitem($topicid, null, $ddd);
+				}
+
+				if ($result) {
+					$data['success']++;
+					$data['result'][] = $ddd[$namefield]." - <font color='green'>导入成功！</font>\r\n";
+				} else {
+					$data['failure']++;
+					$data['result'][] = $ddd[$namefield]." - <font color='red'>导入失败！</font>\r\n";
+				}
 			}
-			$result = D('Topic')->saveTopicitems($datas);
 		}
 
         $this->ajaxReturn($error, $msg, $data);

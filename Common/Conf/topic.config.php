@@ -14,7 +14,7 @@
  * fields.value.show : 是否列表显示
  * fields.value.search : 是否表单搜索
  * fields.value.excel : excel导入对应列
- * fields.value.apifield : topicitemlist接口对应字段名
+ * fields.value.apifield : topicitemlist接口对应字段名/excel数据导入对应专题点名称查询字段名
  */
 return array(
 	1 => array(

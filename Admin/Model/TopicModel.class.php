@@ -76,6 +76,25 @@ class TopicModel extends CommonModel
 		return array('total'=>$total, 'data'=>is_array($data)?$data:array());
 	}
 
+	//获取专题点-通过名称
+	public function getTopicitemByName($topicid=null, $name=null)
+	{
+		if (!isset($this->topicmap[$topicid])) return false;
+
+		$topicmapinfo = $this->topicmap[$topicid];
+
+		//解析fields
+		$namefield = null;
+		foreach ($topicmapinfo['fields'] as $field) {
+			if ($field['apifield'] == 'name') $namefield = $field['field'];
+		}
+
+		$where = array($namefield=>$name);
+		$data = M('topic_'.$topicmapinfo['table'])->where($where)->find();
+
+		return is_array($data) ? $data : array();
+	}
+
 	//保存专题点
 	public function saveTopicitem($topicid=null, $itemid=null, $data=array())
 	{
@@ -93,7 +112,7 @@ class TopicModel extends CommonModel
 	}
 
 	//保存专题点 - 批量
-	public function saveTopicitems($topicid=null, $data=array();)
+	public function saveTopicitems($topicid=null, $data=array())
 	{
 		if (!isset($this->topicmap[$topicid]) || !is_array($data) || empty($data)) return false;
 

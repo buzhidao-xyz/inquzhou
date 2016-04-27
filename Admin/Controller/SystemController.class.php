@@ -35,32 +35,12 @@ class SystemController extends CommonController
 	//图层设置
 	public function layer()
 	{
-		//实时路况图层key
-		$configkey = $this->_mapconfig['maplayer_road']['key'];
-
-		$configinfo = D('System')->getSystemConfigByKey($configkey);
-
-		$this->assign('configinfo', $configinfo);
 		$this->display();
 	}
 
 	//图层设置-保存
 	public function layersave()
 	{
-		//获取configvalue
-		$configvalue = $this->_getConfigvalue($this->_mapconfig['maplayer_road']['type'], $this->_mapconfig['maplayer_road']['key']);
 		
-		$data = array(
-			$this->_mapconfig['maplayer_road']['key'] => array(
-				'configvalue' => $configvalue,
-				'updatetime'  => TIMESTAMP,
-			),
-		);
-		$result = D('System')->saveSystemConfig($data);
-		if ($result) {
-			$this->ajaxReturn(0, '保存成功！');
-		} else {
-			$this->ajaxReturn(1, '保存失败！');
-		}
 	}
 }

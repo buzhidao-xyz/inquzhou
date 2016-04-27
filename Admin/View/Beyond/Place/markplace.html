@@ -71,6 +71,7 @@
                                         <th></th>
                                         <th>名称</th>
                                         <th>地址</th>
+                                        <th>说明</th>
                                         <th>经纬度</th>
                                         <th>标注用户</th>
                                         <th>标注时间</th>
@@ -84,7 +85,8 @@
                                         <td>{$data.markplaceid}</td>
                                         <td>{$data.title}</td>
                                         <td>{$data.address}</td>
-                                        <td>经度：{$data.lng} , 维度：{$data.lat}</td>
+                                        <td>{$data.desc}</td>
+                                        <td>{$data.lng} , {$data.lat}</td>
                                         <td>{$data.username}</td>
                                         <td>{'Y-m-d'|date:$data.marktime}</td>
                                         <td>

@@ -71,6 +71,7 @@
                                         <th></th>
                                         <th>名称</th>
                                         <th>地址</th>
+                                        <th>说明</th>
                                         <th>经纬度</th>
                                         <th>用户</th>
                                         <th>新增时间</th>
@@ -84,10 +85,16 @@
                                         <td>{$data.ptplaceid}</td>
                                         <td>{$data.title}</td>
                                         <td>{$data.address}</td>
-                                        <td>经度：{$data.lng} , 维度：{$data.lat}</td>
+                                        <td>{$data.desc}</td>
+                                        <td>{$data.lng} , {$data.lat}</td>
                                         <td>{$data.username}</td>
                                         <td>{'Y-m-d'|date:$data.pttime}</td>
                                         <td>
+                                            {if $data.status}
+                                            <font color="green">已处理</font>
+                                            {else}
+                                            <a href="{$ANY.__APP__}?s=Place/ptplacedo&ptplaceid={$data.ptplaceid}" class="btn btn-sky btn-ajax">处理</a>
+                                            {/if}
                                         </td>
                                     </tr>
                                     {/foreach}

@@ -57,12 +57,12 @@
                                 {/foreach}
                                 {foreach $picnum as $num}
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label no-padding-right">图片{$num+1}</label>
+                                    <label class="col-sm-2 control-label no-padding-right">图片{$num+1}：</label>
                                     <div class="col-sm-10">
                                         {if isset($topiciteminfo['pics'][$num])}
-                                        <p><img src="{$SERVER.HOST.HTTP_HOST}{$topiciteminfo['pics'][$num]['pic']}" class="img-responsive"></p>
+                                        <p style="overflow: hidden;"><img src="{$SERVER.HOST.HTTP_HOST}{$topiciteminfo['pics'][$num]['pic']}" class="img-responsive" style="float: left;"><a href="javascript:;" class="a-btn-del" style="color: #FF0000; margin-left: 10px;">【删除】</a></p>
                                         {/if}
-                                        <input type="hidden" name="pic{$num}" value="{$topiciteminfo['pics'][$num]['pic']}">
+                                        <input type="hidden" name="pic{$num}" value="{$topiciteminfo['pics'][$num]['pic']}" class="img-link">
                                         <input id="pic{$num}file" type="file" name="pic{$num}file" placeholder="图片" class="file-loading">
                                         <p class="help-block">*大小:200K以下</p>
                                     </div>
@@ -88,4 +88,12 @@
         </div>
     </div>
 
+<script type="text/javascript">
+$(function (){
+    $("a.a-btn-del").click(function (){
+        $(this).parent().next("input.img-link").val(null);
+        $(this).parent().remove();
+    });
+})
+</script>
 {include file="Common/foot.html"}

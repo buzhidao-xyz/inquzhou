@@ -72,6 +72,20 @@ class PlaceController extends CommonController
 		$this->display();
 	}
 
+	//处理新增地点
+	public function ptplacedo()
+	{
+		$ptplaceid = mRequest('ptplaceid');
+		if (!$ptplaceid) $this->ajaxReturn(1, '未知地点！');
+
+		$result = M('ptplace')->where(array('ptplaceid'=>$ptplaceid))->save(array('status'=>1));
+		if ($result) {
+			$this->ajaxReturn(0, '处理成功！');
+		} else {
+			$this->ajaxReturn(1, '处理失败！');
+		}
+	}
+
 	//纠错地点
 	public function pmplace()
 	{
@@ -95,6 +109,20 @@ class PlaceController extends CommonController
 		$this->display();
 	}
 
+	//处理纠错地点
+	public function pmplacedo()
+	{
+		$pmplaceid = mRequest('pmplaceid');
+		if (!$pmplaceid) $this->ajaxReturn(1, '未知地点！');
+
+		$result = M('pmplace')->where(array('pmplaceid'=>$pmplaceid))->save(array('status'=>1));
+		if ($result) {
+			$this->ajaxReturn(0, '处理成功！');
+		} else {
+			$this->ajaxReturn(1, '处理失败！');
+		}
+	}
+
 	//导出
 	public function export()
 	{
@@ -102,7 +130,7 @@ class PlaceController extends CommonController
 
 		// 创建一个处理对象实例
 		$objPHPExcel = new \PHPExcel();
-		$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+		$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 
 		//设置当前的sheet索引，用于后续的内容操作。
 		$objPHPExcel->setActiveSheetIndex(0);       
@@ -177,7 +205,8 @@ class PlaceController extends CommonController
 			$objActSheet->getColumnDimension('D')->setWidth(20);
 			$objActSheet->getColumnDimension('E')->setWidth(20);
 			$objActSheet->getColumnDimension('F')->setWidth(10);
-			$objActSheet->getColumnDimension('G')->setWidth(25);
+			$objActSheet->getColumnDimension('G')->setWidth(15);
+			$objActSheet->getColumnDimension('H')->setWidth(25);
 			//设置单元格的值
 			// $objActSheet->setCellValue('A1', '总标题显示');
 			//合并单元格
@@ -190,7 +219,8 @@ class PlaceController extends CommonController
 			$objActSheet->setCellValue('D1', '经度');
 			$objActSheet->setCellValue('E1', '纬度');
 			$objActSheet->setCellValue('F1', '提交人');
-			$objActSheet->setCellValue('G1', '新增时间');
+			$objActSheet->setCellValue('G1', '状态');
+			$objActSheet->setCellValue('H1', '新增时间');
 			
 			//遍历数据
 			$n = 2;
@@ -201,7 +231,8 @@ class PlaceController extends CommonController
 				$objActSheet->setCellValue('D'.$n, $v["lng"]);
 				$objActSheet->setCellValue('E'.$n, $v["lat"]);
 				$objActSheet->setCellValue('F'.$n, $v["username"]);
-				$objActSheet->setCellValue('G'.$n, date('Y-m-d H:i:s', $v["pttime"]));
+				$objActSheet->setCellValue('G'.$n, $v["status"]?'已处理':'未处理');
+				$objActSheet->setCellValue('H'.$n, date('Y-m-d H:i:s', $v["pttime"]));
 
 				$n++;
 			}
@@ -226,7 +257,8 @@ class PlaceController extends CommonController
 			$objActSheet->getColumnDimension('D')->setWidth(20);
 			$objActSheet->getColumnDimension('E')->setWidth(20);
 			$objActSheet->getColumnDimension('F')->setWidth(10);
-			$objActSheet->getColumnDimension('G')->setWidth(25);
+			$objActSheet->getColumnDimension('G')->setWidth(15);
+			$objActSheet->getColumnDimension('H')->setWidth(25);
 			//设置单元格的值
 			// $objActSheet->setCellValue('A1', '总标题显示');
 			//合并单元格
@@ -239,7 +271,8 @@ class PlaceController extends CommonController
 			$objActSheet->setCellValue('D1', '经度');
 			$objActSheet->setCellValue('E1', '纬度');
 			$objActSheet->setCellValue('F1', '提交人');
-			$objActSheet->setCellValue('G1', '提交时间');
+			$objActSheet->setCellValue('G1', '状态');
+			$objActSheet->setCellValue('H1', '提交时间');
 			
 			//遍历数据
 			$n = 2;
@@ -250,14 +283,15 @@ class PlaceController extends CommonController
 				$objActSheet->setCellValue('D'.$n, $v["lng"]);
 				$objActSheet->setCellValue('E'.$n, $v["lat"]);
 				$objActSheet->setCellValue('F'.$n, $v["username"]);
-				$objActSheet->setCellValue('G'.$n, date('Y-m-d H:i:s', $v["pmtime"]));
+				$objActSheet->setCellValue('G'.$n, $v["status"]?'已处理':'未处理');
+				$objActSheet->setCellValue('H'.$n, date('Y-m-d H:i:s', $v["pmtime"]));
 
 				$n++;
 			}
 		}
 
 		//输出内容
-		$outputFileName = $title.'_'.date('Ymd_His', TIMESTAMP).".xls";
+		$outputFileName = $title.'_'.date('Ymd_His', TIMESTAMP).".xlsx";
 		//到文件
 		// $objWriter->save($outputFileName);
 
