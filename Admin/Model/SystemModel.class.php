@@ -90,4 +90,41 @@ class SystemModel extends CommonModel
 		$DBObj->commit();
 		return true;
 	}
+
+	//获取图层信息
+	public function getLayer($layerid=null, $title=null, $start=0, $length=9999)
+	{
+		$where = array();
+		if ($layerid) $where['layerid'] = $layerid;
+		if ($title) $where['title'] = array('like', '%'.$title.'%');
+
+		$total = M('layer')->where($where)->count();
+		$data = M('layer')->where($where)->select();
+
+		return array('total'=>$total, 'data'=>is_array($data)?$data:array());
+	}
+
+	//获取图层信息 通过ID
+	public function getLayerByID($layerid=null)
+	{
+		if (!$layerid) return false;
+
+		$layerinfo = $this->getLayer($layerid);
+
+		return $layerinfo['total'] ? current($layerinfo['data']) : array();
+	}
+
+	//保存图层信息
+	public function savelayer($layerid=null, $data=array())
+	{
+		if (!is_array($data) || empty($data)) return false;
+
+		if ($layerid) {
+			$result = M('layer')->where(array('layerid'=>$layerid))->save($data);
+		} else {
+			$result = M('layer')->add($data);
+		}
+
+		return $result;
+	}
 }

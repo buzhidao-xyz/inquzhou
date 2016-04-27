@@ -1,0 +1,81 @@
+{include file="Common/head.html"}
+    <!-- Page Header -->
+    <div class="page-header position-relative page-header-fixed">
+        <div class="header-title">
+            <h1>
+                系统设置 <!-- <small><i class="fa fa-angle-right"></i> 管理 </small> -->
+            </h1>
+        </div>
+        <!--Header Buttons-->
+        <div class="header-buttons">
+            <a class="sidebar-toggler" href="#">
+                <i class="fa fa-arrows-h"></i>
+            </a>
+            <a class="refresh" id="refresh-toggler" href="#">
+                <i class="glyphicon glyphicon-refresh"></i>
+            </a>
+            <a class="fullscreen" id="fullscreen-toggler" href="#">
+                <i class="glyphicon glyphicon-fullscreen"></i>
+            </a>
+        </div>
+        <!--Header Buttons End-->
+    </div>
+    <!-- /Page Header -->
+
+    <!-- Page Body -->
+    <div class="page-body">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+                <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>新增图层</h5>
+                <div class="widget">
+                    <div class="widget-header bordered-bottom bordered-sky">
+                        <span class="widget-caption">图层信息表单</span>
+                    </div>
+                    <div class="widget-body">
+                        <div id="horizontal-form">
+                            <form name="ajaxform" method="post" action="{$ANY.__APP__}?s=System/newlayersave" class="form-horizontal" role="form">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">图层名称</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="title" placeholder="图层名称">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">接口地址</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="url" placeholder="接口地址 http://">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">图标</label>
+                                    <div class="col-sm-10">
+                                        <input type="hidden" name="icon" value="">
+                                        <input id="iconfile" type="file" name="iconfile" placeholder="图标" class="file-loading">
+                                        <p class="help-block">*大小:50K以下</p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-sky">保存</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<link href="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/plugins/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
+<script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/plugins/bootstrap-fileinput/js/fileinput.min.js"></script>
+<script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/plugins/bootstrap-fileinput/js/fileinput_locale_zh.js"></script>
+<script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/js/class/bootstrap-fileinput.class.js"></script>
+<script>
+$(function (){
+    var BootstrapFileInputClassObj = new BootstrapFileInputClass();
+    //课程示例图
+    BootstrapFileInputClassObj.Init("icon", JS_APP+"?s=System/iconupload");
+})
+</script>
+{include file="Common/foot.html"}

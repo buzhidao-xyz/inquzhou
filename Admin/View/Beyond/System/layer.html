@@ -1,9 +1,10 @@
 {include file="Common/head.html"}
+<link href="{$SERVER.HOST.CSS_SERVER}View/Beyond/Assets/css/dataTables.bootstrap.css" rel="stylesheet">
     <!-- Page Header -->
     <div class="page-header position-relative page-header-fixed">
         <div class="header-title">
             <h1>
-                图层设置 <!-- <small><i class="fa fa-angle-right"></i> 管理 </small> -->
+                系统设置 <!-- <small><i class="fa fa-angle-right"></i> 管理 </small> -->
             </h1>
         </div>
         <!--Header Buttons-->
@@ -26,28 +27,26 @@
     <div class="page-body">
         <div class="row">
             <div class="col-lg-12 col-sm-12 col-xs-12">
-                <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>图层设置</h5>
+                <h5 class="row-title before-warning"><i class="glyphicon glyphicon-plane warning"></i>图层设置</h5>
+                <div class="oplinks">
+                    <a href="{$ANY.__APP__}?s=System/newlayer" class="btn btn-sky">新增图层</a>
+                </div>
                 <div class="widget">
-                    <div class="widget-header bordered-bottom bordered-sky">
-                        <span class="widget-caption">图层信息表单</span>
+                    <div class="widget-header bordered-bottom bordered-warning">
+                        <span class="widget-caption">查询图层信息表单</span>
                     </div>
                     <div class="widget-body">
                         <div id="horizontal-form">
-                            <form name="ajaxform" method="post" action="{$ANY.__APP__}?s=System/layersave" class="form-horizontal" role="form">
+                            <form name="mtserverform" method="post" action="{$ANY.__APP__}?s=System/layer" class="form-horizontal" role="form">
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label no-padding-right">实时路况图层</label>
-                                    <div class="col-sm-2 col-sm-10">
-                                        <div class="checkbox">
-                                            <label>
-                                                <input class="checkbox-slider colored-palegreen checkbox-slider-ck" type="checkbox" name="{$configinfo.maplayer_road.configkey}" value="{$configinfo.maplayer_road.configvalue}" {if $configinfo.maplayer_road.configvalue}checked="checked"{/if}>
-                                                <span class="text"></span>
-                                            </label>
-                                        </div>
+                                    <label class="col-sm-2 control-label no-padding-right">关键字</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="keywords" value="{$keywords}" placeholder="名称 关键字">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-offset-2 col-sm-10">
-                                        <button type="submit" class="btn btn-sky">保存</button>
+                                        <button type="submit" class="btn btn-warning">查询</button>
                                     </div>
                                 </div>
                             </form>
@@ -56,5 +55,68 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div class="widget">
+                    <div class="widget-header bg-sky">
+                        <span class="widget-caption">图层信息列表</span>
+                        <div class="widget-buttons">
+                            <a href="#" data-toggle="collapse">
+                                <i class="fa fa-minus"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="widget-body no-padding">
+                        <div class="dataTables_wrapper form-inline">
+                            <table class="table table-bordered table-hover table-striped dataTable">
+                                <thead class="bordered-darkorange">
+                                    <tr role="row">
+                                        <th></th>
+                                        <th>名称</th>
+                                        <th>单独显示</th>
+                                        <th>接口地址</th>
+                                        <th>状态</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {if isset($datalist)&&is_array($datalist)&&!empty($datalist)}
+                                    {foreach $datalist as $data}
+                                    <tr role="row" class="even">
+                                        <td>{$data.layerid}</td>
+                                        <td>{$data.title}</td>
+                                        <td>{if $data.ashow}是{else}否{/if}</td>
+                                        <td>{$data.url}</td>
+                                        <td>{if $data.status}<span class="success">已启用</span>{else}<span class="danger">已禁用</span>{/if}</td>
+                                        <td>
+                                            {if $data.ashow}
+                                            <a href="" class="btn btn-darkorange">取消单独显示</a>
+                                            {else}
+                                            <a href="" class="btn btn-success">设为单独显示</a>
+                                            {/if}
+                                            <a href="" class="btn btn-sky">编辑</a>
+                                            {if $data.status}
+                                            <a href="" class="btn btn-danger">禁用</a>
+                                            {else}
+                                            <a href="" class="btn btn-success">启用</a>
+                                            {/if}
+                                        </td>
+                                    </tr>
+                                    {/foreach}
+                                    {/if}
+                                </tbody>
+                            </table>
+                            <div class="row DTTTFooter">
+                                <div class="col-xs-4"></div>
+                                <div class="col-xs-8">
+                                    {include file="Public/pagination.html"}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
 {include file="Common/foot.html"}
