@@ -56,4 +56,16 @@ class TopicModel extends CommonModel
 
 		return array('total'=>$total, 'data'=>is_array($data)?$data:array());
 	}
+
+	//获取专题点信息 单条
+	public function getTopicitemOne($topicid=null, $itemid=null)
+	{
+		if (!isset($this->topicmap[$topicid]) || !$itemid) return false;
+
+		$topicmapinfo = $this->topicmap[$topicid];
+
+		$topiciteminfo = M('topic_'.$topicmapinfo['table'])->where(array('itemid'=>$itemid))->find();
+
+		return is_array($topiciteminfo) ? $topiciteminfo : array();
+	}
 }

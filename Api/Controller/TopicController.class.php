@@ -34,6 +34,16 @@ class TopicController extends CommonController
 		return (int)$topicid;
 	}
 
+	//获取itemid
+	private function _getItemid($ck=false)
+	{
+		$itemid = mRequest('itemid');
+
+		$ck&&!$itemid ? $this->apiReturn(1, '未知专题点信息！') : null;
+
+		return (int)$itemid;
+	}
+
 	//获取distance
 	private function _getDistance($ck=false)
 	{
@@ -111,5 +121,45 @@ class TopicController extends CommonController
 			'total' => (int)$total,
 			'data'  => $data
 		));
+	}
+
+	//专题点详情
+	public function topicitemprofile()
+	{
+		$topicid = $this->_getTopicid(true);
+		$topicmapinfo = $this->topicmap[$topicid];
+		if (!is_array($topicmapinfo)||empty($topicmapinfo)) $this->apiReturn(1, '未知专题！');
+
+		$itemid = $this->_getItemid(true);
+
+		//获取专题点信息
+		$topiciteminfo = D('Topic')->getTopicitemOne($topicid, $itemid);
+		if (!is_array($topiciteminfo)||empty($topiciteminfo)) $this->apiReturn(1, '未知专题点！');
+
+		//专题信息
+		$apifields = array();
+		foreach ($topicmapinfo['fields'] as $field) {
+			if (isset($field['apifield'])&&$field['apifield']) {
+				$apifields[$field['apifield']] = $field['field'];
+			}
+		}
+
+		$data = array(
+			'topicid' => $topicid,
+			'itemid'  => $itemid,
+			'name'    => $topiciteminfo[$apifields['name']],
+			'address' => $topiciteminfo[$apifields['address']],
+			'lat'     => (string)$topiciteminfo[$apifields['lat']],
+			'lng'     => (string)$topiciteminfo[$apifields['lng']],
+			'content' => array()
+		);
+		foreach ($topicmapinfo['fields'] as $field) {
+			if (in_array($field['apifield'], array('name','address','lat','lng'))) continue;
+			$data['content'][] = array(
+				'title' => $field['name'],
+				'value' => $topiciteminfo[$field['field']],
+			);
+		}
+		$this->apiReturn(0, '', $data);
 	}
 }

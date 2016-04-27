@@ -55,5 +55,11 @@ return array(
 			'method' => 'get',
 			'logon'  => false,
 		),
+		//专题点详情
+		'/topic/topicitemprofile' => array(
+			'api'    => 'topic/topicitemprofile',
+			'method' => 'get',
+			'logon'  => false,
+		),
 	),
 );
