@@ -23,6 +23,24 @@ return array(
 			'method' => 'post',
 			'logon'  => false,
 		),
+		//我的收藏地点
+		'/fav/favplace' => array(
+			'api'    => 'fav/favplace',
+			'method' => 'get',
+			'logon'  => false,
+		),
+		//我的收藏路线
+		'/fav/favline' => array(
+			'api'    => 'fav/favline',
+			'method' => 'get',
+			'logon'  => false,
+		),
+		//删除收藏
+		'/fav/delfav' => array(
+			'api'    => 'fav/delfav',
+			'method' => 'post',
+			'logon'  => false,
+		),
 		
 		//新增标注地点
 		'/place/newmarkplace' => array(
@@ -42,6 +60,30 @@ return array(
 			'method' => 'post',
 			'logon'  => false,
 		),
+		//我的标注地点
+		'/place/markplace' => array(
+			'api'    => 'place/markplace',
+			'method' => 'get',
+			'logon'  => false,
+		),
+		//我的新增地点
+		'/place/ptplace' => array(
+			'api'    => 'place/ptplace',
+			'method' => 'get',
+			'logon'  => false,
+		),
+		//我的纠错地点
+		'/place/pmplace' => array(
+			'api'    => 'place/pmplace',
+			'method' => 'get',
+			'logon'  => false,
+		),
+		//删除地点
+		'/place/delplace' => array(
+			'api'    => 'place/delplace',
+			'method' => 'post',
+			'logon'  => false,
+		),
 
 		//专题列表
 		'/topic/topiclist' => array(
@@ -58,6 +100,13 @@ return array(
 		//专题点详情
 		'/topic/topicitemprofile' => array(
 			'api'    => 'topic/topicitemprofile',
+			'method' => 'get',
+			'logon'  => false,
+		),
+
+		//图层接口
+		'/map/layer' => array(
+			'api'    => 'map/layer',
 			'method' => 'get',
 			'logon'  => false,
 		),

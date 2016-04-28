@@ -62,20 +62,29 @@ class PlaceController extends CommonController
 		return (int)$pmtype;
 	}
 
+	//获取placeid
+	private function _getPlaceid($ck=false)
+	{
+		$placeid = mRequest('placeid');
+
+		$ck&&!$placeid ? $this->apiReturn(1, '未知地点！') : null;
+
+		return $placeid;
+	}
+
 	public function index(){}
 
 	//新增标注地点
 	public function newmarkplace()
 	{
+		$userid = $this->userinfo['userid'];
+
 		$title = $this->_getTitle(true);
 		$address = $this->_getAddress(true);
 		$desc = $this->_getDesc();
 		$lat = $this->_getLat(true);
 		$lng = $this->_getLng(true);
 
-		$userid = $this->userinfo['userid'];
-
-		$userid = 1;
 		$data = array(
 			'userid'   => $userid,
 			'title'    => $title,
@@ -104,15 +113,14 @@ class PlaceController extends CommonController
 	//新增地点
 	public function newptplace()
 	{
+		$userid = $this->userinfo['userid'];
+
 		$title = $this->_getTitle(true);
 		$address = $this->_getAddress(true);
 		$desc = $this->_getDesc();
 		$lat = $this->_getLat(true);
 		$lng = $this->_getLng(true);
 
-		$userid = $this->userinfo['userid'];
-
-		$userid = 1;
 		$data = array(
 			'userid'   => $userid,
 			'title'    => $title,
@@ -141,15 +149,14 @@ class PlaceController extends CommonController
 	//新增纠错
 	public function newpmplace()
 	{
+		$userid = $this->userinfo['userid'];
+
 		$pmtype = $this->_getPmtype(true);
 		$address = $this->_getAddress(true);
 		$desc = $this->_getDesc();
 		$lat = $this->_getLat(true);
 		$lng = $this->_getLng(true);
 
-		$userid = $this->userinfo['userid'];
-
-		$userid = 1;
 		$data = array(
 			'pmtype'   => $pmtype,
 			'userid'   => $userid,
@@ -173,5 +180,126 @@ class PlaceController extends CommonController
 			);
 		}
 		$this->apiReturn(0, $msg, $result);
+	}
+
+	//我的标注地点
+	public function markplace()
+	{
+		$userid = $this->userinfo['userid'];
+
+		list($start, $length) = $this->mkPage();
+		$result = D('Place')->getMarkplace(null, $userid, $start, $length);
+		
+		$data = array();
+		foreach ($result['data'] as $d) {
+			$data[] = array(
+				'placeid'  => (int)$d['markplaceid'],
+				'title'    => $d['title'],
+				'address'  => $d['address'],
+				'desc'     => $d['desc'],
+				'lat'      => $d['lat'],
+				'lng'      => $d['lng'],
+				'marktime' => date('Y-m-d H:i:s', $d['marktime']),
+			);
+		}
+
+		$this->apiReturn(0,'',array(
+			'total' => (int)$result['total'],
+			'data' => $data
+		));
+	}
+
+	//我的新增地点
+	public function ptplace()
+	{
+		$userid = $this->userinfo['userid'];
+
+		list($start, $length) = $this->mkPage();
+		$result = D('Place')->getPtplace(null, $userid, $start, $length);
+		
+		$data = array();
+		foreach ($result['data'] as $d) {
+			$data[] = array(
+				'placeid'  => (int)$d['ptplaceid'],
+				'title'    => $d['title'],
+				'address'  => $d['address'],
+				'desc'     => $d['desc'],
+				'lat'      => $d['lat'],
+				'lng'      => $d['lng'],
+				'pttime'   => date('Y-m-d H:i:s', $d['pttime']),
+			);
+		}
+
+		$this->apiReturn(0,'',array(
+			'total' => (int)$result['total'],
+			'data' => $data
+		));
+	}
+
+	//我的纠错地点
+	public function pmplace()
+	{
+		$userid = $this->userinfo['userid'];
+
+		list($start, $length) = $this->mkPage();
+		$result = D('Place')->getPmplace(null, $userid, null, $start, $length);
+		
+		$data = array();
+		foreach ($result['data'] as $d) {
+			$data[] = array(
+				'placeid'  => (int)$d['pmplaceid'],
+				'pmtype'   => (int)$d['pmtype'],
+				'address'  => $d['address'],
+				'desc'     => $d['desc'],
+				'lat'      => $d['lat'],
+				'lng'      => $d['lng'],
+				'pmtime'   => date('Y-m-d H:i:s', $d['pmtime']),
+			);
+		}
+
+		$this->apiReturn(0,'',array(
+			'total' => (int)$result['total'],
+			'data' => $data
+		));
+	}
+
+	//删除地点信息
+	public function delplace()
+	{
+		$userid = $this->userinfo['userid'];
+
+		$placeid = $this->_getPlaceid(true);
+
+		$placetype = mRequest('placetype');
+		$table = null;
+		$placeidfield = null;
+		switch ($placetype) {
+			case 'markplace':
+				$table = 'markplace';
+				$placeidfield = 'markplaceid';
+			break;
+			case 'pmplace':
+				$table = 'pmplace';
+				$placeidfield = 'pmplaceid';
+			break;
+			case 'ptplace':
+				$table = 'ptplace';
+				$placeidfield = 'ptplaceid';
+			break;
+			default:
+			break;
+		}
+		if (!$table) $this->apiReturn(1, '未知地点类型！');
+
+		$result = M($table)->where(array($placeidfield=>$placeid, 'userid'=>$userid))->save(array('isdelete'=>1));
+		if ($result) {
+			$this->apiReturn(0, '删除成功！', array(
+				'result' => 1
+			));
+		} else {
+			$this->apiReturn(0, '删除失败！', array(
+				'result' => 0
+			));
+		}
 	}
 }

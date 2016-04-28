@@ -85,20 +85,20 @@
                                     <tr role="row" class="even">
                                         <td>{$data.layerid}</td>
                                         <td>{$data.title}</td>
-                                        <td>{if $data.ashow}是{else}否{/if}</td>
+                                        <td>{if $data.ashow}<span class="danger">是</span>{else}否{/if}</td>
                                         <td>{$data.url}</td>
                                         <td>{if $data.status}<span class="success">已启用</span>{else}<span class="danger">已禁用</span>{/if}</td>
                                         <td>
                                             {if $data.ashow}
-                                            <a href="" class="btn btn-darkorange">取消单独显示</a>
+                                            <a href="{$ANY.__APP__}?s=System/ashowlayer&layerid={$data.layerid}&ashow=0" class="btn btn-darkorange btn-ajax">取消单独显示</a>
                                             {else}
-                                            <a href="" class="btn btn-success">设为单独显示</a>
+                                            <a href="{$ANY.__APP__}?s=System/ashowlayer&layerid={$data.layerid}&ashow=1" class="btn btn-success btn-ajax">设为单独显示</a>
                                             {/if}
-                                            <a href="" class="btn btn-sky">编辑</a>
+                                            <a href="{$ANY.__APP__}?s=System/uplayer&layerid={$data.layerid}" class="btn btn-sky">编辑</a>
                                             {if $data.status}
-                                            <a href="" class="btn btn-danger">禁用</a>
+                                            <a href="{$ANY.__APP__}?s=System/enablelayer&layerid={$data.layerid}&status=0" class="btn btn-danger btn-ajax">禁用</a>
                                             {else}
-                                            <a href="" class="btn btn-success">启用</a>
+                                            <a href="{$ANY.__APP__}?s=System/enablelayer&layerid={$data.layerid}&status=1" class="btn btn-success btn-ajax">启用</a>
                                             {/if}
                                         </td>
                                     </tr>

@@ -63,8 +63,8 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-padding-right">头像</label>
                                     <div class="col-sm-10">
-                                        <p><img src="{$userinfo.avatar}" class="img-responsive"></p>
-                                        <input type="hidden" name="avatar" value="{$SERVER.HOST.HTTP_HOST}{$userinfo.avatar}">
+                                        {if $userinfo.avatar}<p><img src="{$SERVER.HOST.HTTP_HOST}{$userinfo.avatar}" class="img-responsive"></p>{/if}
+                                        <input type="hidden" name="avatar" value="{$userinfo.avatar}">
                                         <input id="avatarfile" type="file" name="avatarfile" placeholder="头像" class="file-loading">
                                         <p class="help-block">*大小:200K以下</p>
                                     </div>

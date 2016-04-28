@@ -26,24 +26,25 @@
     <div class="page-body">
         <div class="row">
             <div class="col-lg-12 col-sm-12 col-xs-12">
-                <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>新增图层</h5>
+                <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>编辑图层</h5>
                 <div class="widget">
                     <div class="widget-header bordered-bottom bordered-sky">
                         <span class="widget-caption">图层信息表单</span>
                     </div>
                     <div class="widget-body">
                         <div id="horizontal-form">
-                            <form name="ajaxform" method="post" action="{$ANY.__APP__}?s=System/newlayersave" class="form-horizontal" role="form">
+                            <form name="ajaxform" method="post" action="{$ANY.__APP__}?s=System/uplayersave" class="form-horizontal" role="form">
+                                <input type="hidden" name="layerid" value="{$layerinfo.layerid}">
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-padding-right">图层名称</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="title" placeholder="图层名称">
+                                        <input type="text" class="form-control" name="title" value="{$layerinfo.title}" placeholder="图层名称">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-padding-right">接口基址</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="url" placeholder="必填 接口基址 http://">
+                                        <input type="text" class="form-control" name="url" value="{$layerinfo.url}" placeholder="接口基址 http://">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -79,18 +80,19 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-padding-right">参数-TILEMATRIXSET</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="tilematrixset" value="" placeholder="可空、default028mmesritilematirx">
+                                        <input type="text" class="form-control" name="tilematrixset" value="{$layerinfo.tilematrixset}" placeholder="可空、default028mmesritilematirx">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-padding-right">参数-FORMAT</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="format" value="" placeholder="可空、image%2Fjpgpng">
+                                        <input type="text" class="form-control" name="format" value="{$layerinfo.format}" placeholder="可空、image%2Fjpgpng">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-padding-right">图标</label>
                                     <div class="col-sm-10">
+                                        {if $layerinfo.icon}<p><img src="{$SERVER.HOST.HTTP_HOST}{$layerinfo.icon}" class="img-responsive"></p>{/if}
                                         <input type="hidden" name="icon" value="">
                                         <input id="iconfile" type="file" name="iconfile" placeholder="图标" class="file-loading">
                                         <p class="help-block">*大小:50K以下</p>

@@ -21,7 +21,7 @@ class MapController extends CommonController
 	}
 
 	//获取lon
-	private function _getLon()
+	protected function _getLon()
 	{
 		$lon = mRequest('lon');
 		if (!$lon) $this->apiReturn(1, '未知参数lon！');
@@ -30,7 +30,7 @@ class MapController extends CommonController
 	}
 
 	//获取lat
-	private function _getLat()
+	protected function _getLat()
 	{
 		$lat = mRequest('lat');
 		if (!$lat) $this->apiReturn(1, '未知参数lat！');
@@ -178,18 +178,9 @@ class MapController extends CommonController
 		));
 	}
 
-	//实时路况图层接口
+	//图层接口
 	public function layer()
 	{
-		$this->CKQuest('get');
-
-		$configkey = 'maplayer_road';
-		$configinfo = D('System')->getSystemConfigByKey($configkey);
-
-		$realtimeroad = $configinfo[$configkey]['configvalue'];
-
-		$this->apiReturn(0, '', array(
-			'realtimeroad' => $realtimeroad
-		));
+		$this->apiReturn(0, '', array());
 	}
 }

@@ -170,4 +170,95 @@ class FavController extends CommonController
         }
         $this->apiReturn(0, $msg, $result);
     }
+
+    //我的收藏-地点
+    public function favplace()
+    {
+        $userid = $this->userinfo['userid'];
+
+        list($start, $length) = $this->mkPage();
+        $result = D('Fav')->getFavplace(null, $userid, $start, $length);
+        
+        $data = array();
+        foreach ($result['data'] as $d) {
+            $data[] = array(
+                'placeid' => (int)$d['placeid'],
+                'title'   => $d['title'],
+                'address' => $d['address'],
+                'lat'     => $d['lat'],
+                'lng'     => $d['lng'],
+                'favtime' => date('Y-m-d H:i:s', $d['favtime']),
+            );
+        }
+
+        $this->apiReturn(0,'',array(
+            'total' => (int)$result['total'],
+            'data' => $data
+        ));
+    }
+
+    //我的收藏-路线
+    public function favline()
+    {
+        $userid = $this->userinfo['userid'];
+
+        list($start, $length) = $this->mkPage();
+        $result = D('Fav')->getFavline(null, $userid, $start, $length);
+        
+        $data = array();
+        foreach ($result['data'] as $d) {
+            $data[] = array(
+                'lineid'  => (int)$d['lineid'],
+                'sour'    => $d['sour'],
+                'sourlat' => $d['sourlat'],
+                'sourlng' => $d['sourlng'],
+                'dest'    => $d['dest'],
+                'destlat' => $d['destlat'],
+                'destlng' => $d['destlng'],
+                'favtime' => date('Y-m-d H:i:s', $d['favtime']),
+            );
+        }
+
+        $this->apiReturn(0,'',array(
+            'total' => (int)$result['total'],
+            'data' => $data
+        ));
+    }
+
+    //删除收藏信息
+    public function delfav()
+    {
+        $userid = $this->userinfo['userid'];
+
+        $favid = mRequest('favid');
+        if (!$favid) $this->apiReturn(1, '未知收藏信息！');
+
+        $favtype = mRequest('favtype');
+        $table = null;
+        $favidfield = null;
+        switch ($favtype) {
+            case 'place':
+                $table = 'favplace';
+                $favidfield = 'placeid';
+            break;
+            case 'line':
+                $table = 'favline';
+                $favidfield = 'lineid';
+            break;
+            default:
+            break;
+        }
+        if (!$table) $this->apiReturn(1, '未知收藏类型！');
+
+        $result = M($table)->where(array($favidfield=>$favid, 'userid'=>$userid))->save(array('isdelete'=>1));
+        if ($result) {
+            $this->apiReturn(0, '删除成功！', array(
+                'result' => 1
+            ));
+        } else {
+            $this->apiReturn(0, '删除失败！', array(
+                'result' => 0
+            ));
+        }
+    }
 }

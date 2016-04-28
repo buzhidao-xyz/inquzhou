@@ -22,6 +22,9 @@ class CommonController extends BaseController
 		parent::__construct();
 
         $this->userinfo = $this->GSUserInfo();
+        $this->userinfo = array(
+            'userid' => 1
+        );
 
         //检查API请求
         $this->CKApiQuest();

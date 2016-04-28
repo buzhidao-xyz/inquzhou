@@ -33,4 +33,30 @@ class FavModel extends CommonModel
 
 		return $result ? true : false;
 	}
+
+	//获取我的收藏-地点
+	public function getFavplace($placeid=null, $userid=null, $start=0, $length=9999)
+	{
+		$where = array('isdelete'=>0);
+		if ($placeid) $where['placeid'] = $placeid;
+		if ($userid) $where['userid'] = $userid;
+
+		$total = M('favplace')->where($where)->count();
+		$data = M('favplace')->where($where)->order('favtime desc')->limit($start,$length)->select();
+
+		return array('total'=>$total, 'data'=>is_array($data)?$data:array());
+	}
+
+	//获取我的收藏-路线
+	public function getFavline($lineid=null, $userid=null, $start=0, $length=9999)
+	{
+		$where = array('isdelete'=>0);
+		if ($lineid) $where['lineid'] = $lineid;
+		if ($userid) $where['userid'] = $userid;
+
+		$total = M('favline')->where($where)->count();
+		$data = M('favline')->where($where)->order('favtime desc')->limit($start,$length)->select();
+
+		return array('total'=>$total, 'data'=>is_array($data)?$data:array());
+	}
 }

@@ -43,4 +43,44 @@ class PlaceModel extends CommonModel
 
 		return $result ? true : false;
 	}
+
+	//获取标注地点
+	public function getMarkplace($markplaceid=null, $userid=null, $start=0, $length=9999)
+	{
+		$where = array('isdelete'=>0);
+		if ($markplaceid) $where['markplaceid'] = $markplaceid;
+		if ($userid) $where['userid'] = $userid;
+
+		$total = M('markplace')->where($where)->count();
+		$data = M('markplace')->where($where)->order('marktime desc')->limit($start,$length)->select();
+
+		return array('total'=>$total, 'data'=>is_array($data)?$data:array());
+	}
+
+	//获取新增地点
+	public function getPtplace($ptplaceid=null, $userid=null, $start=0, $length=9999)
+	{
+		$where = array('isdelete'=>0);
+		if ($ptplaceid) $where['ptplaceid'] = $ptplaceid;
+		if ($userid) $where['userid'] = $userid;
+
+		$total = M('ptplace')->where($where)->count();
+		$data = M('ptplace')->where($where)->order('pttime desc')->limit($start,$length)->select();
+
+		return array('total'=>$total, 'data'=>is_array($data)?$data:array());
+	}
+
+	//获取纠错地点
+	public function getPmplace($pmplaceid=null, $userid=null, $pmtype=null, $start=0, $length=9999)
+	{
+		$where = array('isdelete'=>0);
+		if ($pmplaceid) $where['pmplaceid'] = $pmplaceid;
+		if ($userid) $where['userid'] = $userid;
+		if ($pmtype!==null) $where['pmtype'] = $pmtype;
+
+		$total = M('pmplace')->where($where)->count();
+		$data = M('pmplace')->where($where)->order('pmtime desc')->limit($start,$length)->select();
+
+		return array('total'=>$total, 'data'=>is_array($data)?$data:array());
+	}
 }
