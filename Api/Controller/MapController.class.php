@@ -178,9 +178,49 @@ class MapController extends CommonController
 		));
 	}
 
+	//离线地图检测接口
+	public function offline()
+	{
+		$version = mRequest('version');
+		if (!$version) $this->apiReturn(1, '未知版本信息！');
+
+		$mapinfo = D('Map')->getMap();
+		$new = version_compare($version, $mapinfo['version'], '<') ? 1 : 0;
+
+		$this->apiReturn(0,'',array(
+			'new'     => $new,
+			'version' => $mapinfo['version'],
+			'title'   => $mapinfo['title'],
+			'dllink'  => $mapinfo['path'],
+			'size'    => format_bytes($mapinfo['size']),
+		));
+	}
+
 	//图层接口
 	public function layer()
 	{
-		$this->apiReturn(0, '', array());
+		$data = D('Map')->getLayer();
+
+		$layerlist = array();
+		foreach ($data as $layer) {
+			$layerlist[] = array(
+				'layerid'  => (int)$layer['layerid'],
+				'title'    => $layer['title'],
+				'icon'     => ImageURL($layer['icon']),
+				'ashow'    => (int)$layer['ashow'],
+				'layerapi' => array(
+					'url'           => (string)$layer['url'],
+					'service'       => (string)$layer['service'],
+					'request'       => (string)$layer['request'],
+					'version'       => (string)$layer['version'],
+					'layer'         => (string)$layer['layer'],
+					'style'         => (string)$layer['style'],
+					'tilematrixset' => (string)$layer['tilematrixset'],
+					'format'        => (string)$layer['format'],
+				)
+			);
+		}
+
+		$this->apiReturn(0, '', array('layerlist'=>$layerlist));
 	}
 }

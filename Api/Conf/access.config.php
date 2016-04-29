@@ -104,6 +104,12 @@ return array(
 			'logon'  => false,
 		),
 
+		//离线地图检测接口
+		'/map/offline' => array(
+			'api'    => 'map/offline',
+			'method' => 'get',
+			'logon'  => false,
+		),
 		//图层接口
 		'/map/layer' => array(
 			'api'    => 'map/layer',

@@ -504,9 +504,15 @@ class TopicController extends CommonController
 		//加载EXCEL
 		include(VENDOR_PATH.'PHPExcel-1.8.1/PHPExcel.php');
 		include(VENDOR_PATH.'PHPExcel-1.8.1/PHPExcel/IOFactory.php');
+		include(VENDOR_PATH.'PHPExcel-1.8.1/PHPExcel/Reader/Excel5.php');
 		include(VENDOR_PATH.'PHPExcel-1.8.1/PHPExcel/Reader/Excel2007.php');
 
-		$excelObjReader = \PHPExcel_IOFactory::createReader('Excel2007');
+		$fileinfo = pathinfo($excelfile);
+		if ($fileinfo['extension'] == 'xls') {
+			$excelObjReader = \PHPExcel_IOFactory::createReader('Excel5');
+		} else if ($fileinfo['extension'] == 'xlsx') {
+			$excelObjReader = \PHPExcel_IOFactory::createReader('Excel2007');
+		}
 		$excelObjReader->setReadDataOnly(true);
 		$excelObjPHPExcel = $excelObjReader->load($excelfile);
 		$excelObjWorksheet = $excelObjPHPExcel->getActiveSheet();
