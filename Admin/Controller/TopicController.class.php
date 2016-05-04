@@ -414,9 +414,11 @@ class TopicController extends CommonController
 
 		//解析导入字段
 		$namefield = null;
+		$addressfield = null;
 		$excelfields = array();
 		foreach ($topicmapinfo['fields'] as $field) {
 			if ($field['apifield'] == 'name') $namefield = $field['field'];
+			if ($field['apifield'] == 'address') $addressfield = $field['field'];
 
 			$excelfields[$field['excel']] = $field['field'];
 		}
@@ -468,6 +470,8 @@ class TopicController extends CommonController
 
 					$ddd[$excelfields[$colname]] = $value;
 				}
+
+				if (!$ddd[$namefield] && !$ddd[$addressfield] && !$ddd['point_x'] && !$ddd['point_y']) continue;
 
 				//查询是否已经存在该名字的专题点
 				$topiciteminfo = D('Topic')->getTopicitemByName($topicid, $ddd[$namefield]);

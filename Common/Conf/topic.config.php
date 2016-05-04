@@ -563,6 +563,15 @@ return array(
 				'search' => 0,
 				'excel'  => 'R',
 			),
+			'description' => array(
+				'field'  => 'description',
+				'name'   => '简介',
+				'inup'   => 1,
+				'need'   => 0,
+				'show'   => 0,
+				'search' => 1,
+				'excel'  => 'S',
+			),
 		)
 	),
 	6 => array(

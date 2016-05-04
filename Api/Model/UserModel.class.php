@@ -26,15 +26,34 @@ class UserModel extends CommonModel
 		return $password;
 	}
 
-	/**
-	 * 用户头像
-	 */
-	public function getUserAvatar($userid=null)
+	//获取用户信息-userid
+	public function getUserByUserid($userid=null)
 	{
-		if (!$userid) return C('DEFAULT_AVATAR');
+		if (!$userid) return false;
 
-		$userinfo = $this->getUserByID($userid);
-		return isset($userinfo['isloadpic'])&&$userinfo['isloadpic'] ? C('RS.IMAGE_SERVER').'/uploadfiles/userheader/users/'.$userinfo['id'].'1.png?'.rand(100000,999999) : C('DEFAULT_AVATAR');
+		$userinfo = M('user')->where(array('userid'=>$userid))->find();
+
+		return is_array($userinfo) ? $userinfo : array();
+	}
+
+	//获取用户信息-phone
+	public function getUserByPhone($phone=null)
+	{
+		if (!$phone) return false;
+
+		$userinfo = M('user')->where(array('phone'=>$phone))->find();
+
+		return is_array($userinfo) ? $userinfo : array();
+	}
+
+	//获取用户信息 通过source+oauthtoken
+	public function getUserByOauth($source=null, $oauthtoken=null)
+	{
+		if (!$source || !$oauthtoken) return false;
+
+		$userinfo = M('user')->where(array('source'=>$source, 'oauthtoken'=>$oauthtoken))->find();
+
+		return is_array($userinfo) ? $userinfo : array();
 	}
 
 	/**
@@ -90,10 +109,7 @@ class UserModel extends CommonModel
 	{
 		if (!$phone) return false;
 
-		$where = array(
-			'status' => null
-		);
-		$userinfo = $this->getUser($phone,0,1,$where);
+		$userinfo = M('user')->where(array('phone'=>$phone))->find();
 
 		return is_array($userinfo)&&!empty($userinfo) ? true : false;
 	}

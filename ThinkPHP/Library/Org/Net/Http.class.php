@@ -452,7 +452,7 @@ class Http_Curl {
             $this->vars = $vars;
         } else {
             $varss = json_decode($vars,true);
-            if (is_array($varss)) $this->vars = $vars;
+            $this->vars = is_array($varss) ? $vars : $vars;
         }
     }
     /** 
@@ -529,8 +529,10 @@ class Http_Curl {
         curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
         //设置特殊属性
         if (!empty($options)) {
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
             curl_setopt_array($ch, $options);
         }
+        // dump($options);exit;
         //处理GET请求参数
         if ($method == 'GET' && !empty($this->vars)) {
             $query = Http::makeQuery($this->vars);

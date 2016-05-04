@@ -175,9 +175,9 @@ class BaseController extends Controller
      * http请求处理
      * @param string $way get/post
      */
-    protected function HttpClient($way='get',$api=null,$vars=array(),$timeout=5,$timeoutflag=1)
+    protected function HttpClient($way='get',$api=null,$vars=array(),$header=array(),$timeout=5,$timeoutflag=1,$options=array())
     {
-    	if (!$api || !is_array($vars)) return false;
+    	if (!$api || !is_array($header) || !is_array($options)) return false;
 
     	import('Org.Net.Http');
 
@@ -186,13 +186,13 @@ class BaseController extends Controller
 
     	switch ($way) {
     		case 'get':
-    			$result = $HttpClient->get(null,$vars,array(),'',$timeout);
+    			$result = $HttpClient->get(null,$vars,$header,'',$timeout,$options);
     			break;
     		case 'post':
-    			$result = $HttpClient->post(null,$vars,array(),'',$timeout);
+    			$result = $HttpClient->post(null,$vars,$header,'',$timeout,$options);
     			break;
     		default:
-    			$result = $HttpClient->get(null,$vars,array(),'',$timeout);
+    			$result = $HttpClient->get(null,$vars,$header,'',$timeout,$options);
     			break;
     	}
 

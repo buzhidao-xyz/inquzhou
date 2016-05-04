@@ -12,9 +12,6 @@ class OrgController extends CommonController
     public function __construct()
     {
         parent::__construct();
-
-        //API请求校验signature
-        $this->CKSignature();
     }
 
     public function index() {}
@@ -22,22 +19,35 @@ class OrgController extends CommonController
     /**
      * 发送短信
      */
-    public function sendsms($phone=null,$msg=null)
+    public function sendsms($phone=null)
     {
-    	if (!\Think\Filter::CKPhone($phone)||!$msg) return false;
+    	if (!\Think\Filter::CKPhone($phone)) return false;
 
-    	$api = C('RS.SMS_API').'?phone='.$phone.'&content='.urlencode($msg);
+        $netease  = C('NETEASE');
+        $appkey   = $netease['appkey'];
+        $nonce    = \Org\Util\String::randString(18);
+        $curtime  = TIMESTAMP;
+        $checksum = sha1($netease['appsecret'].$nonce.$curtime);
+
+    	$api = 'https://api.netease.im/sms/sendcode.action';
+        $vars = 'mobile='.$phone;
+        $header = array(
+            'AppKey: '.$appkey,
+            'CurTime: '.$curtime,
+            'CheckSum: '.$checksum,
+            'Nonce: '.$nonce,
+            'Content-Type: application/x-www-form-urlencoded',
+        );
 
         //http请求
-        $result = $this->HttpClient('get',$api,array(),1,0);
-    	$result = json_decode($result);
+        $result = $this->HttpClient('post',$api,$vars,$header,3,0,array('CURLOPT_SSL_VERIFYPEER'=>0));
+    	$result = json_decode($result, true);
 
-    	if (!isset($result->result)||!$result->result) {
-    		//发送失败
-    		return false;
-    	}
-
-    	return true;
+    	if ($result['code'] === 200) {
+            return $result['obj'];
+        } else {
+            return false;
+        }
     }
 
     /**

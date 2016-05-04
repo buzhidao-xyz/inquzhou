@@ -11,6 +11,43 @@ return array(
 
 	//API列表
 	'APILIST' => array(
+		//用户注册
+		'/user/regist' => array(
+			'api'    => 'user/regist',
+			'method' => 'post',
+			'logon'  => false,
+		),
+		//用户登录
+		'/user/login' => array(
+			'api'    => 'user/login',
+			'method' => 'post',
+			'logon'  => false,
+		),
+		//用户退出
+		'/user/logout' => array(
+			'api'    => 'user/logout',
+			'method' => 'post',
+			'logon'  => false,
+		),
+		//修改用户资料
+		'/user/setuserinfo' => array(
+			'api'    => 'user/setuserinfo',
+			'method' => 'post',
+			'logon'  => false,
+		),
+		//修改密码
+		'/user/setpasswd' => array(
+			'api'    => 'user/setpasswd',
+			'method' => 'post',
+			'logon'  => false,
+		),
+		//获取用户信息
+		'/user/userinfo' => array(
+			'api'    => 'user/userinfo',
+			'method' => 'get',
+			'logon'  => false,
+		),
+
 		//收藏地点
 		'/fav/newfavplace' => array(
 			'api'    => 'fav/newfavplace',
@@ -114,6 +151,19 @@ return array(
 		'/map/layer' => array(
 			'api'    => 'map/layer',
 			'method' => 'get',
+			'logon'  => false,
+		),
+
+		//发送短信验证码
+		'/user/sendvcode' => array(
+			'api'    => 'user/sendvcode',
+			'method' => 'post',
+			'logon'  => false,
+		),
+		//验证短信验证码
+		'/user/checkvcode' => array(
+			'api'    => 'user/checkvcode',
+			'method' => 'post',
 			'logon'  => false,
 		),
 	),

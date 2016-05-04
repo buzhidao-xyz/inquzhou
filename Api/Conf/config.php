@@ -50,6 +50,8 @@ return array(
 	'LOAD_EXT_CONFIG' => array(
 		//访问信息配置文件
 		'ACCESS'  => 'access.config',
+		//网易云信配置
+		'NETEASE' => 'netease.config',
 	),
 
 	//图片地址

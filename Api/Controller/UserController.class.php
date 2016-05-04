@@ -10,13 +10,18 @@ use Org\Net\Http;
 
 class UserController extends CommonController
 {
+    //短信发送时间间隔
+    private $_sms_sendexpire = 60;
+    //短信验证码有效期
+    private $_sms_expiretime = 600;
+
+    //用户来源
+    private $_user_source = array('regist','weixin','qq','weibo');
+
     //初始化
     public function __construct()
     {
         parent::__construct();
-
-        //API请求校验signature
-        $this->CKSignature();
     }
 
     public function index() {}
@@ -24,33 +29,32 @@ class UserController extends CommonController
     /**
      * 获取手机账号
      */
-    private function _getPhone($ck=1)
+    private function _getPhone($ck=true)
     {
         $phone = mRequest('phone');
-        if ($ck&&!\Think\Filter::CKPhone($phone)) $this->apiReturn(1,'未知手机号码！');
-        if ($phone&&!\Think\Filter::CKPhone($phone)) $this->apiReturn(1,'未知手机号码！');
+        if ($ck&&!\Org\Util\Filter::F_Phone($phone)) $this->apiReturn(1,'未知手机号码！');
 
         return $phone;
+    }
+
+    //获取username
+    private function _getUsername($ck=true)
+    {
+        $username = mRequest('username');
+        if ($ck&&!$username) $this->apiReturn(1, '请填写姓名！');
+
+        return $username;
     }
 
     /**
      * 获取登录密码
      */
-    private function _getPassword()
+    private function _getPasswd()
     {
-        $password = $_REQUEST['password'];
+        $passwd = $_REQUEST['passwd'];
+        if (!$passwd) $this->apiReturn(1, '请填写登录密码！');
 
-        return $password;
-    }
-
-    /**
-     * 获取确认密码
-     */
-    private function _getPasswordc()
-    {
-        $passwordc = $_REQUEST['passwordc'];
-
-        return $passwordc;
+        return $passwd;
     }
 
     /**
@@ -59,6 +63,7 @@ class UserController extends CommonController
     private function _getVcode()
     {
         $vcode = mRequest('vcode');
+        if (!$vcode) $this->apiReturn(1, '验证码错误！');
 
         return $vcode;
     }
@@ -75,331 +80,22 @@ class UserController extends CommonController
         return $action;
     }
 
-    /**
-     * 发送手机短信验证码
-     */
-    public function sendvcode()
+    //获取source
+    private function _getSource($ck=true)
     {
-        $this->CKQuest('post');
-        //短信防重发间隔
-        $sms_resend_expire = C('RS.SMS_RESEND_EXPIRE');
+        $source = mRequest('source');
+        if ($ck&&!in_array($source, $this->_user_source)) $this->apiReturn(1, '用户来源错误！');
 
-        //查询session是否在N秒内有短信发送记录
-        if (session('smssendflag','',0,0)) $this->apiReturn(1,$sms_resend_expire.'秒内请勿重复发送短信！');
-
-        //发送短信的动作
-        $action = $this->_getAction();
-        if ($action == 'regist') {
-            $phone = $this->_getPhone();
-            $userinfo = D('User')->getUserByPhone($phone);
-            if (!empty($userinfo)) $this->apiReturn(1,'该手机号码已注册！');
-        }
-        if ($action == 'forgot') {
-            $phone = $this->_getPhone();
-            $userinfo = D('User')->getUserByPhone($phone);
-            if (empty($userinfo)) $this->apiReturn(1,'该手机号码未注册！');
-        }
-        if ($action == 'forgotwalletpwd') {
-            $phone = $this->_getPhone(0);
-
-            //检查登录
-            $this->CKUserLogon(1);
-
-            $userinfo = $this->userinfo;
-            //判断要发送的手机号码是否是该登录用户手机号码
-            if ($phone&&$phone!=$userinfo['phone']) $this->apiReturn(1,'发送手机号码验证失败！');
-
-            $phone = $userinfo['phone'];
-        }
-
-        //短信验证码过期时间
-        $sms_code_expire = C('RS.SMS_CODE_EXPIRE');
-        //生成短信验证码
-        $vcode = D('Org')->GCsmsvcode();
-
-        //短信模板编码
-        $templatecode = D('Org')->smsTemplateCode($action);
-        //获取短信模板
-        $smstemplate = D('Org')->getSmstemplate($templatecode);
-        $msg = isset($smstemplate['caption']) ? str_replace('ml000009', $vcode, $smstemplate['caption']) : null;
-
-        //存储短信验证码
-        $invalitedate = TIMESTAMP+$sms_code_expire;
-        $return = D('Org')->smsvcodeSave($templatecode,$phone,$vcode,$invalitedate);
-        if ($return) {
-            //发送短信
-            CR('Org')->sendsms($phone,$msg);
-
-            //session记录短信发送标记 N秒内防重发
-            session('smssendflag',1,$sms_resend_expire);
-
-            $this->apiReturn(0,'短信发送成功！',array(
-                'success' => 1,
-                'message' => ''
-            ));
-        }
-
-        $this->apiReturn(1,'短信发送失败！');
+        return $source;
     }
 
-    /**
-     * 验证手机短信验证码是否真实有效
-     */
-    public function ckvcode()
+    //获取oauthtoken
+    private function _getOauthtoken($ck=true)
     {
-        $this->CKQuest('get');
+        $oauthtoken = mRequest('oauthtoken');
+        if (!$oauthtoken) $this->apiReturn(1, 'oauthtoken错误！');
 
-        //手机号码
-        $phone = $this->_getPhone();
-        //验证码
-        $vcode = $this->_getVcode();
-
-        //发送短信的动作
-        $action = $this->_getAction();
-        //短信模板编码
-        $templatecode = D('Org')->smsTemplateCode($action);
-
-        //检查短信验证码是否已过期
-        $return = D('Org')->ckSmsVcodeExpire($templatecode,$phone,$vcode);
-        if ($return) {
-            $this->apiReturn(0,'',array(
-                'success' => 1,
-                'message' => ''
-            ));
-        } else {
-            $this->apiReturn(1,'短信验证码不存在或已过期！');
-        }
-    }
-
-    /**
-     * 用户注册
-     */
-    public function regist()
-    {
-        $this->CKQuest('post');
-    }
-
-    /**
-     * 用户登录
-     */
-    public function login()
-    {
-        $this->CKQuest('post');
-
-        //获取手机号码
-        $phone = $this->_getPhone();
-
-        //获取密码或登录码
-        $password = $this->_getPassword();
-        $signtoken = $this->_getSigntoken();
-        if (!$password && !$signtoken) $this->apiReturn(1,'未知密码！');
-
-        //appid
-        $appid = mRequest('appid');
-        //获取appdevice
-        $appinfo = D('Apps')->getAppdeviceByAppid($appid);
-        $appsecret = isset($appinfo['appsecret']) ? $appinfo['appsecret'] : "";
-
-        //IP
-        $ip = $this->_getIp();
-        //经度
-        $lng = $this->_getLng();
-        //维度
-        $lat = $this->_getLat();
-
-        //登录成功
-        import('Org.Net.Http');
-
-        //登录信息
-        $postvars = array(
-            'appid' => $appid,
-            'appsecret' => $appsecret,
-            'phone' => $phone,
-            'password' => $password,
-            'ip' => $ip,
-            'lng' => $lng,
-            'lat' => $lat,
-            'signtoken' => $signtoken,
-            'ticket' => D('Apps')->GSTicket($appid)
-        );
-
-        //连接单点登录服务器 远程登录认证
-        require_once(MODULE_PATH.'Conf/sso.config.php');
-        $api = 'http://'.$sso_host.':'.$sso_port.__ROOT__.'/sso/login';
-        //http请求
-        $result = $this->HttpClient('post',$api,$postvars);
-        $result = json_decode($result);
-
-        if ($result->success) {
-            $userinfo = (array)$result->userinfo;
-            $avatar = D('User')->getUserAvatar($userinfo['id']);
-
-            //生成登录signtoken
-            $signtoken = D('User')->GCSigntoken($appid,$phone);
-            //保存登录signtoken
-            D('User')->signtokenSave($userinfo['id'],$appid,$signtoken);
-
-            //用户绑定appid
-            $appid = mRequest('appid');
-            D('User')->bindingAppid($userinfo['id'],$appid);
-
-            //设置登录session
-            $this->GSUserInfo(array(
-                'userid' => $userinfo['id'],
-                'phone' => $userinfo['phone'],
-                'nickname' => $userinfo['nickname'],
-                'username' => $userinfo['username'],
-            ));
-
-            $vipflag = $userinfo['roleid']==C('USER.USERROLE_P2') && strtotime($userinfo['disabledate'])>TIMESTAMP ? 1 : 0;
-
-            //返回数据
-            $return = array(
-                'userid' => $userinfo['id'],
-                'phone'  => $userinfo['phone'],
-                'nickname' => $userinfo['nickname'],
-                'email'  => $userinfo['email'],
-                'bindingbusinessid' => $userinfo['bindingbusinessid'],
-                'bindingbusiness'   => $userinfo['bindingbusiness'],
-                'avatar'   => $avatar,
-                'userrole' => $userinfo['roleid'],
-                'status' => $userinfo['status'],
-                'signtoken' => $signtoken,
-                'sessionid' => session_id(),
-                'vipflag' => $vipflag
-            );
-            $this->apiReturn(0,null,$return);
-        } else {
-            $this->apiReturn(1,'登录失败！账户或密码错误！');
-        }
-    }
-
-    /**
-     * 用户退出
-     */
-    public function logout()
-    {
-        $this->CKQuest('get');
-
-        //注销登录session
-        $this->USUserInfo();
-
-        //清除signtoken
-        D('User')->signtokenSave($userinfo['id'],null,null,0);
-        //用户解绑appid
-        D('User')->bindingAppid($userinfo['id'],null,0);
-
-        $this->apiReturn(0,'',array(
-            'success' => 1,
-            'message' => ''
-        ));
-    }
-
-    /**
-     * 忘记密码-验证手机号码
-     */
-    public function forgotpwdckphone()
-    {
-        $this->CKQuest('post');
-
-        $action = 'forgot';
-
-        //手机号码
-        $phone = $this->_getPhone();
-        if (!D('User')->CKPhoneExists($phone)) $this->apiReturn(1,'该手机号码未注册！');
-
-        //短信验证码
-        $vcode = $this->_getVcode();
-        $templatecode = D('Org')->smsTemplateCode($action);
-        if (!D('Org')->ckSmsVcodeExpire($templatecode,$phone,$vcode)) $this->apiReturn(1,'短信验证码不存在或已过期！');
-
-        $this->apiReturn(0,'',array(
-            'success' => 1,
-            'message' => ''
-        ));
-    }
-
-    /**
-     * 忘记密码-设置新密码
-     */
-    public function forgotpwdnew()
-    {
-        $this->CKQuest('post');
-
-        $action = 'forgot';
-
-        //手机号码
-        $phone = $this->_getPhone();
-        if (!D('User')->CKPhoneExists($phone)) $this->apiReturn(1,'该手机号码尚未注册！');
-
-        //短信验证码
-        $vcode = $this->_getVcode();
-        $templatecode = D('Org')->smsTemplateCode($action);
-        // if (!D('Org')->ckSmsVcodeExpire($templatecode,$phone,$vcode)) $this->apiReturn(1,'短信验证码不存在或已过期！');
-
-        //用户密码
-        $password = $this->_getPassword();
-        if (!\Think\Filter::CKPasswd($password)) $this->apiReturn(1,'密码规则：数字字母开始 包含数字字母_!@#$的6-20位字符串');
-        //确认密码
-        $passwordc = $this->_getPasswordc();
-        //检查密码
-        if ($password != $passwordc) $this->apiReturn(1,'两次输入的密码不一致！');
-
-        //设置新密码
-        
-        //获取用户信息
-        $userinfo = D('User')->getUserByPhone($phone);
-        
-        //用户信息
-        $data = array(
-            'password' => md5($password)
-        );
-
-        //用户ID
-        $userid = $userinfo['id'];
-        //设置用户所属的人群角色
-        $return = D('User')->setUserInfo($userid,$data);
-
-        if ($return) {
-            $this->apiReturn(0,'',array(
-                'success' => 1,
-                'message' => ''
-            ));
-        } else {
-            $this->apiReturn(1,'设置新密码失败！');
-        }
-    }
-
-    /**
-     * 获取个人信息
-     */
-    public function userinfo()
-    {
-        $this->CKQuest('get');
-
-        //检查用户登录状态
-        $this->CKUserLogon(1);
-
-        $userid = $this->userinfo['userid'];
-        //获取用户信息
-        $userinfo = D('User')->getUserByID($userid);
-
-        //用户钱包信息
-        $userwallet = D('Wallet')->getUserWallet($userid);
-        $totalvolume = isset($userwallet['silver']) ? $userwallet['silver'] : 0;
-
-        $avatar = D('User')->getUserAvatar($userinfo['id']);
-        $usergroup = isset($userinfo['usergroup']) ? $userinfo['usergroup'] : null;
-        $this->apiReturn(0,'',array(
-            'userid' => $userid,
-            'avatar' => $avatar,
-            'nickname' => $userinfo['nickname'],
-            'totalvolume' => $totalvolume,
-            'usergroup' => $usergroup,
-            'truename'  => $userinfo['username'],
-            'gender'    => $userinfo['gender'],
-            'phone'     => $userinfo['phone']
-        ));
+        return $oauthtoken;
     }
 
     /**
@@ -413,146 +109,342 @@ class UserController extends CommonController
     }
 
     /**
-     * 获取昵称
+     * 发送手机短信验证码
      */
-    private function _getNickname()
+    public function sendvcode()
     {
-        $nickname = mRequest('nickname');
+        $action = $this->_getAction();
+        $phone = $this->_getPhone();
 
-        return $nickname;
-    }
+        if ($action=="forgot" && !D('User')->CKPhoneExists($phone)) $this->apiReturn(1, '该手机号码尚未注册！');
 
-    /**
-     * 获取真实姓名
-     */
-    private function _getTruename()
-    {
-        $truename = mRequest('truename');
+        //查询是否刚发送过验证码 1分钟内不能重复发送
+        if (M('vcode')->where(array('phone'=>$phone,'action'=>$action,'sendtime'=>array('egt', TIMESTAMP-$this->_sms_sendexpire)))->count()) {
+            $this->apiReturn(1, '1分钟内请勿重复发送短信！');
+        }
 
-        return $truename;
-    }
-
-    /**
-     * 获取性别 男/女
-     */
-    private function _getGender()
-    {
-        $gender = mRequest('gender');
-
-        return $gender;
-    }
-
-    /**
-     * 更新个人信息
-     */
-    public function setinfo()
-    {
-        $this->CKQuest('post');
-
-        //检查用户登录状态
-        $this->CKUserLogon(1);
-        $userinfo = $this->userinfo;
-
-        $data = array();
-
-        //获取头像 avatar
-        $avatar = $this->_getAvatar();
-        if ($avatar) {
-            $api = C('RS.AVATAR_API');
-
-            $postvars = array(
-                'action' => 'appupload',
-                'id'     => $userinfo['userid'],
-                'imagekey' => $avatar
+        $code = CR('Org')->sendsms($phone);
+        if ($code) {
+            //短信发送成功
+            $data = array(
+                'phone'      => $phone,
+                'code'       => $code,
+                'action'     => $action,
+                'checked'    => 0,
+                'sendtime'   => TIMESTAMP,
+                'expiretime' => TIMESTAMP+$this->_sms_expiretime,
             );
-            //http请求
-            $result = $this->HttpClient('post',$api,$postvars);
-            $result = json_decode($result);
-
-            if (isset($result->State) && $result->State === 0) {
-                $data['isloadpic'] = 1;
+            $result = M('vcode')->add($data);
+            if ($result) {
+                $this->apiReturn(0, '短信发送成功！', array(
+                    'result' => 1
+                ));
             }
         }
 
-        //获取昵称
-        $nickname = $this->_getNickname();
-        if ($nickname) $data['nickname'] = $nickname;
+        $this->apiReturn(0,'短信发送失败！', array(
+            'result' => 1
+        ));
+    }
 
-        //获取用户所属人群
-        $usergroup = $this->_getUsergroup(0);
-        if ($usergroup) $data['usergroup'] = $usergroup;
+    /**
+     * 验证手机短信验证码是否真实有效
+     */
+    public function checkvcode()
+    {
+        $action = $this->_getAction();
+        $phone = $this->_getPhone();
 
-        //获取真实姓名
-        $truename = $this->_getTruename();
-        if ($truename) $data['username'] = $truename;
+        //验证码
+        $vcode = $this->_getVcode();
 
-        //获取gender
-        $gender = $this->_getGender();
-        if ($gender) $data['gender'] = $gender;
+        //检查短信验证码是否已过期
+        $vcodeinfo = M('vcode')->where(array('phone'=>$phone,'action'=>$action,'checked'=>0,'expiretime'=>array('egt', TIMESTAMP)))->order('expiretime desc')->find();
+        if (is_array($vcodeinfo) && !empty($vcodeinfo) && $vcodeinfo['code']==$vcode) {
+            //标识为已使用
+            M('vcode')->where(array('vcodeid'=>$vcodeinfo['vcodeid']))->save(array('checked'=>1));
 
-        //获取phone
-        $phone = $this->_getPhone(0);
-        if ($phone) $data['phone'] = $phone;
-
-        //设置用户信息
-        $return = D('User')->setUserInfo($userinfo['userid'],$data);
-        if ($return) {
-            //更新昵称或手机号
-            if ($nickname||$phone) {
-                $userinfo = array();
-                if ($nickname) $userinfo['nickname'] = $nickname;
-                if ($phone) $userinfo['phone'] = $phone;
-                $this->GSUserInfo($userinfo,0);
-            }
-
-            $this->apiReturn(0,'',array(
-                'success' => 1,
-                'message' => ''
+            $this->apiReturn(0,'短信验证码验证成功！',array(
+                'result' => 1
             ));
         } else {
-            $this->apiReturn(1,'更新失败！');
+            $this->apiReturn(0,'短信验证码不存在或已过期！',array(
+                'result' => 0
+            ));
         }
     }
 
     /**
-     * 修改密码
+     * 用户注册
      */
-    public function setuserpwd()
+    public function regist()
     {
-        $this->CKQuest('post');
+        $action = 'regist';
 
-        //检查用户登录状态
-        $this->CKUserLogon(1);
-        $userinfo = $this->userinfo;
+        $phone = $this->_getPhone(true);
+        $vcode = $this->_getVcode();
+        $username = $this->_getUsername();
+        $passwd = $this->_getPasswd();
 
-        $data = array();
+        //检查验证码
+        $vcodeinfo = M('vcode')->where(array('phone'=>$phone,'action'=>$action,'checked'=>1))->order('expiretime desc')->find();
+        if (!is_array($vcodeinfo) || empty($vcodeinfo) || $vcodeinfo['code']!==$vcode) {
+            $this->apiReturn(1, '验证码错误！');
+        }
 
-        //获取原密码
-        $oldpassword = mRequest('oldpassword');
-        $oldpassword = D('User')->passwordEncrypt($oldpassword);
-        //检查原密码是否正确
-        if (!$oldpassword || !D('User')->CKUserPassword($userinfo['userid'],$oldpassword)) $this->apiReturn(1,L('oldpassword_error'));
-    
-        //新密码
-        $password = $this->_getPassword();
-        if (!\Think\Filter::CKPasswd($password)) $this->apiReturn(1,'密码规则：数字字母开始 包含数字字母_!@#$的6-20位字符串');
-        //确认密码
-        $passwordc = $this->_getPasswordc();
-        //检查密码
-        if ($password != $passwordc) $this->apiReturn(1,'两次输入的密码不一致！');
+        //检查手机号码是否已存在
+        if (M('user')->where(array('phone'=>$phone))->count()) {
+            $this->apiReturn(1, '账号已存在！');
+        }
 
-        //设置密码
+        //检查密码格式
+        if (!\Org\Util\Filter::F_Password($passwd)) {
+            $this->apiReturn(1, '密码错误！5-20位数字字母下划线！');
+        }
+
+        $user = C('USER');
+        $passwd = D('User')->passwordEncrypt($passwd);
         $data = array(
-            'password' => D('User')->passwordEncrypt($password)
+            'phone'      => $phone,
+            'passwd'     => $passwd,
+            'username'   => $username,
+            'avatar'     => $user['USER_AVATAR_DEFAULT'],
+            'source'     => 'regist',
+            'oauthtoken' => '',
+            'status'     => 1,
+            'registtime' => TIMESTAMP,
         );
-        $return = D('User')->setUserInfo($userinfo['userid'],$data);
-        if ($return) {
-            $this->apiReturn(0,'',array(
-                'success' => 1,
-                'message' => ''
+        $result = M('User')->add($data);
+        if ($result) {
+            $this->apiReturn(0, '注册成功！', array('result'=>1));
+        } else {
+            $this->apiReturn(0, '注册失败！', array('result'=>0));
+        }
+    }
+
+    /**
+     * 用户登录
+     */
+    public function login()
+    {
+        $source = $this->_getSource(false);
+
+        if ($source == '' || $source == 'regist') {
+            $phone = $this->_getPhone(true);
+            $passwd = $this->_getPasswd();
+            //查询用户信息
+            $userinfo = D('User')->getUserByPhone($phone);
+
+            if (empty($userinfo) || D('User')->passwordEncrypt($passwd)!=$userinfo['passwd']) {
+                $this->apiReturn(1, '登录失败！账号或密码错误！');
+            }
+        } else {
+            //第三方登录
+            $oauthtoken = $this->_getOauthtoken();
+        }
+
+        //设置登录session
+        $this->GSUserInfo(array(
+            'userid'     => $userinfo['userid'],
+            'phone'      => $userinfo['phone'],
+            'username'   => $userinfo['username'],
+            'source'     => $userinfo['source'],
+            'oauthtoken' => $userinfo['oauthtoken'],
+        ));
+
+        //用户信息返回
+        $data = array(
+            'userid'    => (int)$userinfo['userid'],
+            'phone'     => $userinfo['phone'],
+            'username'  => $userinfo['username'],
+            'avatar'    => ImageURL($userinfo['avatar']),
+            'source'    => $userinfo['source'],
+            'sessionid' => session_id(),
+        );
+        $this->apiReturn(0, '登录成功！', $data);
+    }
+
+    /**
+     * 用户退出
+     */
+    public function logout()
+    {
+        //注销登录session
+        $this->USUserInfo();
+
+        $this->apiReturn(0, '退出登录成功！', array(
+            'result' => 1,
+        ));
+    }
+
+    //修改用户资料 - 姓名、头像
+    public function setuserinfo()
+    {
+        $userinfo = $this->userinfo;
+        $userid = $userinfo['userid'];
+
+        $username = $this->_getUsername(false);
+        $avatar = $this->_getAvatar();
+        if (!$username && !$avatar) $this->apiReturn(1, '用户信息错误！');
+
+        //更新姓名
+        if ($username) {
+            $result = M('user')->where(array('userid'=>$userid))->save(array(
+                'username' => $username,
+                'updatetime' => TIMESTAMP
+            ));
+            if (!$result) $this->apiReturn(1, '姓名设置失败！', array(
+                'result' => 0,
+            ));
+        }
+
+        //更新头像
+        if ($avatar) {
+            $imagedata = base64_decode($avatar);
+
+            $rootpath = APP_PATH;
+            $uploadpath = 'Upload/avatar/'.date('Y/md', TIMESTAMP).'/';
+            mkdir($rootpath.$uploadpath, 0777, true);
+            $avatarfile = $uploadpath.uniqid().'_'.TIMESTAMP.'.png';
+            $size = file_put_contents($rootpath.$avatarfile, $imagedata);
+
+            $result = true;
+            if ($size) {
+                $result = M('user')->where(array('userid'=>$userid))->save(array(
+                    'avatar' => '/'.$avatarfile,
+                    'updatetime' => TIMESTAMP
+                ));
+            }
+
+            if (!$result) $this->apiReturn(1, '头像更新失败！', array(
+                'result' => 0,
+            ));
+        }
+
+        $this->apiReturn(0, '更新成功！', array(
+            'result' => 1
+        ));
+    }
+
+    //修改密码
+    public function setpasswd()
+    {
+        $userinfo = $this->userinfo;
+        $userid = $userinfo['userid'];
+
+        //用户信息
+        $userinfo = D('User')->getUserByUserid($userid);
+
+        $originpasswd = mRequest('originpasswd');
+        if ($userinfo['passwd']!=D('User')->passwordEncrypt($originpasswd)) $this->apiReturn(1, '原密码不正确！');
+
+        $newpasswd = mRequest('newpasswd');
+        if (!\Org\Util\Filter::F_Password($newpasswd)) $this->apiReturn(1, '新密码错误！5-20位数字字母下划线！');
+
+        $confirmpasswd = mRequest('confirmpasswd');
+        if ($confirmpasswd != $newpasswd) $this->apiReturn(1, '两次输入的新密码不一致！');
+
+        $result = M('User')->where(array('userid'=>$userid))->save(array(
+            'passwd' => D('User')->passwordEncrypt($newpasswd),
+            'updatetime' => TIMESTAMP
+        ));
+        if ($result) {
+            $this->apiReturn(0, '修改成功！', array(
+                'result' => 1
             ));
         } else {
-            $this->apiReturn(1,'修改失败！');
+            $this->apiReturn(1, '修改失败！', array(
+                'result' => 0
+            ));
+        }
+    }
+
+    /**
+     * 找回密码
+     */
+    public function rebackpasswd()
+    {
+        $action = 'forgot';
+
+        //手机号码
+        $phone = $this->_getPhone();
+        if (!D('User')->CKPhoneExists($phone)) $this->apiReturn(1,'该手机号码尚未注册！');
+
+        //验证码
+        $vcode = $this->_getVcode();
+        //检查短信验证码是否已过期
+        $vcodeinfo = M('vcode')->where(array('phone'=>$phone,'action'=>$action,'checked'=>0,'expiretime'=>array('egt', TIMESTAMP)))->order('expiretime desc')->find();
+        if (is_array($vcodeinfo) && !empty($vcodeinfo) && $vcodeinfo['code']==$vcode) {
+            //标识为已使用
+            M('vcode')->where(array('vcodeid'=>$vcodeinfo['vcodeid']))->save(array('checked'=>1));
+        } else {
+            $this->apiReturn(0,'短信验证码验证失败！',array(
+                'result' => 0
+            ));
+        }
+
+        //用户密码
+        $passwd = $this->_getPasswd();
+        if (!\Org\Util\Filter::F_Password($passwd)) $this->apiReturn(1, '密码错误！5-20位数字字母下划线！');
+
+        //设置新密码
+        $result = M('User')->where(array('phone'=>$phone))->save(array(
+            'passwd' => D('User')->passwordEncrypt($passwd),
+            'updatetime' => TIMESTAMP
+        ));
+        if ($result) {
+            $this->apiReturn(0, '新密码设置成功！', array(
+                'result' => 1
+            ));
+        } else {
+            $this->apiReturn(1, '新密码设置失败！', array(
+                'result' => 0
+            ));
+        }
+    }
+
+    /**
+     * 获取个人信息
+     */
+    public function userinfo()
+    {
+        $userinfo = $this->userinfo;
+        $userid = $userinfo['userid'];
+
+        //用户信息
+        $userinfo = D('User')->getUserByUserid($userid);
+
+        $this->apiReturn(0, '', array(
+            'userid'    => (int)$userinfo['userid'],
+            'phone'     => $userinfo['phone'],
+            'username'  => $userinfo['username'],
+            'avatar'    => ImageURL($userinfo['avatar']),
+            'source'    => $userinfo['source'],
+        ));
+    }
+
+    //意见反馈
+    public function lvword()
+    {
+        $userinfo = $this->userinfo;
+        $userid = $userinfo['userid'];
+
+        $content = mRequest('content');
+        if (!$content) $this->apiReturn(1, '请填写意见内容！');
+
+        $result = M('lvword')->add(array(
+            'userid' => $userid,
+            'content' => $content,
+            'createtime' => TIMESTAMP
+        ));
+        if ($result) {
+            $this->apiReturn(0, '反馈意见提交成功！', array(
+                'result' => 1
+            ));
+        } else {
+            $this->apiReturn(1, '反馈意见提交失败！', array(
+                'result' => 0
+            ));
         }
     }
 }
