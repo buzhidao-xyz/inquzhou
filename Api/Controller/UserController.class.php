@@ -116,6 +116,7 @@ class UserController extends CommonController
         $action = $this->_getAction();
         $phone = $this->_getPhone();
 
+        if ($action=="regist" && D('User')->CKPhoneExists($phone)) $this->apiReturn(1, '该手机号码已注册！');
         if ($action=="forgot" && !D('User')->CKPhoneExists($phone)) $this->apiReturn(1, '该手机号码尚未注册！');
 
         //查询是否刚发送过验证码 1分钟内不能重复发送
@@ -123,8 +124,9 @@ class UserController extends CommonController
             $this->apiReturn(1, '1分钟内请勿重复发送短信！');
         }
 
-        $code = CR('Org')->sendsms($phone);
-        if ($code) {
+        $code = \Org\Util\String::randString(6,1);
+        $obj = CR('Org')->sendsms($phone, $code);
+        if ($obj) {
             //短信发送成功
             $data = array(
                 'phone'      => $phone,

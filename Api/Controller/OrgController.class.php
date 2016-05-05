@@ -19,9 +19,9 @@ class OrgController extends CommonController
     /**
      * 发送短信
      */
-    public function sendsms($phone=null)
+    public function sendsms($phone=null, $code=null)
     {
-    	if (!\Think\Filter::CKPhone($phone)) return false;
+    	if (!\Think\Filter::CKPhone($phone) || !$code) return false;
 
         $netease  = C('NETEASE');
         $appkey   = $netease['appkey'];
@@ -29,13 +29,14 @@ class OrgController extends CommonController
         $curtime  = TIMESTAMP;
         $checksum = sha1($netease['appsecret'].$nonce.$curtime);
 
-    	$api = 'https://api.netease.im/sms/sendcode.action';
-        $vars = 'mobile='.$phone;
+    	$api = 'https://api.netease.im/sms/sendtemplate.action';
+        $vars = 'templateid=6421&mobiles=["'.$phone.'"]&params=["'.$code.'"]';
         $header = array(
             'AppKey: '.$appkey,
             'CurTime: '.$curtime,
             'CheckSum: '.$checksum,
             'Nonce: '.$nonce,
+            'charset: utf-8',
             'Content-Type: application/x-www-form-urlencoded',
         );
 

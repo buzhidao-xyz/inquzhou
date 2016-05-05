@@ -107,7 +107,6 @@ class FavController extends CommonController
 
         $userid = $this->userinfo['userid'];
 
-        $userid = 1;
         $data = array(
             'userid'  => $userid,
             'title'   => $title,
@@ -144,7 +143,6 @@ class FavController extends CommonController
 
         $userid = $this->userinfo['userid'];
 
-        $userid = 1;
         $data = array(
             'userid'  => $userid,
             'sour'    => $sour,

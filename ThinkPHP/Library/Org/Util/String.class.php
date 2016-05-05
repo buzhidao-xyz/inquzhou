@@ -119,7 +119,7 @@ class String {
                 $chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.$addChars;
                 break;
             case 1:
-                $chars= str_repeat('0123456789',3);
+                $chars= str_repeat('123456789',3);
                 break;
             case 2:
                 $chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.$addChars;
