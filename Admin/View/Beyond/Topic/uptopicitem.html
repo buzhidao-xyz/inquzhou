@@ -43,6 +43,15 @@
                                 <input type="hidden" name="itemid" value="{$topiciteminfo.itemid}">
                                 {foreach $topicmapinfo.fields as $field}
                                 {if $field.inup}
+                                {if $field.vartype=="text"}
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">{$field.name}</label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control" name="{$field.field}" placeholder="{$field.name}" rows="5">{$topiciteminfo[$field.field]}</textarea>
+                                        {if $field.need}<span class="danger">*必填</span>{/if}
+                                    </div>
+                                </div>
+                                {else}
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-padding-right">{$field.name}</label>
                                     <div class="col-sm-10">
@@ -50,6 +59,7 @@
                                         {if $field.need}<span class="danger">*必填</span>{/if}
                                     </div>
                                 </div>
+                                {/if}
                                 {/if}
                                 {/foreach}
                                 <div class="form-group">

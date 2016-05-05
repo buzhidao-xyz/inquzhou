@@ -15,6 +15,7 @@
  * fields.value.search : 是否表单搜索
  * fields.value.excel : excel导入对应列
  * fields.value.apifield : topicitemlist接口对应字段名/excel数据导入对应专题点名称查询字段名
+ * fields.value.vartype : 数据类型 index/string/text
  */
 return array(
 	1 => array(
@@ -571,6 +572,7 @@ return array(
 				'show'   => 0,
 				'search' => 1,
 				'excel'  => 'S',
+				'vartype' => 'text'
 			),
 		)
 	),
@@ -774,6 +776,81 @@ return array(
 				'show'   => 1,
 				'search' => 0,
 				'excel'  => 'D',
+				'apifield' => 'lat',
+			),
+		)
+	),
+	9 => array(
+		'id'     => 9,
+		'table'  => 'jingdian',
+		'title'  => '旅游景点',
+		'fields' => array(
+			'name' => array(
+				'field'  => 'name',
+				'name'   => '名称',
+				'inup'   => 1,
+				'need'   => 1,
+				'show'   => 1,
+				'search' => 1,
+				'excel'  => 'A',
+				'apifield' => 'name',
+			),
+			'address' => array(
+				'field'  => 'address',
+				'name'   => '地址',
+				'inup'   => 1,
+				'need'   => 0,
+				'show'   => 1,
+				'search' => 1,
+				'excel'  => 'B',
+				'apifield' => 'address',
+			),
+			'level' => array(
+				'field'  => 'level',
+				'name'   => '等级',
+				'inup'   => 1,
+				'need'   => 0,
+				'show'   => 1,
+				'search' => 0,
+				'excel'  => 'C',
+			),
+			'href' => array(
+				'field'  => 'href',
+				'name'   => '链接',
+				'inup'   => 1,
+				'need'   => 0,
+				'show'   => 1,
+				'search' => 0,
+				'excel'  => 'D',
+			),
+			'content' => array(
+				'field'  => 'content',
+				'name'   => '简介',
+				'inup'   => 1,
+				'need'   => 0,
+				'show'   => 0,
+				'search' => 0,
+				'excel'  => 'E',
+				'vartype' => 'text'
+			),
+			'point_x' => array(
+				'field'  => 'point_x',
+				'name'   => '经度',
+				'inup'   => 1,
+				'need'   => 1,
+				'show'   => 1,
+				'search' => 0,
+				'excel'  => 'F',
+				'apifield' => 'lng',
+			),
+			'point_y' => array(
+				'field'  => 'point_y',
+				'name'   => '纬度',
+				'inup'   => 1,
+				'need'   => 1,
+				'show'   => 1,
+				'search' => 0,
+				'excel'  => 'G',
 				'apifield' => 'lat',
 			),
 		)
