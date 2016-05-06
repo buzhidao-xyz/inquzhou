@@ -40,13 +40,10 @@ class CommonController extends BaseController
 
         $suserinfo = session('userinfo');
         if (!empty($userinfo)) {
-            isset($userinfo['userid']) ? $suserinfo['userid'] = $userinfo['userid'] : null;
-            isset($userinfo['phone']) ? $suserinfo['phone'] = $userinfo['phone'] : null;
-            isset($userinfo['nickname']) ? $suserinfo['nickname'] = $userinfo['nickname'] : null;
-
-            session('userinfo',$suserinfo);
+            $suserinfo = is_array($suserinfo)&&!empty($suserinfo) ? array_merge($suserinfo, $userinfo) : $userinfo;
         }
-        
+        session('userinfo',$suserinfo);
+
         return is_array($suserinfo)&&!empty($suserinfo) ? $suserinfo : array();
     }
 

@@ -252,7 +252,7 @@ class UserController extends CommonController
             'username'   => $userinfo['username'],
             'source'     => $userinfo['source'],
             'oauthtoken' => $userinfo['oauthtoken'],
-        ));
+        ),5);
 
         //用户信息返回
         $data = array(

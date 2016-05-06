@@ -41,7 +41,4 @@ return array(
 		//专题信息配置文件
 		'TOPIC' => 'topic.config',
 	),
-
-	//用户默认头像
-	''
 );

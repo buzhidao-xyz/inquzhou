@@ -81,27 +81,6 @@ class UserModel extends CommonModel
 	}
 
 	/**
-	 * 设置用户信息
-	 */
-	public function setUserInfo($userid=null,$data=array())
-	{
-		if (!$userid || !is_array($data) || empty($data)) return false;
-
-		//整理数据
-		$datas = array();
-		isset($data['isloadpic']) ? $datas['isloadpic'] = $data['isloadpic'] : null;
-		isset($data['nickname'])  ? $datas['nickname']  = $data['nickname']  : null;
-		isset($data['usergroup']) ? $datas['usergroup'] = $data['usergroup'] : null;
-		isset($data['username'])  ? $datas['username']  = $data['username']  : null;
-		isset($data['gender'])    ? $datas['gender']    = $data['gender']    : null;
-		isset($data['phone'])     ? $datas['phone']     = $data['phone']     : null;
-
-		$return = M('User')->where(array('id'=>$userid))->save($data);
-
-		return $return;
-	}
-
-	/**
 	 * 检查用户手机号码是否存在
 	 * @return boolean true已存在 false不存在
 	 */
