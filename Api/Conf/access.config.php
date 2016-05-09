@@ -53,6 +53,12 @@ return array(
 			'method' => 'post',
 			'logon'  => false
 		),
+		//用户设备
+		'/user/device' => array(
+			'api'    => 'user/device',
+			'method' => 'post',
+			'logon'  => false
+		),
 
 		//收藏地点
 		'/fav/newfavplace' => array(
@@ -170,6 +176,13 @@ return array(
 		'/user/checkvcode' => array(
 			'api'    => 'user/checkvcode',
 			'method' => 'post',
+			'logon'  => false,
+		),
+
+		//检测新版本
+		'/appi/ckversion' => array(
+			'api'    => 'appi/ckversion',
+			'method' => 'get',
 			'logon'  => false,
 		),
 	),

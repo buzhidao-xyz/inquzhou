@@ -185,7 +185,7 @@ class MapController extends CommonController
 		if (!$version) $this->apiReturn(1, '未知版本信息！');
 
 		$mapinfo = D('Map')->getMap();
-		$new = version_compare($version, $mapinfo['version'], '<') ? 1 : 0;
+		$new = version_compare($version, $mapinfo['version'], '<') ? true : false;
 
 		$this->apiReturn(0,'',array(
 			'new'     => $new,

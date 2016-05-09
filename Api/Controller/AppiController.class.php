@@ -16,11 +16,21 @@ class AppiController extends CommonController
 
     public function index(){}
 
-    //获取APP最新版本
-    public function newversion()
+    //检测APP最新版本
+    public function ckversion()
     {
-        if (!IS_GET) $this->apiReturn(1,'Http请求方式错误！');
+        $version = mRequest('version');
+        if (!$version) $this->apiReturn(1, '未知版本号！');
 
-        $this->apiReturn(0, '', array());
+        //获取最新版本信息
+        $versioninfo = M('app_version')->order('versionid desc')->find();
+        $new = version_compare($version, $versioninfo['versionno'], '<') ? true : false;
+
+        $this->apiReturn(0, '', array(
+            'new'     => $new,
+            'version' => $versioninfo['versionno'],
+            'desc'    => explode(';', $versioninfo['versiondesc']),
+            'dllink'  => $versioninfo['appstorelink']
+        ));
     }
 }

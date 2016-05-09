@@ -242,7 +242,31 @@ class UserController extends CommonController
             }
         } else {
             //第三方登录
+            
+            $usid = mRequest('usid');
+            if (!$usid) $this->apiReturn(1, '未知USID！');
             $oauthtoken = $this->_getOauthtoken();
+
+            $username = mRequest('username');
+            $avatar = mRequest('avatar');
+
+            //查询是否已经有该oauthuser
+            $userinfo = M('user')->where(array('source'=>$source, 'usid'=>$usid, 'oauthtoken'=>$oauthtoken))->find();
+            if (!is_array($userinfo) || empty($userinfo)) {
+                //第三方用户入库
+                $userinfo = array(
+                    'phone'      => '',
+                    'passwd'     => '',
+                    'username'   => $username,
+                    'avatar'     => $avatar,
+                    'source'     => $source,
+                    'usid'       => $usid,
+                    'oauthtoken' => $oauthtoken,
+                    'status'     => 1,
+                    'registtime' => TIMESTAMP,
+                );
+                $userinfo['userid'] = M('user')->add($userinfo);
+            }
         }
 
         //设置登录session
@@ -251,6 +275,7 @@ class UserController extends CommonController
             'phone'      => $userinfo['phone'],
             'username'   => $userinfo['username'],
             'source'     => $userinfo['source'],
+            'usid'       => $userinfo['usid'],
             'oauthtoken' => $userinfo['oauthtoken'],
         ),5);
 
@@ -445,6 +470,53 @@ class UserController extends CommonController
             ));
         } else {
             $this->apiReturn(1, '反馈意见提交失败！', array(
+                'result' => 0
+            ));
+        }
+    }
+
+    //用户设备
+    public function device()
+    {
+        $userinfo = $this->userinfo;
+        $userid = $userinfo['userid'];
+
+        $deviceid = mRequest('deviceid');
+        if (!$deviceid) $this->apiReturn(1, '未知设备ID号！');
+
+        $devicetype = mRequest('devicetype');
+        $deviceos = mRequest('deviceos');
+        $osversion = mRequest('osversion');
+
+        $ip = mRequest('ip');
+        $lat = mRequest('lat');
+        $lng = mRequest('lng');
+
+        $data = array(
+            'userid'     => $userid,
+            'deviceid'   => $deviceid,
+            'devicetype' => $devicetype,
+            'deviceos'   => $deviceos,
+            'deviceid'   => $deviceid,
+            'osversion'  => $osversion,
+            'ip'         => $ip,
+            'lat'        => $lat,
+            'lng'        => $lng,
+            'createtime' => TIMESTAMP
+        );
+
+        //判断deviceid是否已存在
+        if (M('devicelog')->where(array('deviceid'=>$deviceid))->count()) {
+            $result = M('devicelog')->where(array('deviceid'=>$deviceid))->save($data);
+        } else {
+            $result = M('devicelog')->add($data);
+        }
+        if ($result) {
+            $this->apiReturn(0, '成功！', array(
+                'result' => 1
+            ));
+        } else {
+            $this->apiReturn(1, '失败！', array(
                 'result' => 0
             ));
         }
