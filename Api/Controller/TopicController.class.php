@@ -12,7 +12,7 @@ class TopicController extends CommonController
 {
     //分页配置
     protected $_page = 1;
-    protected $_pagesize = 100000;
+    protected $_pagesize = 10;
 
 	//默认距离 5000千米
 	private $_distance = 5000;

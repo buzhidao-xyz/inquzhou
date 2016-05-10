@@ -204,7 +204,9 @@ function ImageURL($imageurl=null)
 {
     if (!$imageurl) return "";
 
-    return mb_convert_encoding(C('HOST.HTTP_HOST').$imageurl, 'UTF-8');
+    $imageurl = preg_match("/^http(s)?:\/\//", $imageurl) ? $imageurl : C('HOST.HTTP_HOST').$imageurl;
+
+    return mb_convert_encoding($imageurl, 'UTF-8');
 }
 
 //计算大小
