@@ -16,4 +16,10 @@ class MapController extends CommonController
 	}
 
 	public function index(){}
+
+	//离线地图
+	public function offline()
+	{
+		$this->display();
+	}
 }

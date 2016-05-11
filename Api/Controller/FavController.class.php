@@ -115,17 +115,19 @@ class FavController extends CommonController
             'lng'     => $lng,
             'favtime' => TIMESTAMP,
         );
-        $result = D('Fav')->savefavplace($data);
+        $favid = D('Fav')->savefavplace($data);
 
-        if ($result) {
+        if ($favid) {
             $msg = '收藏地点成功！';
             $result = array(
                 'result' => 1,
+                'favid'  => (int)$favid,
             );
         } else {
             $msg = '收藏地点失败！';
             $result = array(
                 'result' => 0,
+                'favid'  => 0,
             );
         }
         $this->apiReturn(0, $msg, $result);
@@ -153,17 +155,19 @@ class FavController extends CommonController
             'destlng' => $destlng,
             'favtime' => TIMESTAMP,
         );
-        $result = D('Fav')->savefavline($data);
+        $favid = D('Fav')->savefavline($data);
 
-        if ($result) {
+        if ($favid) {
             $msg = '收藏路线成功！';
             $result = array(
                 'result' => 1,
+                'favid'  => (int)$favid,
             );
         } else {
             $msg = '收藏路线失败！';
             $result = array(
                 'result' => 0,
+                'favid'  => 0,
             );
         }
         $this->apiReturn(0, $msg, $result);

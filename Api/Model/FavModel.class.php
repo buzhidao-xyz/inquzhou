@@ -19,9 +19,9 @@ class FavModel extends CommonModel
 	{
 		if (!is_array($data) || empty($data)) return false;
 
-		$result = M('favplace')->add($data);
+		$favid = M('favplace')->add($data);
 
-		return $result ? true : false;
+		return $favid;
 	}
 
 	//新增收藏路线-保存
@@ -29,9 +29,9 @@ class FavModel extends CommonModel
 	{
 		if (!is_array($data) || empty($data)) return false;
 
-		$result = M('favline')->add($data);
+		$favid = M('favline')->add($data);
 
-		return $result ? true : false;
+		return $favid;
 	}
 
 	//获取我的收藏-地点

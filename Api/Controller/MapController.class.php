@@ -182,10 +182,19 @@ class MapController extends CommonController
 	public function offline()
 	{
 		$version = mRequest('version');
-		if (!$version) $this->apiReturn(1, '未知版本信息！');
+		// if (!$version) $this->apiReturn(1, '未知版本信息！');
 
 		$mapinfo = D('Map')->getMap();
-		$new = version_compare($version, $mapinfo['version'], '<') ? true : false;
+		if (!is_array($mapinfo) || empty($mapinfo)) {
+			$this->apiReturn(0,'',array(
+				'new'     => false,
+				'version' => '',
+				'title'   => '',
+				'dllink'  => '',
+				'size'    => '',
+			));
+		}
+		$new = version_compare((int)$version, $mapinfo['version'], '<') ? true : false;
 
 		$this->apiReturn(0,'',array(
 			'new'     => $new,

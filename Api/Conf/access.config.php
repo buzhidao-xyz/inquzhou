@@ -59,6 +59,12 @@ return array(
 			'method' => 'post',
 			'logon'  => false
 		),
+		//意见反馈
+		'/user/lvword' => array(
+			'api'    => 'user/lvword',
+			'method' => 'post',
+			'logon'  => true
+		),
 
 		//收藏地点
 		'/fav/newfavplace' => array(

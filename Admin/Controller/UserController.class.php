@@ -293,6 +293,18 @@ class UserController extends CommonController
 	//设备日志
 	public function device()
 	{
-		
+		$username = mRequest('username');
+		$this->assign('username', $username);
+
+		$devicekeyword = mRequest('devicekeyword');
+		$this->assign('devicekeyword', $devicekeyword);
+
+		list($start, $length) = $this->_mkPage();
+		$devicelog = D('User')->getDevicelog($username, $devicekeyword, $start, $length);
+		$total = $devicelog['total'];
+		$devicelog = $devicelog['data'];
+
+		$this->assign('datalist', $devicelog);
+		$this->display();
 	}
 }

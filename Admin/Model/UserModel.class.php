@@ -79,4 +79,22 @@ class UserModel extends CommonModel
 
 		return array('total'=>$total, 'data'=>is_array($data)?$data:array());
 	}
+
+	//获取用户设备信息
+	public function getDevicelog($username=null, $devicekeyword=null, $start=0, $length=9999)
+	{
+		$where = array();
+		if ($username) $where['b.username'] = array('like', '%'.$username.'%');
+		if ($devicekeyword) $where['_complex'] = array(
+			'_logic' => 'or',
+			'a.deviceid' => 'like', '%'.$devicekeyword.'%',
+			'a.devicetype' => 'like', '%'.$devicekeyword.'%',
+			'a.deviceos' => 'like', '%'.$devicekeyword.'%',
+		);
+
+		$total = M('devicelog')->where($where)->count();
+		$data = M('devicelog')->alias('a')->join(' left join __USER__ b on a.userid=b.userid ')->where($where)->order('createtime desc')->limit($start,$length)->select();
+
+		return array('total'=>$total, 'data'=>$data);
+	}
 }
