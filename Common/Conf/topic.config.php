@@ -16,6 +16,7 @@
  * fields.value.excel : excel导入对应列
  * fields.value.apifield : topicitemlist接口对应字段名/excel数据导入对应专题点名称查询字段名
  * fields.value.vartype : 数据类型 index/string/text
+ * fields.value.aloneshow : 是否是详情页单独显示字段
  */
 return array(
 	1 => array(
@@ -62,6 +63,7 @@ return array(
 				'search' => 0,
 				'excel'  => 'D',
 				'apifield' => '',
+				'aloneshow' => 'tel',
 			),
 			'servicetime' => array(
 				'field'  => 'servicetime',
@@ -213,6 +215,7 @@ return array(
 				'show'   => 0,
 				'search' => 0,
 				'excel'  => 'H',
+				'aloneshow' => 'tel',
 			),
 			'remark' => array(
 				'field'  => 'remark',
@@ -491,6 +494,7 @@ return array(
 				'show'   => 1,
 				'search' => 0,
 				'excel'  => 'J',
+				'aloneshow' => 'tel',
 			),
 			'mobilephone' => array(
 				'field'  => 'mobilephone',

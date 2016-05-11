@@ -138,12 +138,17 @@ class TopicController extends CommonController
 
 		//专题信息
 		$apifields = array();
+		$aloneshowfields = array();
 		foreach ($topicmapinfo['fields'] as $field) {
 			if (isset($field['apifield'])&&$field['apifield']) {
 				$apifields[$field['apifield']] = $field['field'];
 			}
+			if (isset($field['aloneshow'])&&$field['aloneshow']) {
+				$aloneshowfields[$field['aloneshow']] = $field['field'];
+			}
 		}
 
+		$tel = isset($aloneshowfields['tel']) ? (string)$topiciteminfo[$aloneshowfields['tel']] : '';
 		$data = array(
 			'topicid' => $topicid,
 			'itemid'  => $itemid,
@@ -151,15 +156,26 @@ class TopicController extends CommonController
 			'address' => $topiciteminfo[$apifields['address']],
 			'lat'     => (string)$topiciteminfo[$apifields['lat']],
 			'lng'     => (string)$topiciteminfo[$apifields['lng']],
+			'tel'     => $tel,
 			'content' => array()
 		);
 		foreach ($topicmapinfo['fields'] as $field) {
 			if (in_array($field['apifield'], array('name','address','lat','lng'))) continue;
+			if (in_array($field['aloneshow'], array('tel'))) continue;
 			$data['content'][] = array(
 				'title' => $field['name'],
 				'value' => $topiciteminfo[$field['field']],
 			);
 		}
+
+		//获取专题点图集
+		$topicpics = M('topic_pics')->where(array('topicid'=>$topicid, 'itemid'=>$itemid))->select();
+		$pics = array();
+		foreach ($topicpics as $pic) {
+			$pics[] = ImageURL($pic['pic']);
+		}
+		$data['pics'] = $pics;
+
 		$this->apiReturn(0, '', $data);
 	}
 }
