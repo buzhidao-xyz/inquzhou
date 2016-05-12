@@ -9,6 +9,8 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
+ini_set("session.save_handler", "user");
+
 //开启缓冲Buffer 注册输出gzip压缩方法ob_gzhandler
 ob_start('ob_gzhandler');
 

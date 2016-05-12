@@ -23,12 +23,12 @@ class Db {
     /**
      * Session有效时间
      */
-   protected $lifeTime      = ''; 
+   protected $lifeTime      = 7200; 
 
     /**
      * session保存的数据库名
      */
-   protected $sessionTable  = '';
+   protected $sessionTable  = 'session';
 
     /**
      * 数据库句柄
@@ -44,12 +44,14 @@ class Db {
     public function open($savePath, $sessName) { 
        $this->lifeTime = C('SESSION_EXPIRE')?C('SESSION_EXPIRE'):ini_get('session.gc_maxlifetime');
        $this->sessionTable  =   C('SESSION_TABLE')?C('SESSION_TABLE'):C("DB_PREFIX")."session";
+
+       $dbinfo = C('DB_CONFIG.DEFAULT_CONFIG');
        //分布式数据库
-       $host = explode(',',C('DB_HOST'));
-       $port = explode(',',C('DB_PORT'));
-       $name = explode(',',C('DB_NAME'));
-       $user = explode(',',C('DB_USER'));
-       $pwd  = explode(',',C('DB_PWD'));
+       $host = explode(',',$dbinfo['DB_HOST']);
+       $port = explode(',',$dbinfo['DB_PORT']);
+       $name = explode(',',$dbinfo['DB_NAME']);
+       $user = explode(',',$dbinfo['DB_USER']);
+       $pwd  = explode(',',$dbinfo['DB_PWD']);
        if(1 == C('DB_DEPLOY_TYPE')){
            //读写分离
            if(C('DB_RW_SEPARATE')){
@@ -96,6 +98,7 @@ class Db {
        $dbSel = mysql_select_db(
            isset($name[$r])?$name[$r]:$name[0]
            ,$hander);
+
        if(!$hander || !$dbSel) 
            return false; 
        $this->hander = $hander; 

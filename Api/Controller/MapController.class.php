@@ -192,9 +192,11 @@ class MapController extends CommonController
 				'title'   => '',
 				'dllink'  => '',
 				'size'    => '',
+				'bsize'   => 0
 			));
 		}
-		$new = version_compare((int)$version, $mapinfo['version'], '<') ? true : false;
+		$version = $version ? $version : '0';
+		$new = version_compare($version, $mapinfo['version'], '<') ? true : false;
 
 		$this->apiReturn(0,'',array(
 			'new'     => $new,
@@ -202,6 +204,7 @@ class MapController extends CommonController
 			'title'   => $mapinfo['title'],
 			'dllink'  => $mapinfo['path'],
 			'size'    => format_bytes($mapinfo['size']),
+			'bsize'   => (int)$mapinfo['size'],
 		));
 	}
 

@@ -27,7 +27,7 @@ return array(
 		'/user/logout' => array(
 			'api'    => 'user/logout',
 			'method' => 'post',
-			'logon'  => true,
+			'logon'  => false,
 		),
 		//修改用户资料
 		'/user/setuserinfo' => array(

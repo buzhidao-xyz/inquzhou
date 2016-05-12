@@ -36,15 +36,14 @@ return array(
 	'LANG_DEFAULT'       => 'zh-cn',
 
 	//SESSION配置信息
-	'SESSION_TYPE'       => '',
 	'SESSION_PREFIX'     => 'inquzhou',
 	'VAR_SESSION_ID'     => 'sessionid',
 	'SESSION_OPTIONS'    => array(
+		'type'   => 'db',
 		'name'   => 'inquzhou',
-		'expire' => 7200 //session默认过期时间 2小时=7200秒
+		'expire' => 7*24*3600 //session默认过期时间 2小时=7200秒
 	),
-	//ticket过期时间 3600秒
-	'SESSION_TICKET_EXPIRE' => 3600,
+	'SESSION_TABLE'      => 'qz_session',
 
 	//加载扩展配置文件 引用方式C('x.x')
 	'LOAD_EXT_CONFIG' => array(

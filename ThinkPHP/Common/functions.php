@@ -1163,7 +1163,7 @@ function data_to_xml($data, $item='item', $id='id') {
  * @param int $extime 是否刷新变量过期时间 0否 1是 默认1 读操作有效
  * @return mixed
  */
-function session($name='',$value='',$expire=0,$extime=1) {
+function sessiond($name='',$value='',$expire=0,$extime=1) {
     $prefix = C('SESSION_PREFIX');
     !$expire||!is_numeric($expire) ? $expire = C('SESSION_OPTIONS.expire') : null;
     $expire_time_new = TIMESTAMP+$expire;
@@ -1383,6 +1383,110 @@ function session($name='',$value='',$expire=0,$extime=1) {
             // if (!isset($_SESSION[$name.'_expire']) || $extime) {
                 $_SESSION[$name.'_expire'] = $expire_time_new;
             // }
+        }
+    }
+}
+
+/**
+ * session管理函数
+ * @param string|array $name session名称 如果为数组则表示进行session设置
+ * @param mixed $value session值
+ * @return mixed
+ */
+function session($name='',$value='') {
+    $prefix   =  C('SESSION_PREFIX');
+    if(is_array($name)) { // session初始化 在session_start 之前调用
+        if(isset($name['prefix'])) C('SESSION_PREFIX',$name['prefix']);
+        if(C('VAR_SESSION_ID') && isset($_REQUEST[C('VAR_SESSION_ID')])){
+            session_id($_REQUEST[C('VAR_SESSION_ID')]);
+        }elseif(isset($name['id'])) {
+            session_id($name['id']);
+        }
+        if('common' != APP_MODE){ // 其它模式可能不支持
+            ini_set('session.auto_start', 0);
+        }
+        if(isset($name['name']))            session_name($name['name']);
+        if(isset($name['path']))            session_save_path($name['path']);
+        if(isset($name['domain']))          ini_set('session.cookie_domain', $name['domain']);
+        if(isset($name['expire']))          ini_set('session.gc_maxlifetime', $name['expire']);
+        if(isset($name['use_trans_sid']))   ini_set('session.use_trans_sid', $name['use_trans_sid']?1:0);
+        if(isset($name['use_cookies']))     ini_set('session.use_cookies', $name['use_cookies']?1:0);
+        if(isset($name['cache_limiter']))   session_cache_limiter($name['cache_limiter']);
+        if(isset($name['cache_expire']))    session_cache_expire($name['cache_expire']);
+        if(isset($name['type']))            C('SESSION_TYPE',$name['type']);
+        if(C('SESSION_TYPE')) { // 读取session驱动
+            $type   =   C('SESSION_TYPE');
+            $class  =   strpos($type,'\\')? $type : 'Think\\Session\\Driver\\'. ucwords(strtolower($type));
+            $hander =   new $class();
+            session_set_save_handler(
+                array(&$hander,"open"), 
+                array(&$hander,"close"), 
+                array(&$hander,"read"), 
+                array(&$hander,"write"), 
+                array(&$hander,"destroy"), 
+                array(&$hander,"gc")); 
+        }
+        // 启动session
+        if(C('SESSION_AUTO_START'))  session_start();
+    }elseif('' === $value){ 
+        if(''===$name){
+            // 获取全部的session
+            return $prefix ? $_SESSION[$prefix] : $_SESSION;
+        }elseif(0===strpos($name,'[')) { // session 操作
+            if('[pause]'==$name){ // 暂停session
+                session_write_close();
+            }elseif('[start]'==$name){ // 启动session
+                session_start();
+            }elseif('[destroy]'==$name){ // 销毁session
+                $_SESSION =  array();
+                session_unset();
+                session_destroy();
+            }elseif('[regenerate]'==$name){ // 重新生成id
+                session_regenerate_id();
+            }
+        }elseif(0===strpos($name,'?')){ // 检查session
+            $name   =  substr($name,1);
+            if(strpos($name,'.')){ // 支持数组
+                list($name1,$name2) =   explode('.',$name);
+                return $prefix?isset($_SESSION[$prefix][$name1][$name2]):isset($_SESSION[$name1][$name2]);
+            }else{
+                return $prefix?isset($_SESSION[$prefix][$name]):isset($_SESSION[$name]);
+            }
+        }elseif(is_null($name)){ // 清空session
+            if($prefix) {
+                unset($_SESSION[$prefix]);
+            }else{
+                $_SESSION = array();
+            }
+        }elseif($prefix){ // 获取session
+            if(strpos($name,'.')){
+                list($name1,$name2) =   explode('.',$name);
+                return isset($_SESSION[$prefix][$name1][$name2])?$_SESSION[$prefix][$name1][$name2]:null;  
+            }else{
+                return isset($_SESSION[$prefix][$name])?$_SESSION[$prefix][$name]:null;                
+            }            
+        }else{
+            if(strpos($name,'.')){
+                list($name1,$name2) =   explode('.',$name);
+                return isset($_SESSION[$name1][$name2])?$_SESSION[$name1][$name2]:null;  
+            }else{
+                return isset($_SESSION[$name])?$_SESSION[$name]:null;
+            }            
+        }
+    }elseif(is_null($value)){ // 删除session
+        if($prefix){
+            unset($_SESSION[$prefix][$name]);
+        }else{
+            unset($_SESSION[$name]);
+        }
+    }else{ // 设置session
+        if($prefix){
+            if (!isset($_SESSION[$prefix])) {
+                $_SESSION[$prefix] = array();
+            }
+            $_SESSION[$prefix][$name]   =  $value;
+        }else{
+            $_SESSION[$name]  =  $value;
         }
     }
 }

@@ -106,6 +106,7 @@ class CommonController extends BaseController
     {
     	$_pagesize = $this->_pagesize;
         $pagesize = mGet('pagesize');
+        if ((int)$pagesize === 0) $pagesize = 10000;
 
         is_numeric($pagesize)&&$pagesize>0 ? $_pagesize = $pagesize : null;
 

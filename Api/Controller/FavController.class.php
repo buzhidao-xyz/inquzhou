@@ -100,15 +100,26 @@ class FavController extends CommonController
     //收藏地点
     public function newfavplace()
     {
+        $type = mRequest('type');
+        if (!in_array($type, array('poi', 'topic'))) $this->apiReturn(1, '未知收藏点类型！');
+
         $title = $this->_getTitle(true);
-        $address = $this->_getAddress(true);
+        $address = $this->_getAddress(false);
         $lat = $this->_getLat(true);
         $lng = $this->_getLng(true);
+
+        $topicid = mRequest('topicid');
+        $itemid = mRequest('itemid');
+        $tel = mRequest('tel');
 
         $userid = $this->userinfo['userid'];
 
         $data = array(
             'userid'  => $userid,
+            'type'    => $type,
+            'topicid' => $topicid,
+            'itemid'  => $itemid,
+            'tel'     => $tel,
             'title'   => $title,
             'address' => $address,
             'lat'     => $lat,
@@ -180,11 +191,15 @@ class FavController extends CommonController
 
         list($start, $length) = $this->mkPage();
         $result = D('Fav')->getFavplace(null, $userid, $start, $length);
-        
+
         $data = array();
         foreach ($result['data'] as $d) {
             $data[] = array(
                 'placeid' => (int)$d['placeid'],
+                'type'    => $d['type'],
+                'topicid' => $d['topicid'],
+                'itemid'  => $d['itemid'],
+                'tel'     => $d['tel'],
                 'title'   => $d['title'],
                 'address' => $d['address'],
                 'lat'     => $d['lat'],
