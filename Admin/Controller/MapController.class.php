@@ -136,4 +136,18 @@ class MapController extends CommonController
 			$this->ajaxReturn(1, '保存失败！');
 		}
 	}
+
+	//删除离线地图
+	public function deloffline()
+	{
+		$mapid = mRequest('mapid');
+		if (!$mapid) $this->ajaxReturn(1, '未知离线地图ID！');
+
+		$result = M('map')->where(array('mapid'=>$mapid))->delete();
+		if ($result) {
+			$this->ajaxReturn(0, '删除成功！');
+		} else {
+			$this->ajaxReturn(1, '删除失败！');
+		}
+	}
 }

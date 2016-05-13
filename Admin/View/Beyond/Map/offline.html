@@ -91,7 +91,7 @@
                                         <td>{$data.size|format_bytes}</td>
                                         <td>{'Y-m-d'|date:$data.uploadtime}</td>
                                         <td>
-                                            <a href="{$ANY.__APP__}?s=System/uplayer&layerid={$data.layerid}" class="btn btn-sky">编辑</a>
+                                            <a href="{$ANY.__APP__}?s=Map/deloffline&mapid={$data.mapid}" class="btn btn-danger btn-ajax">删除</a>
                                         </td>
                                     </tr>
                                     {/foreach}
