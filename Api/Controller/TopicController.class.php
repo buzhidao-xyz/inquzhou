@@ -111,7 +111,9 @@ class TopicController extends CommonController
 				'itemid'  => (int)$d['itemid'],
 			);
 			foreach ($apifields as $apifield=>$field) {
-				$c[$apifield] = (string)$d[$field];
+				$value = (string)$d[$field];
+				if (strtoupper($value)=="NULL") $value = "";
+				$c[$apifield] = $value;
 			}
 
 			$data[] = $c;
@@ -162,9 +164,12 @@ class TopicController extends CommonController
 		foreach ($topicmapinfo['fields'] as $field) {
 			if (in_array($field['apifield'], array('name','address','lat','lng'))) continue;
 			if (in_array($field['aloneshow'], array('tel'))) continue;
+
+			$value = $topiciteminfo[$field['field']];
+			if (strtoupper($value)=="NULL") $value = "";
 			$data['content'][] = array(
 				'title' => $field['name'],
-				'value' => $topiciteminfo[$field['field']],
+				'value' => $value,
 			);
 		}
 
