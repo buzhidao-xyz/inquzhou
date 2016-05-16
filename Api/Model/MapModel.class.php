@@ -25,7 +25,9 @@ class MapModel extends CommonModel
 	//获取图层信息
 	public function getLayer($layerid=null)
 	{
-		$where = array();
+		$where = array(
+			'status' => 1,
+		);
 		if ($layerid) $where['layerid'] = $layerid;
 
 		$data = M('layer')->where($where)->select();
