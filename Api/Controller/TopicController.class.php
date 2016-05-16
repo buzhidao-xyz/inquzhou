@@ -90,6 +90,9 @@ class TopicController extends CommonController
 		$lng = $this->_getLng(true);
 		$distance = $this->_getDistance(true);
 
+		//关键字
+		$keyword = mRequest('keyword');
+
 		//专题信息
 		$apifields = array();
 		foreach ($topicmapinfo['fields'] as $field) {
@@ -100,7 +103,7 @@ class TopicController extends CommonController
 
 		//获取专题点数据
 		list($start, $length) = $this->mkPage();
-		$datas = D('Topic')->getTopicitem($topicid, $lat, $lng, $distance, $start, $length);
+		$datas = D('Topic')->getTopicitem($topicid, $lat, $lng, $distance, $start, $length, $keyword);
 		$total = $datas['total'];
 		$datalist = $datas['data'];
 

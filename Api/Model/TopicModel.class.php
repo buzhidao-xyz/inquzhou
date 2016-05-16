@@ -38,20 +38,32 @@ class TopicModel extends CommonModel
 	}
 
 	//获取专题点列表
-	public function getTopicitem($topicid=null, $lat=null, $lng=null, $distance=null, $start=0, $length=9999)
+	public function getTopicitem($topicid=null, $lat=null, $lng=null, $distance=null, $start=0, $length=9999, $keyword=null)
 	{
 		if (!isset($this->topicmap[$topicid])) return false;
 
 		$topicmapinfo = $this->topicmap[$topicid];
 
+		$apifields = array();
+		foreach ($topicmapinfo['fields'] as $field) {
+			if (isset($field['apifield'])&&$field['apifield']) {
+				$apifields[$field['apifield']] = $field['field'];
+			}
+		}
+
+		$wherekeyword = '';
+		if ($keyword) {
+			$wherekeyword = ' AND (TTABLE.'.$apifields['name'].' LIKE \'%'.$keyword.'%\' OR TTABLE.'.$apifields['address'].' LIKE \'%'.$keyword.'%\') ';
+		}
+
 		$table = 'qz_topic_'.$topicmapinfo['table'];
 		$ttable = 'SELECT *, ACOS(SIN(('.$lat.' * 3.1415) / 180) * SIN((point_y * 3.1415) / 180) + COS(('.$lat.' * 3.1415) / 180) * COS((point_y * 3.1415) / 180) * COS(('.$lng.' * 3.1415) / 180 - (point_x * 3.1415) / 180)) * 6371 as distance FROM `'.$table.'`';
 
-		$sql = 'SELECT COUNT(*) AS TC FROM ('.$ttable.') TTABLE WHERE TTABLE.distance<'.$distance.' LIMIT 1';
+		$sql = 'SELECT COUNT(*) AS TC FROM ('.$ttable.') TTABLE WHERE TTABLE.distance<'.$distance.' '.$wherekeyword.' LIMIT 1';
 		$total = M($table)->query($sql);
 		$total = $total[0]['TC'];
 
-		$sql = 'SELECT * FROM ('.$ttable.') TTABLE WHERE TTABLE.distance<'.$distance.' ORDER BY TTABLE.distance ASC LIMIT '.$start.','.$length;
+		$sql = 'SELECT * FROM ('.$ttable.') TTABLE WHERE TTABLE.distance<'.$distance.' '.$wherekeyword.' ORDER BY TTABLE.distance ASC LIMIT '.$start.','.$length;
 		$data = M($table)->query($sql);
 
 		return array('total'=>$total, 'data'=>is_array($data)?$data:array());
