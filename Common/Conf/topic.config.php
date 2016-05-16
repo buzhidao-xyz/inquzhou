@@ -401,15 +401,6 @@ return array(
 		'table'  => 'farmhouse',
 		'title'  => '农家乐',
 		'fields' => array(
-			'folder' => array(
-				'field'  => 'folder',
-				'name'   => '图集文件夹',
-				'inup'   => 1,
-				'need'   => 0,
-				'show'   => 0,
-				'search' => 0,
-				'excel'  => 'A',
-			),
 			'point_x' => array(
 				'field'  => 'point_x',
 				'name'   => '经度',
@@ -578,7 +569,21 @@ return array(
 				'excel'  => 'S',
 				'vartype' => 'text'
 			),
-		)
+		),
+		'pics' => array(
+			'picfolder' => array(
+				'field' => 'picfolder',
+				'excel' => 'T',
+			),
+			'subfolder' => array(
+				'field' => 'subfolder',
+				'excel' => 'A',
+			),
+			'picfile' => array(
+				'field' => 'picfile',
+				'excel' => 'U',
+			),
+		),
 	),
 	6 => array(
 		'id'     => 6,
@@ -593,15 +598,6 @@ return array(
 				'show'   => 0,
 				'search' => 1,
 				'excel'  => 'A',
-			),
-			'folder' => array(
-				'field'  => 'folder',
-				'name'   => '图集文件夹',
-				'inup'   => 1,
-				'need'   => 0,
-				'show'   => 0,
-				'search' => 0,
-				'excel'  => 'B',
 			),
 			'caption' => array(
 				'field'  => 'caption',
@@ -688,7 +684,21 @@ return array(
 				'excel'  => 'K',
 				'apifield' => 'lat',
 			),
-		)
+		),
+		'pics' => array(
+			'picfolder' => array(
+				'field' => 'picfolder',
+				'excel' => 'L',
+			),
+			'subfolder' => array(
+				'field' => 'subfolder',
+				'excel' => 'B',
+			),
+			'picfile' => array(
+				'field' => 'picfile',
+				'excel' => 'M',
+			),
+		),
 	),
 	7 => array(
 		'id'     => 7,
@@ -857,6 +867,20 @@ return array(
 				'excel'  => 'G',
 				'apifield' => 'lat',
 			),
-		)
+		),
+		'pics' => array(
+			'picfolder' => array(
+				'field' => 'picfolder',
+				'excel' => 'H',
+			),
+			'subfolder' => array(
+				'field' => 'subfolder',
+				'excel' => 'I',
+			),
+			'picfile' => array(
+				'field' => 'picfile',
+				'excel' => 'J',
+			),
+		),
 	),
 );

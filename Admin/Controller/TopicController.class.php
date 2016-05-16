@@ -422,6 +422,10 @@ class TopicController extends CommonController
 
 			$excelfields[$field['excel']] = $field['field'];
 		}
+		$picfields = array();
+		foreach ($topicmapinfo['pics'] as $d) {
+			$picfields[$d['excel']] = $d['field'];
+		}
 
 		$upload = new \Think\Upload();
 		$upload->maxSize  = 5242880; //5M
@@ -455,21 +459,46 @@ class TopicController extends CommonController
 			array_shift($ExcelData);
 			foreach ($ExcelData as $dcell) {
 				$ddd = array();
+				$picsddd = array();
+				$picfolder = '';
+				$subfolder = '';
+				$picfile = array();
 				foreach ($dcell as $colname=>$value) {
-					//解析数据类型
-					switch ($excelfields[$colname]) {
-						case 'point_x':
-							$value = (double)$value;
-						break;
-						case 'point_y':
-							$value = (double)$value;
-						break;
-						default:
-						break;
+					if (isset($excelfields[$colname])) {
+						//解析数据类型
+						switch ($excelfields[$colname]) {
+							case 'point_x':
+								$value = (double)$value;
+							break;
+							case 'point_y':
+								$value = (double)$value;
+							break;
+							default:
+							break;
+						}
+
+						strtoupper($value)=='NULL' ? $value='' : null;
+						$ddd[$excelfields[$colname]] = $value;
 					}
 
-					strtoupper($value)=='NULL' ? $value='' : null;
-					$ddd[$excelfields[$colname]] = $value;
+					if (isset($picfields[$colname])) {
+						if ($picfields[$colname] == 'picfolder') {
+							$picfolder = $value.'/';
+						}
+						if ($picfields[$colname] == 'subfolder') {
+							$subfolder = $value.'/';
+						}
+						if ($picfields[$colname] == 'picfile') {
+							if ($value) $picfile = explode(';', $value);
+						}
+					}
+				}
+
+				//处理图集数组
+				if (is_array($picfile) && !empty($picfile)) {
+					foreach ($picfile as $pic) {
+						$picsddd[] = '/Upload/topic/'.$picfolder.$subfolder.$pic;
+					}
 				}
 
 				if (!$ddd[$namefield] && !$ddd[$addressfield] && !$ddd['point_x'] && !$ddd['point_y']) continue;
@@ -482,10 +511,39 @@ class TopicController extends CommonController
 					}
 					$ddd['updatetime'] = TIMESTAMP;
 					$result = D('Topic')->saveTopicitem($topicid, $topiciteminfo['itemid'], $ddd);
+					if ($result && is_array($picsddd) && !empty($picsddd)) {
+						//删除原来的关联图集
+						M('topic_pics')->where(array('topicid'=>$topicid, 'itemid'=>$topiciteminfo['itemid']))->delete();
+						//关联新图集
+						$picsdddddd = array();
+						foreach ($picsddd as $d) {
+							$picsdddddd[] = array(
+								'topicid'    => $topicid,
+								'itemid'     => $topiciteminfo['itemid'],
+								'pic'        => $d,
+								'createtime' => TIMESTAMP,
+							);
+						}
+						M('topic_pics')->addAll($picsdddddd);
+					}
 				} else {
 					$ddd['createtime'] = TIMESTAMP;
 					$ddd['updatetime'] = TIMESTAMP;
 					$result = D('Topic')->saveTopicitem($topicid, null, $ddd);
+					if ($result && is_array($picsddd) && !empty($picsddd)) {
+						$itemid = $result;
+						//关联新图集
+						$picsdddddd = array();
+						foreach ($picsddd as $d) {
+							$picsdddddd[] = array(
+								'topicid'    => $topicid,
+								'itemid'     => $itemid,
+								'pic'        => $d,
+								'createtime' => TIMESTAMP,
+							);
+						}
+						M('topic_pics')->addAll($picsdddddd);
+					}
 				}
 
 				if ($result) {
