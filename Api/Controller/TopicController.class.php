@@ -151,6 +151,7 @@ class TopicController extends CommonController
 		}
 
 		$tel = isset($aloneshowfields['tel']) ? (string)$topiciteminfo[$aloneshowfields['tel']] : '';
+		if (strtoupper($tel)=="NULL") $tel = "";
 		$data = array(
 			'topicid' => $topicid,
 			'itemid'  => $itemid,

@@ -468,6 +468,7 @@ class TopicController extends CommonController
 						break;
 					}
 
+					strtoupper($value)=='NULL' ? $value='' : null;
 					$ddd[$excelfields[$colname]] = $value;
 				}
 
