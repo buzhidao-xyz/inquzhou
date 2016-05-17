@@ -87,7 +87,13 @@
 $(function (){
     var BootstrapFileInputClassObj = new BootstrapFileInputClass();
     //课程示例图
-    BootstrapFileInputClassObj.Init("path", JS_APP+"?s=User/mapupload");
+    BootstrapFileInputClassObj.Init("path", JS_APP+"?s=Map/mapupload", true, function (data){
+        alertPanelShow('success', data.response.msg);
+        //服务端返回file写入input
+        $('input[name=path]').val(data.response.data.filepath+data.response.data.filename);
+        //服务端返回size写入input
+        $('input[name=size]').val(data.response.data.filesize);
+    });
 
     //用户Form提交
     $("form[name=userform]").submit(function (){

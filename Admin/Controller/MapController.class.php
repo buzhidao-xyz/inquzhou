@@ -79,6 +79,7 @@ class MapController extends CommonController
 			$data = array(
 				'filepath' => $fileinfo['savepath'],
 				'filename' => $fileinfo['savename'],
+				'filesize' => $fileinfo['size'],
 			);
 		}
 
