@@ -200,13 +200,13 @@ function returnSquarePoint($lng, $lat,$distance = 10){
  * 处理图片链接
  * @param string $imageurl 图片路径
  */
-function ImageURL($imageurl=null)
+function ImageURL($imageurl=null, $convert=true)
 {
     if (!$imageurl) return "";
 
     $imageurl = preg_match("/^http(s)?:\/\//", $imageurl) ? $imageurl : C('HOST.HTTP_HOST').$imageurl;
 
-    return mb_convert_encoding($imageurl, 'UTF-8');
+    return $convert ? mb_convert_encoding($imageurl, 'UTF-8') : $imageurl;
 }
 
 //计算大小

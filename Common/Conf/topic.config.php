@@ -135,7 +135,17 @@ return array(
 				'excel'  => 'K',
 				'apifield' => 'lat',
 			),
-		)
+		),
+		'pics' => array(
+			'picfolder' => array(
+				'field' => 'picfolder',
+				'excel' => 'L',
+			),
+			'subfolder' => array(
+				'field' => 'subfolder',
+				'excel' => 'M',
+			)
+		),
 	),
 	2 => array(
 		'id'     => 2,
@@ -255,7 +265,17 @@ return array(
 				'excel'  => 'L',
 				'apifield' => 'lat',
 			),
-		)
+		),
+		'pics' => array(
+			'picfolder' => array(
+				'field' => 'picfolder',
+				'excel' => 'M',
+			),
+			'subfolder' => array(
+				'field' => 'subfolder',
+				'excel' => 'N',
+			)
+		),
 	),
 	3 => array(
 		'id'     => 3,
@@ -302,7 +322,17 @@ return array(
 				'excel'  => 'D',
 				'apifield' => 'lat',
 			),
-		)
+		),
+		'pics' => array(
+			'picfolder' => array(
+				'field' => 'picfolder',
+				'excel' => 'E',
+			),
+			'subfolder' => array(
+				'field' => 'subfolder',
+				'excel' => 'F',
+			)
+		),
 	),
 	4 => array(
 		'id'     => 4,
@@ -394,7 +424,17 @@ return array(
 				'excel'  => 'I',
 				'apifield' => 'lat',
 			),
-		)
+		),
+		'pics' => array(
+			'picfolder' => array(
+				'field' => 'picfolder',
+				'excel' => 'J',
+			),
+			'subfolder' => array(
+				'field' => 'subfolder',
+				'excel' => 'K',
+			)
+		),
 	),
 	5 => array(
 		'id'     => 5,
@@ -408,7 +448,7 @@ return array(
 				'need'   => 1,
 				'show'   => 1,
 				'search' => 0,
-				'excel'  => 'B',
+				'excel'  => 'A',
 				'apifield' => 'lng',
 			),
 			'point_y' => array(
@@ -418,7 +458,7 @@ return array(
 				'need'   => 1,
 				'show'   => 1,
 				'search' => 0,
-				'excel'  => 'C',
+				'excel'  => 'B',
 				'apifield' => 'lat',
 			),
 			'name' => array(
@@ -428,7 +468,7 @@ return array(
 				'need'   => 1,
 				'show'   => 1,
 				'search' => 1,
-				'excel'  => 'D',
+				'excel'  => 'C',
 				'apifield' => 'name',
 			),
 			'fullname' => array(
@@ -438,7 +478,7 @@ return array(
 				'need'   => 0,
 				'show'   => 0,
 				'search' => 1,
-				'excel'  => 'E',
+				'excel'  => 'D',
 			),
 			'company' => array(
 				'field'  => 'company',
@@ -447,7 +487,7 @@ return array(
 				'need'   => 0,
 				'show'   => 0,
 				'search' => 1,
-				'excel'  => 'F',
+				'excel'  => 'E',
 			),
 			'address' => array(
 				'field'  => 'address',
@@ -456,7 +496,7 @@ return array(
 				'need'   => 0,
 				'show'   => 1,
 				'search' => 1,
-				'excel'  => 'G',
+				'excel'  => 'F',
 				'apifield' => 'address',
 			),
 			'postcode' => array(
@@ -466,7 +506,7 @@ return array(
 				'need'   => 0,
 				'show'   => 0,
 				'search' => 0,
-				'excel'  => 'H',
+				'excel'  => 'G',
 			),
 			'contactor' => array(
 				'field'  => 'contactor',
@@ -475,7 +515,7 @@ return array(
 				'need'   => 0,
 				'show'   => 1,
 				'search' => 0,
-				'excel'  => 'I',
+				'excel'  => 'H',
 			),
 			'telephone' => array(
 				'field'  => 'telephone',
@@ -484,7 +524,7 @@ return array(
 				'need'   => 0,
 				'show'   => 1,
 				'search' => 0,
-				'excel'  => 'J',
+				'excel'  => 'I',
 				'aloneshow' => 'tel',
 			),
 			'mobilephone' => array(
@@ -494,7 +534,7 @@ return array(
 				'need'   => 0,
 				'show'   => 0,
 				'search' => 0,
-				'excel'  => 'K',
+				'excel'  => 'J',
 			),
 			'website' => array(
 				'field'  => 'website',
@@ -503,7 +543,7 @@ return array(
 				'need'   => 0,
 				'show'   => 0,
 				'search' => 0,
-				'excel'  => 'L',
+				'excel'  => 'K',
 			),
 			'totalcount' => array(
 				'field'  => 'totalcount',
@@ -512,7 +552,7 @@ return array(
 				'need'   => 0,
 				'show'   => 0,
 				'search' => 0,
-				'excel'  => 'M',
+				'excel'  => 'L',
 			),
 			'farmcount' => array(
 				'field'  => 'farmcount',
@@ -521,7 +561,7 @@ return array(
 				'need'   => 0,
 				'show'   => 0,
 				'search' => 0,
-				'excel'  => 'N',
+				'excel'  => 'M',
 			),
 			'areasize' => array(
 				'field'  => 'areasize',
@@ -530,7 +570,7 @@ return array(
 				'need'   => 0,
 				'show'   => 0,
 				'search' => 0,
-				'excel'  => 'O',
+				'excel'  => 'N',
 			),
 			'persons' => array(
 				'field'  => 'persons',
@@ -539,7 +579,7 @@ return array(
 				'need'   => 0,
 				'show'   => 0,
 				'search' => 0,
-				'excel'  => 'P',
+				'excel'  => 'O',
 			),
 			'bads' => array(
 				'field'  => 'bads',
@@ -548,7 +588,7 @@ return array(
 				'need'   => 0,
 				'show'   => 0,
 				'search' => 0,
-				'excel'  => 'Q',
+				'excel'  => 'P',
 			),
 			'workmans' => array(
 				'field'  => 'workmans',
@@ -557,7 +597,7 @@ return array(
 				'need'   => 0,
 				'show'   => 0,
 				'search' => 0,
-				'excel'  => 'R',
+				'excel'  => 'Q',
 			),
 			'description' => array(
 				'field'  => 'description',
@@ -566,23 +606,19 @@ return array(
 				'need'   => 0,
 				'show'   => 0,
 				'search' => 1,
-				'excel'  => 'S',
+				'excel'  => 'R',
 				'vartype' => 'text'
 			),
 		),
 		'pics' => array(
 			'picfolder' => array(
 				'field' => 'picfolder',
-				'excel' => 'T',
+				'excel' => 'S',
 			),
 			'subfolder' => array(
 				'field' => 'subfolder',
-				'excel' => 'A',
-			),
-			'picfile' => array(
-				'field' => 'picfile',
-				'excel' => 'U',
-			),
+				'excel' => 'T',
+			)
 		),
 	),
 	6 => array(
@@ -606,7 +642,7 @@ return array(
 				'need'   => 0,
 				'show'   => 1,
 				'search' => 0,
-				'excel'  => 'C',
+				'excel'  => 'B',
 				'apifield' => 'name',
 			),
 			'address' => array(
@@ -616,7 +652,7 @@ return array(
 				'need'   => 0,
 				'show'   => 1,
 				'search' => 0,
-				'excel'  => 'D',
+				'excel'  => 'C',
 				'apifield' => 'address',
 			),
 			'stime' => array(
@@ -626,7 +662,7 @@ return array(
 				'need'   => 0,
 				'show'   => 1,
 				'search' => 0,
-				'excel'  => 'E',
+				'excel'  => 'D',
 			),
 			'opentime' => array(
 				'field'  => 'opentime',
@@ -635,7 +671,7 @@ return array(
 				'need'   => 0,
 				'show'   => 0,
 				'search' => 0,
-				'excel'  => 'F',
+				'excel'  => 'E',
 			),
 			'level' => array(
 				'field'  => 'level',
@@ -644,7 +680,7 @@ return array(
 				'need'   => 0,
 				'show'   => 1,
 				'search' => 0,
-				'excel'  => 'G',
+				'excel'  => 'F',
 			),
 			'category' => array(
 				'field'  => 'category',
@@ -653,7 +689,7 @@ return array(
 				'need'   => 0,
 				'show'   => 0,
 				'search' => 0,
-				'excel'  => 'H',
+				'excel'  => 'G',
 			),
 			'seccategory' => array(
 				'field'  => 'seccategory',
@@ -662,7 +698,7 @@ return array(
 				'need'   => 0,
 				'show'   => 0,
 				'search' => 0,
-				'excel'  => 'I',
+				'excel'  => 'H',
 			),
 			'point_x' => array(
 				'field'  => 'point_x',
@@ -671,7 +707,7 @@ return array(
 				'need'   => 1,
 				'show'   => 1,
 				'search' => 0,
-				'excel'  => 'J',
+				'excel'  => 'I',
 				'apifield' => 'lng',
 			),
 			'point_y' => array(
@@ -681,22 +717,18 @@ return array(
 				'need'   => 1,
 				'show'   => 1,
 				'search' => 0,
-				'excel'  => 'K',
+				'excel'  => 'J',
 				'apifield' => 'lat',
 			),
 		),
 		'pics' => array(
 			'picfolder' => array(
 				'field' => 'picfolder',
-				'excel' => 'L',
+				'excel' => 'K',
 			),
 			'subfolder' => array(
 				'field' => 'subfolder',
-				'excel' => 'B',
-			),
-			'picfile' => array(
-				'field' => 'picfile',
-				'excel' => 'M',
+				'excel' => 'L',
 			),
 		),
 	),
@@ -745,7 +777,17 @@ return array(
 				'excel'  => 'D',
 				'apifield' => 'lat',
 			),
-		)
+		),
+		'pics' => array(
+			'picfolder' => array(
+				'field' => 'picfolder',
+				'excel' => 'E',
+			),
+			'subfolder' => array(
+				'field' => 'subfolder',
+				'excel' => 'F',
+			)
+		),
 	),
 	8 => array(
 		'id'     => 8,
@@ -792,7 +834,17 @@ return array(
 				'excel'  => 'D',
 				'apifield' => 'lat',
 			),
-		)
+		),
+		'pics' => array(
+			'picfolder' => array(
+				'field' => 'picfolder',
+				'excel' => 'E',
+			),
+			'subfolder' => array(
+				'field' => 'subfolder',
+				'excel' => 'F',
+			)
+		),
 	),
 	9 => array(
 		'id'     => 9,
@@ -876,10 +928,6 @@ return array(
 			'subfolder' => array(
 				'field' => 'subfolder',
 				'excel' => 'I',
-			),
-			'picfile' => array(
-				'field' => 'picfile',
-				'excel' => 'J',
 			),
 		),
 	),

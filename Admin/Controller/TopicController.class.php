@@ -427,6 +427,8 @@ class TopicController extends CommonController
 			$picfields[$d['excel']] = $d['field'];
 		}
 
+		$topicpics_uploadpath = '/Upload/topic/';
+
 		$upload = new \Think\Upload();
 		$upload->maxSize  = 5242880; //5M
 		$upload->exts     = array('xls', 'xlsx');
@@ -488,16 +490,20 @@ class TopicController extends CommonController
 						if ($picfields[$colname] == 'subfolder') {
 							$subfolder = $value.'/';
 						}
-						if ($picfields[$colname] == 'picfile') {
-							if ($value) $picfile = explode(';', $value);
-						}
 					}
 				}
 
-				//处理图集数组
-				if (is_array($picfile) && !empty($picfile)) {
-					foreach ($picfile as $pic) {
-						$picsddd[] = '/Upload/topic/'.$picfolder.$subfolder.$pic;
+				//遍历图集目录-收集图片
+				if ($picfolder || $subfolder) {
+					$dir = APP_PATH.$topicpics_uploadpath.$picfolder.$subfolder;
+					if (is_dir($dir) && $dh=opendir($dir)) {
+						while (($file = readdir($dh)) !== false) {
+							$file = iconv('GB2312', 'UTF-8', $file);
+							if ($file && preg_match("/(\.jpg|\.png|\.jpeg|\.gif)$/i", $file)) {
+								$picsddd[] = $topicpics_uploadpath.$picfolder.$subfolder.$file;
+							}
+						}
+						closedir($dh);
 					}
 				}
 

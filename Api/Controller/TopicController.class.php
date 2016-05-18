@@ -181,7 +181,7 @@ class TopicController extends CommonController
 		$topicpics = M('topic_pics')->where(array('topicid'=>$topicid, 'itemid'=>$itemid))->select();
 		$pics = array();
 		foreach ($topicpics as $pic) {
-			$pics[] = ImageURL($pic['pic']);
+			$pics[] = ImageURL($pic['pic'], false);
 		}
 		$data['pics'] = $pics;
 
