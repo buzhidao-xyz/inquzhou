@@ -166,7 +166,7 @@ class Log
         //日志内容
         $logcontent  = null;
 		$logcontent .= '[' . $logparam['ModuleName'] . ':' . $logparam['ServerIp'] . '] ';
-		$logcontent .= '[' . $logparam['DateTime'] . ' ' . $logparam['TimeZone'] . '] ';
+		$logcontent .= $logparam['ClientIp'] . ' - - ' . '[' . $logparam['DateTime'] . ' ' . $logparam['TimeZone'] . '] ';
 		$logcontent .= is_array($logparam['Content']) ? trim(var_export(json_encode($logparam['Content']), true), '\'') : $logparam['Content'];
 		$logcontent .= "\r\n";
 

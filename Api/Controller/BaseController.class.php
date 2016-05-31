@@ -85,10 +85,10 @@ class BaseController extends Controller
         $lang_type = C('DEFAULT_LANG');
 
         //加载公共语言包
-        include(LANG_PATH.$lang_type.'.php');
+        if (LANG_PATH.$lang_type.'.php') include(LANG_PATH.$lang_type.'.php');
         L($lang);
         //加载控制器语言包
-        include(APP_PATH.MODULE_NAME.'/Common/Lang/'.$lang_type.'/'.CONTROLLER_NAME.'.php');
+        if (APP_PATH.MODULE_NAME.'/Common/Lang/'.$lang_type.'/'.CONTROLLER_NAME.'.php') include(APP_PATH.MODULE_NAME.'/Common/Lang/'.$lang_type.'/'.CONTROLLER_NAME.'.php');
         L($lang);
     }
 

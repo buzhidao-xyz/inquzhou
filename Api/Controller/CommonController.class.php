@@ -7,6 +7,8 @@
  */
 namespace Api\Controller;
 
+use Org\Util\Log;
+
 class CommonController extends BaseController
 {
     //分页配置
@@ -44,6 +46,19 @@ class CommonController extends BaseController
         }
         session('userinfo',$suserinfo);
 
+        $Content['URL'] = $_SERVER['REQUEST_URI'];
+        $Content['c_sessionid'] = $_REQUEST['sessionid'];
+        $Content['s_sessionid'] = session_id();
+        $Content['userinfo'] = session('userinfo');
+        Log::record('runtime',array(
+            'ModuleName'  => MODULE_NAME,
+            'ServerIp'    => $_SERVER['SERVER_ADDR'].':'.$_SERVER['SERVER_PORT'],
+            'ClientIp'    => get_client_ip(),
+            'DateTime'    => date('Y-m-d H:i:s', TIMESTAMP),
+            'TimeZone'    => 'UTC'.date('O',TIMESTAMP),
+            'Content'     => $Content,
+        ));
+
         return is_array($suserinfo)&&!empty($suserinfo) ? $suserinfo : array();
     }
 
@@ -53,6 +68,7 @@ class CommonController extends BaseController
     protected function USUserInfo()
     {
         session('userinfo', null);
+        session('[destroy]');
     }
 
     /**

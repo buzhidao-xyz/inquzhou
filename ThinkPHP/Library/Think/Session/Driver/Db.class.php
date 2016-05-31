@@ -28,7 +28,7 @@ class Db {
     /**
      * session保存的数据库名
      */
-   protected $sessionTable  = 'session';
+   protected $sessionTable  = 'qz_session';
 
     /**
      * 数据库句柄

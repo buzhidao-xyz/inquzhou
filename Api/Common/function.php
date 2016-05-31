@@ -11,7 +11,7 @@
  * @param string $db 数据库名称
  */
 
-define(EARTH_RADIUS, 6371);
+define('EARTH_RADIUS', 6371);
 
 
 function Mongo($collection=null,$db=null,$dbConfig=null)
