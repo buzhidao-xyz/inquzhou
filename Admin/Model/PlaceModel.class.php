@@ -64,8 +64,8 @@ class PlaceModel extends CommonModel
 		if ($userid) $where['a.userid'] = is_array($userid) ? array('in', $userid) : $userid;
 		if ($keywords) $where['_complex'] = array(
 			'_logic'  => 'or',
-			'a.title'   => array('like', '%'.$keywords.'%'),
 			'a.address' => array('like', '%'.$keywords.'%'),
+			'a.desc'   => array('like', '%'.$keywords.'%'),
 		);
 
 		$total = M('pmplace')->alias('a')->where($where)->count();

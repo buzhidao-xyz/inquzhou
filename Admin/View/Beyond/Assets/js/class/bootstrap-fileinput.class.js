@@ -60,6 +60,12 @@ var BootstrapFileInputClass = function () {
             msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
         });
 
+        //文件选择自动上传
+        ctrlObj.on("fileloaded", function (event, file) {
+            // console.log(file);
+            if (file.type == "image/jpeg") ctrlObj.fileinput('upload');
+        });
+
         //上传成功回调
         ctrlObj.on("fileuploaded", function (event, data, previewId, index) {
             if (callbackfunc) {

@@ -33,9 +33,47 @@ class IndexController extends CommonController
         $this->display();
     }
 
+    //解析时间段
+    private function _mkdaterange()
+    {
+        $daterange = mRequest('daterange');
+
+        $begindate = TIMESTAMP-30*24*3600;
+        $enddate = TIMESTAMP;
+        if ($daterange) {
+            $dateranges = explode(' - ', $daterange);
+            $begindate = strtotime($dateranges[0]);
+            $enddate = strtotime($dateranges[1]);
+        } else {
+            $daterange = date('m/d/Y', $begindate) . ' - ' . date('m/d/Y', $enddate);
+        }
+
+        $this->assign('daterange', $daterange);
+        return array($begindate, $enddate);
+    }
+
     //系统主界面-控制面板
     public function dashboard()
     {
+        //解析时间段
+        list($begindate, $enddate) = $this->_mkdaterange();
+
+        //用户增长数
+        $usernum = M('user')->where(array('registtime'=>array('between', array($begindate, $enddate))))->count();
+        $this->assign('usernum', $usernum);
+
+        //设备增长数
+        $devicenum = M('devicelog')->where(array('createtime'=>array('between', array($begindate, $enddate))))->count();
+        $this->assign('devicenum', $devicenum);
+
+        //数据纠错
+        $pmplacenum = M('pmplace')->where(array('pmtime'=>array('between', array($begindate, $enddate))))->count();
+        $this->assign('pmplacenum', $pmplacenum);
+        
+        //意见反馈
+        $lvwordnum = M('lvword')->where(array('createtime'=>array('between', array($begindate, $enddate))))->count();
+        $this->assign('lvwordnum', $lvwordnum);
+
         $this->display();
     }
 }

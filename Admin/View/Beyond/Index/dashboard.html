@@ -1,4 +1,14 @@
 {include file="Common/head.html"}
+    <!--Bootstrap Date Picker-->
+    <script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/plugins/datetime/bootstrap-datepicker.js"></script>
+
+    <!--Bootstrap Time Picker-->
+    <script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/plugins/datetime/bootstrap-timepicker.js"></script>
+
+    <!--Bootstrap Date Range Picker-->
+    <script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/plugins/datetime/moment.js"></script>
+    <script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/plugins/datetime/daterangepicker.js"></script>
+
     <!-- Page Header -->
     <div class="page-header position-relative page-header-fixed">
         <div class="header-title">
@@ -30,6 +40,94 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="widget">
+                    <div class="widget-header bordered-bottom bordered-warning">
+                        <span class="widget-caption">查询统计数据</span>
+                    </div>
+                    <div class="widget-body">
+                        <div id="horizontal-form">
+                            <form name="mtserverform" method="post" action="{$ANY.__APP__}?s=Index/dashboard" class="form-horizontal" role="form">
+                                <div class="form-group" style="margin-left: 0; margin-right: 0;">
+                                    <label for="reservation" style="color: #333;">选择时间段</label>
+                                    <div class="controls">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                            <input type="text" name="daterange" value="{$daterange}" class="form-control" id="reservation" readonly="" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-warning">查询</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="widget">
+                    <div class="widget-header bordered-bottom bordered-darkorange">
+                        <span class="widget-caption">统计数据 【{$daterange}】</span>
+                    </div>
+                    <div class="widget-body col-xs-12">
+                        <div class="col-xs-6">
+                            <div class="widget widget-stats bg-green">
+                                <div class="stats-icon"><i class="fa fa-users"></i></div>
+                                <div class="stats-info">
+                                    <h4>用户增长数</h4>
+                                    <p>{$usernum}</p>    
+                                </div>
+                                <div class="stats-link">
+                                    <a href="{$ANY.__APP__}?s=User/userlist">查看更多 <i class="fa fa-arrow-circle-o-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="widget widget-stats bg-blue">
+                                <div class="stats-icon"><i class="fa fa-desktop"></i></div>
+                                <div class="stats-info">
+                                    <h4>设备增长数</h4>
+                                    <p>{$devicenum}</p>    
+                                </div>
+                                <div class="stats-link">
+                                    <a href="{$ANY.__APP__}?s=User/device">查看更多 <i class="fa fa-arrow-circle-o-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="widget widget-stats bg-purple">
+                                <div class="stats-icon"><i class="fa fa-tags"></i></div>
+                                <div class="stats-info">
+                                    <h4>数据纠错</h4>
+                                    <p>{$pmplacenum}</p>    
+                                </div>
+                                <div class="stats-link">
+                                    <a href="{$ANY.__APP__}?s=Place/pmplace">查看更多 <i class="fa fa-arrow-circle-o-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="widget widget-stats bg-red">
+                                <div class="stats-icon"><i class="fa fa-comment"></i></div>
+                                <div class="stats-info">
+                                    <h4>意见反馈</h4>
+                                    <p>{$lvwordnum}</p>    
+                                </div>
+                                <div class="stats-link">
+                                    <a href="{$ANY.__APP__}?s=User/lvword">查看更多 <i class="fa fa-arrow-circle-o-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <style type="text/css">
@@ -50,5 +148,103 @@
         font-weight: 700;
         background: #FFFFFF;
     }
+
+    .widget.widget-stats {
+        position: relative;
+    }
+    .widget {
+        border-radius: 3px;
+        margin-bottom: 20px;
+        color: #fff;
+        padding: 15px;
+        overflow: hidden;
+    }
+    .bg-green {
+        background: #00acac!important;
+    }
+    .bg-blue {
+        background: #348fe2!important;
+    }
+    .bg-purple {
+        background: #727cb6!important;
+    }
+    .bg-red {
+        background: #ff5b57!important;
+    }
+    .widget-stats .stats-icon {
+        font-size: 66px;
+        height: 80px;
+        width: 80px;
+        text-align: center;
+        line-height: 80px;
+        margin-left: 15px;
+        color: #fff;
+        position: absolute;
+        right: 15px;
+        top: 40px;
+        opacity: .2;
+        filter: alpha(opacity=20);
+    }
+    .fa {
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        transform: translate(0, 0);
+    }
+    .fa-desktop:before {
+        content: "\f108";
+    }
+    .widget-stats .stats-info h4 {
+        font-size: 17px;
+        margin: 5px 0;
+        color: #fff;
+        padding: 10px 0;
+        padding-top: 15px;
+    }
+    .widget-stats .stats-info p {
+        font-size: 30px;
+        font-weight: 300;
+        margin-bottom: 0;
+        line-height: 30px;
+        padding: 10px 0;
+        padding-bottom: 15px;
+    }
+    .widget-stats .stats-link a {
+        display: block;
+        margin: 15px -15px -15px;
+        padding: 7px 15px;
+        background: url(../img/transparent/black-0.4.png);
+        background: rgba(0,0,0,.4);
+        text-align: right;
+        color: #ddd;
+        font-weight: 300;
+        text-decoration: none;
+    }
+    .widget-stats .stats-link a {
+        display: block;
+        margin: 15px -15px -15px;
+        padding: 7px 15px;
+        background: url(../img/transparent/black-0.4.png);
+        background: rgba(0,0,0,.4);
+        text-align: right;
+        color: #ddd;
+        font-weight: 300;
+        text-decoration: none;
+    }
+    .fa-arrow-circle-o-right:before {
+        content: "\f18e";
+    }
     </style>
+
+    <script type="text/javascript">
+    $(function (){
+        //--Bootstrap Date Range Picker--
+        $('#reservation').daterangepicker({
+            lang: "zh"
+        });
+    })
+    </script>
 {include file="Common/foot.html"}

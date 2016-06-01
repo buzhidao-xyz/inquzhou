@@ -519,7 +519,7 @@ return array(
 			),
 			'telephone' => array(
 				'field'  => 'telephone',
-				'name'   => '联系电话',
+				'name'   => '电话',
 				'inup'   => 1,
 				'need'   => 0,
 				'show'   => 1,
@@ -547,7 +547,7 @@ return array(
 			),
 			'totalcount' => array(
 				'field'  => 'totalcount',
-				'name'   => '全村总户数',
+				'name'   => '全村户数',
 				'inup'   => 1,
 				'need'   => 0,
 				'show'   => 0,
@@ -556,7 +556,7 @@ return array(
 			),
 			'farmcount' => array(
 				'field'  => 'farmcount',
-				'name'   => '经营农家乐户数',
+				'name'   => '农家乐数',
 				'inup'   => 1,
 				'need'   => 0,
 				'show'   => 0,
@@ -574,7 +574,7 @@ return array(
 			),
 			'persons' => array(
 				'field'  => 'persons',
-				'name'   => '可招待人数',
+				'name'   => '可招待数',
 				'inup'   => 1,
 				'need'   => 0,
 				'show'   => 0,
@@ -583,7 +583,7 @@ return array(
 			),
 			'bads' => array(
 				'field'  => 'bads',
-				'name'   => '床位数',
+				'name'   => '床位',
 				'inup'   => 1,
 				'need'   => 0,
 				'show'   => 0,
@@ -592,7 +592,7 @@ return array(
 			),
 			'workmans' => array(
 				'field'  => 'workmans',
-				'name'   => '从业人员数',
+				'name'   => '从业人员',
 				'inup'   => 1,
 				'need'   => 0,
 				'show'   => 0,
