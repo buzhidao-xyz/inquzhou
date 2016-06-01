@@ -14,7 +14,7 @@ class PlaceModel extends CommonModel
 	}
 
 	//获取标注点
-	public function getMarkplace($userid=null, $keywords=null, $start=0, $length=9999, $orderway='desc')
+	public function getMarkplace($userid=null, $keywords=null, $start=0, $length=9999, $orderway='asc')
 	{
 		$where = array();
 		if ($userid) $where['a.userid'] = is_array($userid) ? array('in', $userid) : $userid;
@@ -51,7 +51,7 @@ class PlaceModel extends CommonModel
 							->field('a.*, b.username')
 							->join(' __USER__ b on a.userid=b.userid ')
 							->where($where)
-							->order('pttime desc')
+							->order('pttime asc')
 							->select();
 
 		return array('total'=>$total, 'data'=>is_array($data)?$data:array());
@@ -73,7 +73,7 @@ class PlaceModel extends CommonModel
 							->field('a.*, b.username')
 							->join(' __USER__ b on a.userid=b.userid ')
 							->where($where)
-							->order('pmtime desc')
+							->order('pmtime asc')
 							->select();
 
 		return array('total'=>$total, 'data'=>is_array($data)?$data:array());

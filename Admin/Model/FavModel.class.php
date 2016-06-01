@@ -29,7 +29,7 @@ class FavModel extends CommonModel
 							 ->field('a.*, b.username')
 							 ->join(' __USER__ b on a.userid=b.userid ')
 							 ->where($where)
-							 ->order('favtime desc')
+							 ->order('favtime asc')
 							 ->select();
 
 		return array('total'=>$total, 'data'=>is_array($data)?$data:array());
@@ -51,7 +51,7 @@ class FavModel extends CommonModel
 							->field('a.*, b.username')
 							->join(' __USER__ b on a.userid=b.userid ')
 							->where($where)
-							->order('favtime desc')
+							->order('favtime asc')
 							->select();
 
 		return array('total'=>$total, 'data'=>is_array($data)?$data:array());

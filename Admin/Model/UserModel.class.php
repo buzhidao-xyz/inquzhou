@@ -71,10 +71,10 @@ class UserModel extends CommonModel
 
 		$total = M('lvword')->alias('a')->where($where)->count();
 		$data = M('lvword')->alias('a')
-						   ->field('a.*, b.username')
+						   ->field('a.*, b.username, b.phone')
 						   ->join(' __USER__ b on a.userid=b.userid ')
 						   ->where($where)
-						   ->order('createtime desc')
+						   ->order('createtime asc')
 						   ->select();
 
 		return array('total'=>$total, 'data'=>is_array($data)?$data:array());
@@ -93,7 +93,7 @@ class UserModel extends CommonModel
 		);
 
 		$total = M('devicelog')->where($where)->count();
-		$data = M('devicelog')->alias('a')->join(' left join __USER__ b on a.userid=b.userid ')->where($where)->order('createtime desc')->limit($start,$length)->select();
+		$data = M('devicelog')->alias('a')->join(' left join __USER__ b on a.userid=b.userid ')->where($where)->order('createtime asc')->limit($start,$length)->select();
 
 		return array('total'=>$total, 'data'=>$data);
 	}

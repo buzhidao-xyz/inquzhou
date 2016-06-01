@@ -92,4 +92,16 @@ class UserModel extends CommonModel
 
 		return is_array($userinfo)&&!empty($userinfo) ? true : false;
 	}
+
+	/**
+	 * 检查用户状态 - 是否被禁用
+	 */
+	public function CKUserDisabled($userid=null)
+	{
+		if (!$userid) return false;
+
+		$userinfo = M('user')->where(array('userid'=>$userid))->find();
+
+		return $userinfo['status'] ? false : true;
+	}
 }

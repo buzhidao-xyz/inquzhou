@@ -270,14 +270,14 @@ class UserController extends CommonController
         }
 
         //设置登录session
-        $this->GSUserInfo(array(
+        $this->SetUserInfos(array(
             'userid'     => $userinfo['userid'],
             'phone'      => $userinfo['phone'],
             'username'   => $userinfo['username'],
             'source'     => $userinfo['source'],
             'usid'       => $userinfo['usid'],
             'oauthtoken' => $userinfo['oauthtoken'],
-        ),5);
+        ));
 
         //用户信息返回
         $data = array(

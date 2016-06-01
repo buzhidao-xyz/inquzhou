@@ -12,7 +12,7 @@ use Org\Util\Log;
 class BaseController extends Controller
 {
 	//接口返回标识
-	private $errorflag = array(0,1);
+	private $errorflag = array(0,1,-101);
 
 	//初始化
 	public function __construct()
@@ -137,17 +137,8 @@ class BaseController extends Controller
 			$data = array();
 		}
 
-		if ($error && !$msg) {
-			$error = 1;
-			$msg = L('apireturn_error_msg');
-			$data = array();
-		}
-
-		if (!$error && !is_array($data)) {
-			$error = 1;
-			$msg = L('apireturn_error_data');
-			$data = array();
-		}
+		if ($error && !$msg) $msg = L('apireturn_error_msg');
+		if (!is_array($data)) $data = array();
 
 		//APP返回
 		$return = array(

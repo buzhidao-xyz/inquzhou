@@ -23,7 +23,7 @@ class CommonController extends BaseController
 	{
 		parent::__construct();
 
-        $this->userinfo = $this->GSUserInfo();
+        $this->userinfo = $this->GetUserInfos();
         // $this->userinfo = array(
         //     'userid' => 1
         // );
@@ -33,33 +33,39 @@ class CommonController extends BaseController
 	}
 
     /**
-     * 存取用户信息session
-     * @param int $isrefresh 是否刷新session 0:不刷新 1:刷新 默认1
+     * 获取用户信息session
      */
-    protected function GSUserInfo($userinfo=array(),$isrefresh=1)
+    protected function GetUserInfos()
+    {
+        $suserinfo = session('userinfo');
+
+        //判断用户状态 如果已禁用 返回:-101
+        if (isset($suserinfo['userid'])) {
+            if (D('User')->CKUserDisabled($suserinfo['userid'])) {
+                $this->apiReturn(-101, '该账号已被禁用！');
+            }
+        }
+
+        return is_array($suserinfo)&&!empty($suserinfo) ? $suserinfo : array();
+    }
+
+    /**
+     * 设置用户信息session
+     */
+    protected function SetUserInfos($userinfo=array())
     {
         if (!is_array($userinfo)) return false;
 
-        $suserinfo = session('userinfo');
-        if (!empty($userinfo)) {
-            $suserinfo = is_array($suserinfo)&&!empty($suserinfo) ? array_merge($suserinfo, $userinfo) : $userinfo;
+        session('userinfo',$userinfo);
+
+        //判断用户状态 如果已禁用 返回:-101
+        if (isset($userinfo['userid'])) {
+            if (D('User')->CKUserDisabled($userinfo['userid'])) {
+                $this->apiReturn(-101, '该账号已被禁用！');
+            }
         }
-        session('userinfo',$suserinfo);
 
-        $Content['URL'] = $_SERVER['REQUEST_URI'];
-        $Content['c_sessionid'] = $_REQUEST['sessionid'];
-        $Content['s_sessionid'] = session_id();
-        $Content['userinfo'] = session('userinfo');
-        Log::record('runtime',array(
-            'ModuleName'  => MODULE_NAME,
-            'ServerIp'    => $_SERVER['SERVER_ADDR'].':'.$_SERVER['SERVER_PORT'],
-            'ClientIp'    => get_client_ip(),
-            'DateTime'    => date('Y-m-d H:i:s', TIMESTAMP),
-            'TimeZone'    => 'UTC'.date('O',TIMESTAMP),
-            'Content'     => $Content,
-        ));
-
-        return is_array($suserinfo)&&!empty($suserinfo) ? $suserinfo : array();
+        return true;
     }
 
     /**
