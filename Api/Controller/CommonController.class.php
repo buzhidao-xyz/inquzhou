@@ -39,13 +39,6 @@ class CommonController extends BaseController
     {
         $suserinfo = session('userinfo');
 
-        //判断用户状态 如果已禁用 返回:-101
-        if (isset($suserinfo['userid'])) {
-            if (D('User')->CKUserDisabled($suserinfo['userid'])) {
-                $this->apiReturn(-101, '该账号已被禁用！');
-            }
-        }
-
         return is_array($suserinfo)&&!empty($suserinfo) ? $suserinfo : array();
     }
 
@@ -57,13 +50,6 @@ class CommonController extends BaseController
         if (!is_array($userinfo)) return false;
 
         session('userinfo',$userinfo);
-
-        //判断用户状态 如果已禁用 返回:-101
-        if (isset($userinfo['userid'])) {
-            if (D('User')->CKUserDisabled($userinfo['userid'])) {
-                $this->apiReturn(-101, '该账号已被禁用！');
-            }
-        }
 
         return true;
     }
@@ -82,6 +68,13 @@ class CommonController extends BaseController
      */
     protected function CKUserLogon($logon=false)
     {
+        //判断用户状态 如果已禁用 返回:-101
+        if ($logon && isset($this->userinfo['userid'])) {
+            if (D('User')->CKUserDisabled($this->userinfo['userid'])) {
+                $this->apiReturn(-101, '该账号已被禁用！');
+            }
+        }
+
         if ($logon && (!$this->userinfo || !is_array($this->userinfo) || empty($this->userinfo))) {
             $this->apiReturn(1,L('user_logon_error'));
         }
