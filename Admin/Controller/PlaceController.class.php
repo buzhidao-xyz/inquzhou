@@ -258,7 +258,8 @@ class PlaceController extends CommonController
 			$objActSheet->getColumnDimension('E')->setWidth(20);
 			$objActSheet->getColumnDimension('F')->setWidth(10);
 			$objActSheet->getColumnDimension('G')->setWidth(15);
-			$objActSheet->getColumnDimension('H')->setWidth(25);
+			$objActSheet->getColumnDimension('H')->setWidth(15);
+			$objActSheet->getColumnDimension('I')->setWidth(25);
 			//设置单元格的值
 			// $objActSheet->setCellValue('A1', '总标题显示');
 			//合并单元格
@@ -271,9 +272,10 @@ class PlaceController extends CommonController
 			$objActSheet->setCellValue('D1', '经度');
 			$objActSheet->setCellValue('E1', '纬度');
 			$objActSheet->setCellValue('F1', '提交人');
-			$objActSheet->setCellValue('G1', '状态');
-			$objActSheet->setCellValue('H1', '提交时间');
-			
+			$objActSheet->setCellValue('G1', '电话');
+			$objActSheet->setCellValue('H1', '状态');
+			$objActSheet->setCellValue('I1', '提交时间');
+
 			//遍历数据
 			$n = 2;
 			foreach ($datalist as $v) {
@@ -283,8 +285,9 @@ class PlaceController extends CommonController
 				$objActSheet->setCellValue('D'.$n, $v["lng"]);
 				$objActSheet->setCellValue('E'.$n, $v["lat"]);
 				$objActSheet->setCellValue('F'.$n, $v["username"]);
-				$objActSheet->setCellValue('G'.$n, $v["status"]?'已处理':'未处理');
-				$objActSheet->setCellValue('H'.$n, date('Y-m-d H:i:s', $v["pmtime"]));
+				$objActSheet->setCellValue('G'.$n, $v["phone"]);
+				$objActSheet->setCellValue('H'.$n, $v["status"]?'已处理':'未处理');
+				$objActSheet->setCellValue('I'.$n, date('Y-m-d H:i:s', $v["pmtime"]));
 
 				$n++;
 			}

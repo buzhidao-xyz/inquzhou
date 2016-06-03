@@ -70,7 +70,7 @@ class PlaceModel extends CommonModel
 
 		$total = M('pmplace')->alias('a')->where($where)->count();
 		$data = M('pmplace')->alias('a')
-							->field('a.*, b.username')
+							->field('a.*, b.username, b.phone')
 							->join(' __USER__ b on a.userid=b.userid ')
 							->where($where)
 							->order('pmtime asc')
