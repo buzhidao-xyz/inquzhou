@@ -52,27 +52,69 @@ class IndexController extends CommonController
         return array($begindate, $enddate);
     }
 
+    //计算环比时间段
+    private function _calcdaterangehb($begindate=null, $enddate=null)
+    {
+        if (!$begindate || !$enddate) return false;
+
+        $days = floor(($enddate-$begindate)/(24*3600));
+        $begindate_hb = strtotime(date('Y-m-d', $begindate)." -".$days.' day');
+        $days++;
+        $enddate_hb = strtotime(date('Y-m-d', $enddate)." -".$days.' day');
+
+        return array($begindate_hb, $enddate_hb);
+    }
+
     //系统主界面-控制面板
     public function dashboard()
     {
         //解析时间段
         list($begindate, $enddate) = $this->_mkdaterange();
+        list($begindate_hb, $enddate_hb) = $this->_calcdaterangehb($begindate,$enddate);
 
         //用户增长数
         $usernum = M('user')->where(array('registtime'=>array('between', array($begindate, $enddate))))->count();
         $this->assign('usernum', $usernum);
+        //环比增长数
+        $usernum_hb = M('user')->where(array('registtime'=>array('between', array($begindate_hb, $enddate_hb))))->count();
+        $usernum = (int)$usernum;
+        $usernum_hb = (int)$usernum_hb;
+        $usernum_inc = $usernum_hb>0 ? number_format(($usernum-$usernum_hb)/$usernum_hb*100, 2, '.', '').'%' : '100%';
+        if ($usernum == 0) $usernum_inc = '0%';
+        $this->assign('usernum_inc', $usernum_inc);
 
         //设备增长数
         $devicenum = M('devicelog')->where(array('createtime'=>array('between', array($begindate, $enddate))))->count();
         $this->assign('devicenum', $devicenum);
+        //环比增长数
+        $devicenum_hb = M('devicelog')->where(array('createtime'=>array('between', array($begindate_hb, $enddate_hb))))->count();
+        $devicenum = (int)$devicenum;
+        $devicenum_hb = (int)$devicenum_hb;
+        $devicenum_inc = $devicenum_hb>0 ? number_format(($devicenum-$devicenum_hb)/$devicenum_hb*100, 2, '.', '').'%' : '100%';
+        if ($devicenum == 0) $devicenum_inc = '0%';
+        $this->assign('devicenum_inc', $devicenum_inc);
 
         //数据纠错
         $pmplacenum = M('pmplace')->where(array('pmtime'=>array('between', array($begindate, $enddate))))->count();
         $this->assign('pmplacenum', $pmplacenum);
+        //环比增长数
+        $pmplacenum_hb = M('pmplace')->where(array('pmtime'=>array('between', array($begindate_hb, $enddate_hb))))->count();
+        $pmplacenum = (int)$pmplacenum;
+        $pmplacenum_hb = (int)$pmplacenum_hb;
+        $pmplacenum_inc = $pmplacenum_hb>0 ? number_format(($pmplacenum-$pmplacenum_hb)/$pmplacenum_hb*100, 2, '.', '').'%' : '100%';
+        if ($pmplacenum == 0) $pmplacenum_inc = '0%';
+        $this->assign('pmplacenum_inc', $pmplacenum_inc);
         
         //意见反馈
         $lvwordnum = M('lvword')->where(array('createtime'=>array('between', array($begindate, $enddate))))->count();
         $this->assign('lvwordnum', $lvwordnum);
+        //环比增长数
+        $lvwordnum_hb = M('lvword')->where(array('createtime'=>array('between', array($begindate_hb, $enddate_hb))))->count();
+        $lvwordnum = (int)$lvwordnum;
+        $lvwordnum_hb = (int)$lvwordnum_hb;
+        $lvwordnum_inc = $lvwordnum_hb>0 ? number_format(($lvwordnum-$lvwordnum_hb)/$lvwordnum_hb*100, 2, '.', '').'%' : '100%';
+        if ($lvwordnum == 0) $lvwordnum_inc = '0%';
+        $this->assign('lvwordnum_inc', $lvwordnum_inc);
 
         $this->display();
     }
