@@ -270,6 +270,8 @@ class TopicController extends CommonController
 
 		$topiciteminfo = current($topiciteminfo['data']);
 
+		$this->assign('point_x', (double)$topiciteminfo['point_x']);
+		$this->assign('point_y', (double)$topiciteminfo['point_y']);
 		$this->assign('topiciteminfo', $topiciteminfo);
 		$this->display();
 	}

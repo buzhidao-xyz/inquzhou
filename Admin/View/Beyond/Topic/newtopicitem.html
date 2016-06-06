@@ -1,4 +1,6 @@
 {include file="Common/head.html"}
+    <script type="text/javascript" src="http://www.zjditu.cn/API/MapALine.js?v=5.2&key=95a29452a6e8c908932646f812919857"></script>
+
     <!-- Page Header -->
     <div class="page-header position-relative page-header-fixed">
         <div class="header-title">
@@ -70,8 +72,31 @@
                         </div>
                     </div>
                 </div>
+                <div style="display: block">
+                    <input type="button" id="btnAddPoint" value="添加图钉" />
+                    <input type="button" id="btnCleanPoint" value="清除图钉" />
+                </div>
+                <div id="tdtu"></div>
             </div>
         </div>
     </div>
 
+<style type="text/css">
+#tdtu {
+    position: relative;
+    width: 95%;
+    height: 630px;
+    overflow: hidden;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+</style>
+<script src="{$SERVER.HOST.JS_SERVER}View/Beyond/Assets/js/class/tdtu.class.js"></script>
+<script type="text/javascript">
+$(function (){
+    $(window).load(function() {
+        new TDTuClass({});
+    })
+})
+</script>
 {include file="Common/foot.html"}
