@@ -39,17 +39,17 @@ var TDTuClass = function (pobj) {
     	var drawPointTool = new MapALine.DrawPoint();
         map.setCurrentTool(drawPointTool);
 
+        drawPointTool.drawEnd = function (map) {
+            drawPointTool.ondrawend();
+
+            map.setCurrentTool(new MapALine.PanTool());
+        }
         drawPointTool.ondrawend = function (overlay) {
         	var point_x = drawPointTool._lastClickPoint.x;
         	var point_y = drawPointTool._lastClickPoint.y;
 
         	if (point_x) $("input[name=point_x]").val(point_x);
         	if (point_y) $("input[name=point_y]").val(point_y);
-        }
-        drawPointTool.drawEnd = function (map) {
-        	drawPointTool.ondrawend();
-
-        	map.setCurrentTool(new MapALine.PanTool());
         }
     });
 

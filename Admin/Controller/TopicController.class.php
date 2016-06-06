@@ -15,6 +15,8 @@ class TopicController extends CommonController
 		parent::__construct();
 
 		$this->topicmap = C('TOPIC');
+
+		$this->assign('zjditu_key', C('zjditu_key'));
 	}
 
 	//获取专题id

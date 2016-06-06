@@ -22,4 +22,7 @@ return array(
 	//加载扩展配置文件 引用方式C('x.x')
 	'LOAD_EXT_CONFIG' => array(
 	),
+
+	//天地图API-Key
+	'zjditu_key' => '95a29452a6e8c908932646f812919857',
 );
