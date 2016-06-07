@@ -32,7 +32,7 @@ class UserModel extends CommonModel
 		if ($source!==null) $where['source'] = $source;
 
 		$total = M('user')->where($where)->count();
-		$data = M('user')->where($where)->order('registtime asc')->select();
+		$data = M('user')->where($where)->order('registtime asc')->limit($start,$length)->select();
 
 		return array('total'=>$total, 'data'=>is_array($data)?$data:array());
 	}
@@ -69,12 +69,13 @@ class UserModel extends CommonModel
 		if ($userid) $where['userid'] = is_array($userid) ? array('in', $userid) : $userid;
 		if ($content) $where['content'] = array('like', '%'.$content.'%');
 
-		$total = M('lvword')->alias('a')->where($where)->count();
+		$total = M('lvword')->alias('a')->field('a.*, b.username, b.phone')->join(' __USER__ b on a.userid=b.userid ')->where($where)->count();
 		$data = M('lvword')->alias('a')
 						   ->field('a.*, b.username, b.phone')
 						   ->join(' __USER__ b on a.userid=b.userid ')
 						   ->where($where)
 						   ->order('createtime asc')
+						   ->limit($start,$length)
 						   ->select();
 
 		return array('total'=>$total, 'data'=>is_array($data)?$data:array());

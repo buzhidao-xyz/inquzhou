@@ -224,6 +224,7 @@ class UserController extends CommonController
         $total = $data['total'];
         $datalist = $data['data'];
 
+        $this->assign('total', $total);
         $this->assign('datalist', $datalist);
 
         $params = array(
@@ -264,6 +265,7 @@ class UserController extends CommonController
         $total = $data['total'];
         $datalist = $data['data'];
 
+        $this->assign('total', $total);
         $this->assign('datalist', $datalist);
 
         $params = array(
@@ -304,7 +306,17 @@ class UserController extends CommonController
 		$total = $devicelog['total'];
 		$devicelog = $devicelog['data'];
 
+		$this->assign('total', $total);
 		$this->assign('datalist', $devicelog);
+
+        $params = array(
+            'username' => $username,
+            'devicekeyword' => $devicekeyword,
+        );
+        $this->assign('params', $params);
+        //解析分页数据
+        $this->_mkPagination($total, $params);
+
 		$this->display();
 	}
 }

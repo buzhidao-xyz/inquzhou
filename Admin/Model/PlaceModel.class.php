@@ -24,12 +24,13 @@ class PlaceModel extends CommonModel
 			'a.address' => array('like', '%'.$keywords.'%'),
 		);
 
-		$total = M('markplace')->alias('a')->where($where)->count();
+		$total = M('markplace')->alias('a')->field('a.*, b.username, b.phone')->join(' __USER__ b on a.userid=b.userid ')->where($where)->count();
 		$data = M('markplace')->alias('a')
 							  ->field('a.*, b.username')
 							  ->join(' __USER__ b on a.userid=b.userid ')
 							  ->where($where)
 							  ->order('marktime '.$orderway)
+							  ->limit($start,$length)
 							  ->select();
 
 		return array('total'=>$total, 'data'=>is_array($data)?$data:array());
@@ -46,12 +47,13 @@ class PlaceModel extends CommonModel
 			'a.address' => array('like', '%'.$keywords.'%'),
 		);
 
-		$total = M('ptplace')->alias('a')->where($where)->count();
+		$total = M('ptplace')->alias('a')->field('a.*, b.username, b.phone')->join(' __USER__ b on a.userid=b.userid ')->where($where)->count();
 		$data = M('ptplace')->alias('a')
 							->field('a.*, b.username')
 							->join(' __USER__ b on a.userid=b.userid ')
 							->where($where)
 							->order('pttime asc')
+							->limit($start,$length)
 							->select();
 
 		return array('total'=>$total, 'data'=>is_array($data)?$data:array());
@@ -68,12 +70,13 @@ class PlaceModel extends CommonModel
 			'a.desc'   => array('like', '%'.$keywords.'%'),
 		);
 
-		$total = M('pmplace')->alias('a')->where($where)->count();
+		$total = M('pmplace')->alias('a')->field('a.*, b.username, b.phone')->join(' __USER__ b on a.userid=b.userid ')->where($where)->count();
 		$data = M('pmplace')->alias('a')
 							->field('a.*, b.username, b.phone')
 							->join(' __USER__ b on a.userid=b.userid ')
 							->where($where)
 							->order('pmtime asc')
+							->limit($start,$length)
 							->select();
 
 		return array('total'=>$total, 'data'=>is_array($data)?$data:array());

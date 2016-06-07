@@ -24,12 +24,13 @@ class FavModel extends CommonModel
 			'a.address' => array('like', '%'.$keywords.'%'),
 		);
 
-		$total = M('favplace')->alias('a')->where($where)->count();
+		$total = M('favplace')->alias('a')->field('a.*, b.username')->join(' __USER__ b on a.userid=b.userid ')->where($where)->count();
 		$data = M('favplace')->alias('a')
 							 ->field('a.*, b.username')
 							 ->join(' __USER__ b on a.userid=b.userid ')
 							 ->where($where)
 							 ->order('favtime asc')
+							 ->limit($start,$length)
 							 ->select();
 
 		return array('total'=>$total, 'data'=>is_array($data)?$data:array());
@@ -46,12 +47,13 @@ class FavModel extends CommonModel
 			'a.dest' => array('like', '%'.$keywords.'%'),
 		);
 
-		$total = M('favline')->alias('a')->where($where)->count();
+		$total = M('favline')->alias('a')->field('a.*, b.username')->join(' __USER__ b on a.userid=b.userid ')->where($where)->count();
 		$data = M('favline')->alias('a')
 							->field('a.*, b.username')
 							->join(' __USER__ b on a.userid=b.userid ')
 							->where($where)
 							->order('favtime asc')
+							->limit($start,$length)
 							->select();
 
 		return array('total'=>$total, 'data'=>is_array($data)?$data:array());

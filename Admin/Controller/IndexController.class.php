@@ -95,10 +95,10 @@ class IndexController extends CommonController
         $this->assign('devicenum_inc', $devicenum_inc);
 
         //数据纠错
-        $pmplacenum = M('pmplace')->where(array('pmtime'=>array('between', array($begindate, $enddate))))->count();
+        $pmplacenum = M('pmplace')->alias('a')->field('a.*, b.phone')->join(' __USER__ b on a.userid=b.userid ')->where(array('pmtime'=>array('between', array($begindate, $enddate))))->count();
         $this->assign('pmplacenum', $pmplacenum);
         //环比增长数
-        $pmplacenum_hb = M('pmplace')->where(array('pmtime'=>array('between', array($begindate_hb, $enddate_hb))))->count();
+        $pmplacenum_hb = M('pmplace')->alias('a')->field('a.*, b.phone')->join(' __USER__ b on a.userid=b.userid ')->where(array('pmtime'=>array('between', array($begindate_hb, $enddate_hb))))->count();
         $pmplacenum = (int)$pmplacenum;
         $pmplacenum_hb = (int)$pmplacenum_hb;
         $pmplacenum_inc = $pmplacenum_hb>0 ? number_format(($pmplacenum-$pmplacenum_hb)/$pmplacenum_hb*100, 2, '.', '').'%' : '100%';
@@ -106,10 +106,10 @@ class IndexController extends CommonController
         $this->assign('pmplacenum_inc', $pmplacenum_inc);
         
         //意见反馈
-        $lvwordnum = M('lvword')->where(array('createtime'=>array('between', array($begindate, $enddate))))->count();
+        $lvwordnum = M('lvword')->alias('a')->field('a.*, b.phone')->join(' __USER__ b on a.userid=b.userid ')->where(array('createtime'=>array('between', array($begindate, $enddate))))->count();
         $this->assign('lvwordnum', $lvwordnum);
         //环比增长数
-        $lvwordnum_hb = M('lvword')->where(array('createtime'=>array('between', array($begindate_hb, $enddate_hb))))->count();
+        $lvwordnum_hb = M('lvword')->alias('a')->field('a.*, b.phone')->join(' __USER__ b on a.userid=b.userid ')->where(array('createtime'=>array('between', array($begindate_hb, $enddate_hb))))->count();
         $lvwordnum = (int)$lvwordnum;
         $lvwordnum_hb = (int)$lvwordnum_hb;
         $lvwordnum_inc = $lvwordnum_hb>0 ? number_format(($lvwordnum-$lvwordnum_hb)/$lvwordnum_hb*100, 2, '.', '').'%' : '100%';

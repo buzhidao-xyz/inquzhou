@@ -204,6 +204,7 @@ class TopicController extends CommonController
         $total = $data['total'];
         $datalist = $data['data'];
 
+        $this->assign('total', $total);
         $this->assign('datalist', $datalist);
 
         $params = array(
