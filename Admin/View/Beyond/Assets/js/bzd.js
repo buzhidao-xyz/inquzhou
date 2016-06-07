@@ -98,6 +98,16 @@ function bootboxInit() {
 }
 
 $(function (){
+    //表格排序
+    if ($(".dataTable tbody").length) {
+        var tableno = 0;
+        $(".dataTable tbody tr").each(function () {
+            var $that = $(this).find("td.no");
+            $that.text(parseInt($that.text())+tableno);
+            tableno++;
+        });
+    }
+
     //checkbox-slider-ck元素
     $(".checkbox-slider-ck").click(function (){
         if ($(this).attr("checked")) {

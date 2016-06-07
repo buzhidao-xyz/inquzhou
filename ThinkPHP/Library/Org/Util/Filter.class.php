@@ -47,7 +47,7 @@ class Filter
     //检测phone 过滤规则：1(33|35|37|38|39|50|51|56|57|58|59|70|80|81|82|83|89)[0-9]{8}
     static public function F_Phone($var=null)
     {
-        $regexp = "/^1(33|35|37|38|39|50|51|56|57|58|59|70|80|81|82|83|89)[0-9]{8}$/i";
+        $regexp = "/^1(3|5|6|7|8|9)[0-9]{9}$/i";
         if (preg_match($regexp, $var) == 0) {
             return false;
         }

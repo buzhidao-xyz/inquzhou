@@ -85,6 +85,7 @@ class CommonController extends BaseController
 
         is_numeric($page)&&$page>0 ? $_page = $page : null;
 
+        $this->assign('page', $_page);
         return $_page;
     }
 
@@ -97,6 +98,7 @@ class CommonController extends BaseController
 
         is_numeric($pagesize)&&$pagesize>0 ? $_pagesize = $pagesize : null;
 
+        $this->assign('pagesize', $_pagesize);
         return $_pagesize;
     }
 
@@ -117,6 +119,8 @@ class CommonController extends BaseController
         $length    = $pagesize;
 
         //返回
+        $this->assign('start', $start);
+        $this->assign('length', $length);
         return array($start,$length);
     }
 

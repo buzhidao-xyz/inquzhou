@@ -85,7 +85,7 @@
                                     {if isset($datalist)&&is_array($datalist)&&!empty($datalist)}
                                     {foreach $datalist as $data}
                                     <tr role="row" class="even">
-                                        <td>{$data.itemid}</td>
+                                        <td class="no">{$start+1}</td>
                                         {foreach $topicmapinfo.fields as $field}
                                         {if $field.show}<td>{$data[$field.field]}</td>{/if}
                                         {/foreach}

@@ -87,7 +87,7 @@
                                     {if isset($datalist)&&is_array($datalist)&&!empty($datalist)}
                                     {foreach $datalist as $data}
                                     <tr role="row" class="even">
-                                        <td>{$data.devicelogid}</td>
+                                        <td class="no">{$start+1}</td>
                                         <td>{$data.username}</td>
                                         <td>{$data.deviceid}</td>
                                         <td>{$data.devicetype}</td>

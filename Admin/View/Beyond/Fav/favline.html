@@ -82,7 +82,7 @@
                                     {if isset($datalist)&&is_array($datalist)&&!empty($datalist)}
                                     {foreach $datalist as $data}
                                     <tr role="row" class="even">
-                                        <td>{$data.lineid}</td>
+                                        <td class="no">{$start+1}</td>
                                         <td>{$data.sour}</td>
                                         <td>{$data.sourlng} , {$data.sourlat}</td>
                                         <td>{$data.dest}</td>

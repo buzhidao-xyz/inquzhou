@@ -86,7 +86,7 @@
                                     {if isset($datalist)&&is_array($datalist)&&!empty($datalist)}
                                     {foreach $datalist as $data}
                                     <tr role="row" class="even">
-                                        <td>{$data.pmplaceid}</td>
+                                        <td class="no">{$start+1}</td>
                                         <td>{$pmtypelist[$data.pmtype]['title']}</td>
                                         <td>{$data.address}</td>
                                         <td>{$data.lng} , {$data.lat}</td>
