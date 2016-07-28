@@ -24,5 +24,5 @@ return array(
 	),
 
 	//天地图API-Key
-	'zjditu_key' => '95a29452a6e8c908932646f812919857',
+	'zjditu_key' => '5a9fe7a5ba70382279328a16fe516c4f',
 );
