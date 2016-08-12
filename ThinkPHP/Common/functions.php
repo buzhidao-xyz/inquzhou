@@ -1394,6 +1394,12 @@ function sessiond($name='',$value='',$expire=0,$extime=1) {
  * @return mixed
  */
 function session($name='',$value='') {
+    $phpinput = file_get_contents("php://input");
+    $phpinputdata = json_decode($phpinput, true);
+    !is_array($phpinputdata) ? $phpinputdata = array() : null;
+
+    if (!isset($_REQUEST[C('VAR_SESSION_ID')]) && isset($phpinputdata[C('VAR_SESSION_ID')])) $_REQUEST[C('VAR_SESSION_ID')] = $phpinputdata[C('VAR_SESSION_ID')];
+
     $prefix   =  C('SESSION_PREFIX');
     if(is_array($name)) { // session初始化 在session_start 之前调用
         if(isset($name['prefix'])) C('SESSION_PREFIX',$name['prefix']);
